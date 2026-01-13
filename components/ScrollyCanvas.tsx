@@ -172,13 +172,16 @@ export default function ScrollyCanvas() {
 
     return (
         <div ref={containerRef} className="h-[500vh] relative">
-            <div className="sticky top-0 h-screen w-full overflow-hidden">
+            <div className="sticky top-0 h-screen w-full overflow-hidden will-change-transform">
                 <AnimatePresence mode="wait">
                     {!isLoaded && <Preloader key="preloader" />}
                 </AnimatePresence>
                 <canvas ref={canvasRef} className="block w-full h-full" />
                 <Overlay scrollYProgress={scrollYProgress} />
+                {/* Gradient Fade to seamless transition */}
+                <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-b from-transparent to-[#121212] z-10 pointer-events-none" />
             </div>
+
         </div>
     );
 }

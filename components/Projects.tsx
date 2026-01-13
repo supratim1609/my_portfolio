@@ -4,28 +4,42 @@ import { motion } from 'framer-motion';
 
 const projects = [
     {
-        id: 1,
-        title: "MassArt Festival Access",
-        category: "Large-Scale Architecture",
-        description: "Architected a QR-based access system for 200,000+ passes using Firebase and Twilio. Delivered a crash-proof MVP in 2 weeks."
-    },
-    {
-        id: 2,
+        id: "01",
         title: "Rivet Framework",
-        category: "Open Source / Core Engineering",
-        description: "High-performance Dart backend framework. Achieved 3-4x faster response times than portable Express.js using isolates."
+        category: "CORE_ENGINEERING",
+        description: "High-performance Dart backend framework with routing, middleware, and isolates. Achieved 4x speedup vs Express.js.",
+        link: "https://pub.dev/packages/rivet"
     },
     {
-        id: 3,
-        title: "ADHD Helper App",
-        category: "Mobile Product",
-        description: "Smart routine planner with behavioral reminders that improved user task completion by 30%. Built with Flutter."
+        id: "02",
+        title: "MassArt Access",
+        category: "DISTRIBUTED_SYSTEMS",
+        description: "QR-based access system for 200,000+ attendees. Orchestrated Firebase, Twilio, and SES for crash-proof operations."
     },
     {
-        id: 4,
-        title: "PegMan India",
-        category: "Mobile Engineering",
-        description: "Developed production-ready pilot app serving real users. Optimized UX and stability using MVVM architecture."
+        id: "03",
+        title: "BLoC Debouncer",
+        category: "OPEN_SOURCE_TOOLING",
+        description: "Event throttling library for Flutter BLoC pattern. Optimizes state updates and reduces unnecessary api calls.",
+        link: "https://pub.dev/packages/bloc_event_debouncer"
+    },
+    {
+        id: "04",
+        title: "Escrow Payment",
+        category: "FINTECH_SECURITY",
+        description: "Secure multi-step payment flow with identity verification and wallet logic. Built for high-trust transactions."
+    },
+    {
+        id: "05",
+        title: "ADHD Helper",
+        category: "MOBILE_PRODUCT",
+        description: "Smart routine planner with behavioral reminders. Improved user task completion by 30% through verified psychology patterns."
+    },
+    {
+        id: "06",
+        title: "Liquor Delivery",
+        category: "COMMERCE_LOGISTICS",
+        description: "End-to-end delivery tracking solution with real-time payments and driver logistics management."
     }
 ];
 
@@ -77,13 +91,19 @@ export default function Projects() {
                             </p>
                         </div>
 
-                        {/* Footer Bar */}
-                        <div className="flex justify-between items-center px-6 py-4 border-t border-white/10 bg-white/5 group-hover:bg-[#CCFF00]/10 transition-colors">
-                            <span className="font-mono text-xs text-gray-500 animate-pulse">:: VIEW_CASE_STUDY</span>
-                            <svg className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                        </div>
+                        {/* Footer Bar - Only if link exists */}
+                        {project.link ? (
+                            <a href={project.link} target="_blank" className="flex justify-between items-center px-6 py-4 border-t border-white/10 bg-white/5 group-hover:bg-[#CCFF00]/10 transition-colors cursor-pointer">
+                                <span className="font-mono text-xs text-gray-500 animate-pulse">:: VIEW_PACKAGE</span>
+                                <svg className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </a>
+                        ) : (
+                            <div className="px-6 py-4 border-t border-white/10 bg-white/[0.02]">
+                                <span className="font-mono text-xs text-gray-700">// INTERNAL_CS_LOCKED</span>
+                            </div>
+                        )}
 
                         {/* Corner Accents */}
                         <div className="absolute top-0 left-0 w-1 h-1 bg-white opacity-20 group-hover:bg-[#CCFF00] group-hover:opacity-100 transition-colors" />

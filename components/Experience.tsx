@@ -9,9 +9,9 @@ const experiences = [
         company: "Calvert Digital Technologies",
         period: "Jul 2025 – Present",
         description: [
-            "Leading architecture for large-scale systems.",
-            "Managed 200,000+ passes for MassArt Festival 2025.",
-            "Orchestrated Firebase, Twilio, and SES integrations."
+            "Architected QR access system for MassArt Festival (200,000+ passes).",
+            "Orchestrated Firebase, Twilio, and SES for zero-downtime operations.",
+            "Delivered production MVP in 2 weeks for peak traffic load."
         ]
     },
     {
@@ -20,9 +20,9 @@ const experiences = [
         company: "Rivet Backend Framework",
         period: "2025 – Present",
         description: [
-            "Built a high-performance Dart backend framework.",
-            "Achieved 3x speedup vs Express.js using isolates.",
-            "Active open-source maintenance on pub.dev."
+            "Built a high-performance Dart framework with 3-4x speedup vs Express.js.",
+            "Implemented zero-copy streaming, WebSockets, and isolate concurrency.",
+            "Active open-source maintenance on pub.dev with roadmap for ORM/Cloud."
         ]
     },
     {
@@ -31,8 +31,8 @@ const experiences = [
         company: "PegMan India",
         period: "Mar 2024 – May 2025",
         description: [
-            "Developed production pilot app with Flutter + MVVM.",
-            "Significantly improved UX/UI and app stability."
+            "Developed production-ready Flutter app with MVVM architecture.",
+            "Significantly optimized UX/UI flows and improved stability."
         ]
     },
     {
@@ -41,8 +41,8 @@ const experiences = [
         company: "WaterDrops Pvt Ltd",
         period: "Aug 2023 – Sep 2023",
         description: [
-            "Integrated Firebase and redesigned core UI flows.",
-            "Optimized conversion funnels for mobile users."
+            "Integrated Firebase across encryption/auth modules.",
+            "Redesigned core UI flows to boost user conversion rates."
         ]
     }
 ];

@@ -24,8 +24,9 @@ export default function TechPresence() {
                         Speaker, Judge & <br /> Open Source Creator.
                     </h2>
                     <p className="text-gray-400 text-lg leading-relaxed mb-8 font-mono">
-                        Beyond code, I actively contribute to the ecosystem. I've spoken at DevFest Ahlen, Flutter India Roadshow, and GDG events.
-                        I also serve as a judge for major hackathons like Diversion 2025 and many others.
+                        I actively shape the ecosystem. I organized <strong>Cloud Community Days Kolkata</strong> (2700+ attendees).
+                        I've delivered sessions at <strong>DevFest Ahlen</strong>, <strong>Flutter India Roadshow</strong>, and <strong>GDG Kolkata/Bangladesh</strong>.
+                        I also serve as a judge for high-stakes hackathons like <strong>Diversion 2025</strong> and <strong>Rebase 01</strong>.
                     </p>
 
                     <div className="flex flex-wrap gap-4 mb-8">
