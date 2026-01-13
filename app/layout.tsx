@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import SmoothScroll from "@/components/SmoothScroll";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains",
@@ -22,6 +24,8 @@ export default function RootLayout({
       <body
         className={`${jetbrainsMono.variable} font-mono antialiased`}
       >
+        <SmoothScroll />
+        <ScrollToTop />
         {children}
       </body>
     </html>
