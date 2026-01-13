@@ -30,19 +30,19 @@ export default function TechPresence() {
                     </p>
 
                     <div className="flex flex-wrap gap-4 mb-8">
-                        <a href="https://www.youtube.com/live/I58UFC0EZMY?si=_fHmMbe_n8eQNqT1" target="_blank" className="group flex items-center gap-2 px-5 py-3 border border-white/20 hover:border-[#CCFF00] bg-white/5 hover:bg-[#CCFF00]/10 transition-all font-mono text-white text-sm">
-                            <span className="text-[#CCFF00] group-hover:text-white">▶</span> WATCH_TALK_01
+                        <a href="https://www.youtube.com/live/I58UFC0EZMY?si=_fHmMbe_n8eQNqT1" target="_blank" className="group flex items-center gap-2 px-5 py-3 border border-white/20 hover:border-[#5FF2D6] bg-white/5 hover:bg-[#5FF2D6]/10 transition-all font-mono text-white text-sm">
+                            <span className="text-[#5FF2D6] group-hover:text-white">▶</span> WATCH_TALK_01
                         </a>
-                        <a href="https://youtu.be/CY7yXHgQAck?si=mOiVER5DW_M5i3Xx" target="_blank" className="group flex items-center gap-2 px-5 py-3 border border-white/20 hover:border-[#CCFF00] bg-white/5 hover:bg-[#CCFF00]/10 transition-all font-mono text-white text-sm">
-                            <span className="text-[#CCFF00] group-hover:text-white">▶</span> WATCH_TALK_02
+                        <a href="https://youtu.be/CY7yXHgQAck?si=mOiVER5DW_M5i3Xx" target="_blank" className="group flex items-center gap-2 px-5 py-3 border border-white/20 hover:border-[#5FF2D6] bg-white/5 hover:bg-[#5FF2D6]/10 transition-all font-mono text-white text-sm">
+                            <span className="text-[#5FF2D6] group-hover:text-white">▶</span> WATCH_TALK_02
                         </a>
                     </div>
 
                     <div className="flex gap-4">
-                        <a href="https://github.com/supratim1609" target="_blank" className="px-8 py-3 bg-white text-black font-bold hover:bg-[#CCFF00] transition-colors font-mono uppercase text-sm border border-transparent hover:border-black/20">
+                        <a href="https://github.com/supratim1609" target="_blank" className="px-8 py-3 bg-white text-black font-bold hover:bg-[#5FF2D6] transition-colors font-mono uppercase text-sm border border-transparent hover:border-black/20">
                             [ GitHub ]
                         </a>
-                        <a href="https://www.linkedin.com/in/supratimdhara/" target="_blank" className="px-8 py-3 border border-white/20 text-white font-bold hover:border-[#CCFF00] hover:text-[#CCFF00] transition-colors font-mono uppercase text-sm">
+                        <a href="https://www.linkedin.com/in/supratimdhara/" target="_blank" className="px-8 py-3 border border-white/20 text-white font-bold hover:border-[#5FF2D6] hover:text-[#5FF2D6] transition-colors font-mono uppercase text-sm">
                             [ LinkedIn ]
                         </a>
                     </div>

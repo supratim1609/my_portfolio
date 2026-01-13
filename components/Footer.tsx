@@ -13,11 +13,11 @@ export default function Footer() {
                     <div className="space-y-6">
                         <h3 className="text-xl font-mono text-gray-500 uppercase tracking-widest">// NEXT_STEP</h3>
                         <h2 className="text-4xl md:text-5xl font-bold leading-tight font-mono">
-                            Time to build<br />something<br /><span className="text-[#CCFF00]">remarkable.</span>
+                            Time to build<br />something<br /><span className="text-[#5FF2D6]">remarkable.</span>
                         </h2>
                         <a
                             href="mailto:supratimdhara0@gmail.com"
-                            className="inline-block mt-8 text-lg border-b border-[#CCFF00] pb-1 hover:text-[#CCFF00] transition-colors font-mono"
+                            className="inline-block mt-8 text-lg border-b border-[#5FF2D6] pb-1 hover:text-[#5FF2D6] transition-colors font-mono"
                         >
                             supratimdhara0@gmail.com
                         </a>
@@ -29,22 +29,22 @@ export default function Footer() {
                             <h3 className="text-xs font-mono text-gray-500 uppercase tracking-widest mb-6">_CONNECT</h3>
                             <ul className="space-y-4 font-mono text-sm">
                                 <li>
-                                    <a href="https://linkedin.com/in/supratimdhara/" target="_blank" className="hover:text-[#CCFF00] transition-colors flex items-center gap-2">
+                                    <a href="https://linkedin.com/in/supratimdhara/" target="_blank" className="hover:text-[#5FF2D6] transition-colors flex items-center gap-2">
                                         LinkedIn <span className="text-gray-600">↗</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://github.com/supratim1609" target="_blank" className="hover:text-[#CCFF00] transition-colors flex items-center gap-2">
+                                    <a href="https://github.com/supratim1609" target="_blank" className="hover:text-[#5FF2D6] transition-colors flex items-center gap-2">
                                         GitHub <span className="text-gray-600">↗</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://medium.com/@supratimdhara0" target="_blank" className="hover:text-[#CCFF00] transition-colors flex items-center gap-2">
+                                    <a href="https://medium.com/@supratimdhara0" target="_blank" className="hover:text-[#5FF2D6] transition-colors flex items-center gap-2">
                                         Medium <span className="text-gray-600">↗</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://www.instagram.com/dhara_apk/" target="_blank" className="hover:text-[#CCFF00] transition-colors flex items-center gap-2">
+                                    <a href="https://www.instagram.com/dhara_apk/" target="_blank" className="hover:text-[#5FF2D6] transition-colors flex items-center gap-2">
                                         Instagram <span className="text-gray-600">↗</span>
                                     </a>
                                 </li>
@@ -58,8 +58,8 @@ export default function Footer() {
                             <h3 className="text-xs font-mono text-gray-500 uppercase tracking-widest mb-6">_STATUS</h3>
                             <div className="font-mono text-xs text-gray-400 space-y-2">
                                 <div className="flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-[#CCFF00] rounded-full animate-pulse" />
-                                    <span className="text-[#CCFF00]">AVAILABLE FOR HIRE</span>
+                                    <span className="w-2 h-2 bg-[#5FF2D6] rounded-full animate-pulse" />
+                                    <span className="text-[#5FF2D6]">AVAILABLE FOR HIRE</span>
                                 </div>
                                 <p>LOC: KOLKATA, INDIA</p>
                                 <p>TZ: GMT+5:30</p>

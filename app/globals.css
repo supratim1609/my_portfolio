@@ -10,7 +10,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-jetbrains);
   --font-mono: var(--font-jetbrains);
-  --color-accent: #CCFF00;
+  --color-accent: #5FF2D6;
 }
 
 @media (prefers-color-scheme: dark) {

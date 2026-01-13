@@ -34,7 +34,7 @@ export default function ScrollToTop() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 20 }}
                     onClick={scrollToTop}
-                    className="fixed bottom-8 right-8 z-50 p-4 bg-[#CCFF00] text-black hover:bg-white transition-colors group"
+                    className="fixed bottom-8 right-8 z-50 p-4 bg-[#5FF2D6] text-black hover:bg-white transition-colors group"
                 >
                     <div className="relative w-6 h-6 flex items-center justify-center overflow-hidden">
                         <span className="font-mono text-xs font-bold group-hover:-translate-y-full transition-transform duration-300 absolute">TOP</span>

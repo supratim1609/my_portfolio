@@ -45,7 +45,7 @@ export default function Preloader() {
                 <div className="w-full h-[1px] bg-white/10 relative overflow-hidden">
                     {/* Animated Progress Line */}
                     <motion.div
-                        className="absolute top-0 left-0 h-full bg-[#CCFF00]"
+                        className="absolute top-0 left-0 h-full bg-[#5FF2D6]"
                         initial={{ width: "0%" }}
                         animate={{ width: `${count}%` }}
                         transition={{ duration: 0.1 }}

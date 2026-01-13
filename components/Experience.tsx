@@ -56,7 +56,7 @@ export default function Experience() {
             <div className="max-w-5xl mx-auto relative z-10">
                 <div className="flex items-end justify-between mb-20 border-b border-white/10 pb-6">
                     <div>
-                        <h3 className="text-sm font-mono text-[#CCFF00] mb-2 uppercase tracking-widest">[ SYSTEM_LOGS ]</h3>
+                        <h3 className="text-sm font-mono text-[#5FF2D6] mb-2 uppercase tracking-widest">[ SYSTEM_LOGS ]</h3>
                         <h2 className="text-4xl md:text-5xl font-bold text-white font-mono uppercase">Role_History</h2>
                     </div>
                     <div className="text-right hidden md:block">
@@ -75,17 +75,17 @@ export default function Experience() {
                             className="group relative pl-8 md:pl-16 font-mono"
                         >
                             {/* Timeline Node */}
-                            <div className="absolute -left-[5px] md:-left-[5px] top-6 w-[9px] h-[9px] bg-[#121212] border border-gray-500 group-hover:border-[#CCFF00] group-hover:bg-[#CCFF00] transition-colors duration-300 z-10" />
+                            <div className="absolute -left-[5px] md:-left-[5px] top-6 w-[9px] h-[9px] bg-[#121212] border border-gray-500 group-hover:border-[#5FF2D6] group-hover:bg-[#5FF2D6] transition-colors duration-300 z-10" />
 
-                            <div className="relative p-6 md:p-8 border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#CCFF00]/30 transition-all duration-300">
+                            <div className="relative p-6 md:p-8 border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#5FF2D6]/30 transition-all duration-300">
                                 {/* Decorator Corner */}
                                 <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <span className="text-[10px] text-[#CCFF00]">:: ACTIVE_NODE ::</span>
+                                    <span className="text-[10px] text-[#5FF2D6]">:: ACTIVE_NODE ::</span>
                                 </div>
 
                                 <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
                                     <div>
-                                        <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-[#CCFF00] transition-colors">
+                                        <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-[#5FF2D6] transition-colors">
                                             {exp.company}
                                         </h3>
                                         <p className="text-sm md:text-base text-gray-400 mt-1 uppercase tracking-wider">
@@ -100,7 +100,7 @@ export default function Experience() {
                                 <div className="space-y-3">
                                     {exp.description.map((point, i) => (
                                         <div key={i} className="flex gap-3 text-sm md:text-base text-gray-400 group-hover:text-gray-300 transition-colors">
-                                            <span className="text-[#CCFF00] opacity-50 group-hover:opacity-100">»</span>
+                                            <span className="text-[#5FF2D6] opacity-50 group-hover:opacity-100">»</span>
                                             <p className="leading-relaxed">{point}</p>
                                         </div>
                                     ))}

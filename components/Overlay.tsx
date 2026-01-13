@@ -35,7 +35,7 @@ export default function Overlay({ scrollYProgress }: OverlayProps) {
                     <h1 className="text-6xl md:text-9xl font-bold tracking-tighter mb-4 text-white font-sans uppercase">
                         Supratim<br />Dhara
                     </h1>
-                    <p className="text-xl md:text-2xl text-[#CCFF00] font-mono tracking-widest uppercase">
+                    <p className="text-xl md:text-2xl text-[#5FF2D6] font-mono tracking-widest uppercase">
                         // Systems Engineer & Architect
                     </p>
                 </div>
@@ -47,12 +47,12 @@ export default function Overlay({ scrollYProgress }: OverlayProps) {
                 className="absolute inset-0 flex items-center justify-start p-12 md:p-24"
             >
                 <div className="max-w-xl">
-                    <p className="font-mono text-[#CCFF00] mb-4 text-sm tracking-wider">001_CREATION</p>
+                    <p className="font-mono text-[#5FF2D6] mb-4 text-sm tracking-wider">001_CREATION</p>
                     <h2 className="text-5xl md:text-7xl font-bold leading-none text-white mb-6 font-sans uppercase">
                         Rivet<br />
                         Framework
                     </h2>
-                    <p className="text-lg text-gray-400 font-mono border-l-2 border-[#CCFF00] pl-4">
+                    <p className="text-lg text-gray-400 font-mono border-l-2 border-[#5FF2D6] pl-4">
                         High-performance distributed systems in Dart.
                     </p>
                 </div>
@@ -64,12 +64,12 @@ export default function Overlay({ scrollYProgress }: OverlayProps) {
                 className="absolute inset-0 flex items-center justify-end p-12 md:p-24"
             >
                 <div className="max-w-xl text-right">
-                    <p className="font-mono text-[#CCFF00] mb-4 text-sm tracking-wider">002_LEADERSHIP</p>
+                    <p className="font-mono text-[#5FF2D6] mb-4 text-sm tracking-wider">002_LEADERSHIP</p>
                     <h2 className="text-5xl md:text-7xl font-bold leading-none text-white mb-6 font-sans uppercase">
                         CTO @<br />
                         Calvert
                     </h2>
-                    <p className="text-lg text-gray-400 font-mono border-r-2 border-[#CCFF00] pr-4">
+                    <p className="text-lg text-gray-400 font-mono border-r-2 border-[#5FF2D6] pr-4">
                         Bridging vision and scale for 200k+ users.
                     </p>
                 </div>
