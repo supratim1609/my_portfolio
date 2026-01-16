@@ -1,6 +1,6 @@
 'use client';
 
-import { useScroll, useTransform, useMotionValueEvent, AnimatePresence } from 'framer-motion';
+import { useScroll, useTransform, useMotionValueEvent, AnimatePresence, useSpring } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import Overlay from './Overlay';
 import Preloader from './Preloader';
@@ -9,7 +9,8 @@ const FRAME_COUNT = 105;
 
 export default function ScrollyCanvas() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [images, setImages] = useState<HTMLImageElement[]>([]);
+    // Store as CanvasImageSource (ImageBitmap | HTMLImageElement)
+    const [images, setImages] = useState<CanvasImageSource[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
     // Track scroll progress of the main container
@@ -19,30 +20,47 @@ export default function ScrollyCanvas() {
         offset: ['start start', 'end end'],
     });
 
-    // Map scroll progress (0 to 1) to frame index (0 to FRAME_COUNT - 1)
-    const currentIndex = useTransform(scrollYProgress, [0, 1], [0, FRAME_COUNT - 1]);
+    // Add physics-based smoothing to the scroll progress
+    const smoothProgress = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
+
+    // Map smoothed progress (0 to 1) to frame index (0 to FRAME_COUNT - 1)
+    const currentIndex = useTransform(smoothProgress, [0, 1], [0, FRAME_COUNT - 1]);
 
     useEffect(() => {
         // Preload images
         const loadImages = async () => {
-            const loadedImages: HTMLImageElement[] = [];
+            const loadedImages: CanvasImageSource[] = [];
             const promises: Promise<void>[] = [];
 
             for (let i = 0; i < FRAME_COUNT; i++) {
-                const promise = new Promise<void>((resolve, reject) => {
+                const promise = new Promise<void>(async (resolve, reject) => {
                     const img = new Image();
                     // Pad number with leading zeros (e.g., frame_000.webp)
                     const paddedIndex = i.toString().padStart(3, '0');
                     img.src = `/sequence/frame_${paddedIndex}.webp`;
-                    img.onload = () => {
-                        loadedImages[i] = img;
+
+                    try {
+                        // Force decode the image first
+                        await img.decode();
+
+                        // Try to convert to ImageBitmap for GPU-optimized rendering
+                        // This handles the transfer to GPU memory upfront
+                        if (typeof window !== 'undefined' && 'createImageBitmap' in window) {
+                            const bitmap = await createImageBitmap(img);
+                            loadedImages[i] = bitmap;
+                        } else {
+                            loadedImages[i] = img;
+                        }
                         resolve();
-                    };
-                    img.onerror = (e) => {
-                        console.error(`Failed to load frame ${i}`, e);
-                        // Resolve anyway to avoid hanging, though you might want a placeholder
+                    } catch (e) {
+                        console.error(`Failed to load/decode frame ${i}`, e);
+                        // Fallback - just resolve to keep going
                         resolve();
-                    };
+                    }
                 });
                 promises.push(promise);
             }
@@ -63,86 +81,67 @@ export default function ScrollyCanvas() {
         const canvas = canvasRef.current;
         if (!canvas || !images[index]) return;
 
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', {
+            alpha: false, // Optimization: canvas doesn't need transparency
+            desynchronized: true // Optimization: allow faster, potentially tearing updates (often smoother)
+        });
         if (!ctx) return;
 
-        // Handle high DPI displays
-        const dpr = window.devicePixelRatio || 1;
+        // OPTIMIZATION: Cap DPR at 2. 
+        // 3x rendering for moving video is unnecessary overhead.
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
         // Check if canvas size matches window size (handling resize)
         if (canvas.width !== window.innerWidth * dpr || canvas.height !== window.innerHeight * dpr) {
             canvas.width = window.innerWidth * dpr;
             canvas.height = window.innerHeight * dpr;
-            ctx.scale(dpr, dpr);
-            // Reset scale because we are managing drawing dimensions manually below? 
-            // Actually standard pattern is verify CSS size vs Attribute size
+            // Explicitly set style width/height to match CSS pixels
             canvas.style.width = `${window.innerWidth}px`;
             canvas.style.height = `${window.innerHeight}px`;
         }
 
-        // Isolate scaling to drawing only if we want specific control, 
-        // but easier to just use the viewport size for calculations
-        const width = canvas.width / dpr;
-        const height = canvas.height / dpr;
+        const width = canvas.width;
+        const height = canvas.height;
 
-        // Clear canvas
-        ctx.clearRect(0, 0, width, height);
+        // No clearRect needed if we cover the whole screen, but good practice if aspect ratio differs significantly
+        // However, since we object-fit cover, we usually draw over everything. 
+        // Removing clearRect can verify if it helps, but let's keep it safe or just fill black?
+        // ctx.clearRect(0, 0, width, height); // Optionally remove this if we always cover
+
+        // Use a fast fill for the background to avoid alpha blending cost?
+        // Actually, since alpha: false is set, the browser knows it's opaque.
 
         const img = images[index];
 
         // "object-fit: cover" logic
-        const imgRatio = img.width / img.height;
+        // Use 'any' cast for width/height property access as CanvasImageSource is a union
+        const imgWidth = (img as any).width;
+        const imgHeight = (img as any).height;
+
+        const imgRatio = imgWidth / imgHeight;
         const canvasRatio = width / height;
 
         let drawWidth, drawHeight, offsetX, offsetY;
 
+        const SCALE_FACTOR = 1.05; // Zoom slightly to hide watermark
+
         if (canvasRatio > imgRatio) {
-            // Canvas is wider than image -> fit to width
-            drawWidth = width;
-            drawHeight = width / imgRatio;
-            offsetX = 0;
+            // Canvas is wider -> fit to width
+            drawWidth = width * SCALE_FACTOR;
+            drawHeight = (width / imgRatio) * SCALE_FACTOR;
+            offsetX = (width - drawWidth) / 2;
             offsetY = (height - drawHeight) / 2;
         } else {
-            // Canvas is taller than image -> fit to height
-            drawHeight = height;
-            drawWidth = height * imgRatio;
-            offsetY = 0;
+            // Canvas is taller -> fit to height
+            drawHeight = height * SCALE_FACTOR;
+            drawWidth = (height * imgRatio) * SCALE_FACTOR;
+            offsetY = (height - drawHeight) / 2;
             offsetX = (width - drawWidth) / 2;
         }
 
-        // Draw image
-        // Note: If using `ctx.scale(dpr, dpr)`, operation units are logical CSS pixels
-        // But setting canvas.width to physical pixels resets context state usually
-        // It's safer to rely on physical pixels or reset transform
-
-        // Let's stick to a robust approach:
-        // Reset transform to identity to use physical pixels directly, simpler for full control
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-        // Re-calculate draw dimensions for PHYSICAL pixels
-        const physWidth = canvas.width;
-        const physHeight = canvas.height;
-
-        const physImgRatio = img.width / img.height;
-        const physCanvasRatio = physWidth / physHeight;
-
-        let physDrawWidth, physDrawHeight, physOffsetX, physOffsetY;
-
-        const SCALE_FACTOR = 1.05; // Zoom slightly to hide watermark
-
-        if (physCanvasRatio > physImgRatio) {
-            physDrawWidth = physWidth * SCALE_FACTOR;
-            physDrawHeight = (physWidth / physImgRatio) * SCALE_FACTOR;
-            physOffsetX = (physWidth - physDrawWidth) / 2;
-            physOffsetY = (physHeight - physDrawHeight) / 2;
-        } else {
-            physDrawHeight = physHeight * SCALE_FACTOR;
-            physDrawWidth = (physHeight * physImgRatio) * SCALE_FACTOR;
-            physOffsetY = (physHeight - physDrawHeight) / 2;
-            physOffsetX = (physWidth - physDrawWidth) / 2;
-        }
-
-        ctx.drawImage(img, physOffsetX, physOffsetY, physDrawWidth, physDrawHeight);
+        // Draw image directly with physical coordinates
+        ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform ensures 1:1 pixel mapping
+        ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     };
 
     // Render loop reacting to scroll
@@ -176,7 +175,16 @@ export default function ScrollyCanvas() {
                 <AnimatePresence mode="wait">
                     {!isLoaded && <Preloader key="preloader" />}
                 </AnimatePresence>
-                <canvas ref={canvasRef} className="block w-full h-full" />
+
+                {/* 
+                  Optimize canvas element:
+                  - opaque-canvas used in conjunction with getContext('2d', { alpha: false }) 
+                */}
+                <canvas
+                    ref={canvasRef}
+                    className="block w-full h-full bg-[#121212]"
+                />
+
                 <Overlay scrollYProgress={scrollYProgress} />
                 {/* Gradient Fade to seamless transition */}
                 <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-b from-transparent to-[#121212] z-10 pointer-events-none" />

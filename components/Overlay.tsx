@@ -32,10 +32,16 @@ export default function Overlay({ scrollYProgress }: OverlayProps) {
                 className="absolute inset-0 flex items-center justify-center text-center p-8"
             >
                 <div>
+                    <div className="flex items-center justify-center gap-3 mb-6">
+                        <span className="w-2 h-2 bg-[#5FF2D6] rounded-full animate-pulse" />
+                        <span className="font-mono text-[#5FF2D6] text-xs md:text-sm tracking-[0.2em] uppercase border border-[#5FF2D6]/30 px-3 py-1 rounded-full bg-[#5FF2D6]/5">
+                            Available for Hire
+                        </span>
+                    </div>
                     <h1 className="text-6xl md:text-9xl font-bold tracking-tighter mb-4 text-white font-sans uppercase">
                         Supratim<br />Dhara
                     </h1>
-                    <p className="text-xl md:text-2xl text-[#5FF2D6] font-mono tracking-widest uppercase">
+                    <p className="text-xl md:text-2xl text-[#5FF2D6] font-mono tracking-widest uppercase mb-8">
                         // Systems Engineer & Architect
                     </p>
                 </div>
@@ -66,11 +72,11 @@ export default function Overlay({ scrollYProgress }: OverlayProps) {
                 <div className="max-w-xl text-right">
                     <p className="font-mono text-[#5FF2D6] mb-4 text-sm tracking-wider">002_LEADERSHIP</p>
                     <h2 className="text-5xl md:text-7xl font-bold leading-none text-white mb-6 font-sans uppercase">
-                        CTO @<br />
-                        Calvert
+                        Engineering<br />
+                        Leadership
                     </h2>
                     <p className="text-lg text-gray-400 font-mono border-r-2 border-[#5FF2D6] pr-4">
-                        Bridging vision and scale for 200k+ users.
+                        Calvert CTO. Scaling vision to reality.
                     </p>
                 </div>
             </motion.div>

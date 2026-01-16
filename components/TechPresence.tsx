@@ -3,9 +3,9 @@
 import { motion } from 'framer-motion';
 
 const stats = [
-    { label: "Community", value: "2.7k+", desc: "Attendees at Cloud Community Days" },
-    { label: "Writing", value: "500+", desc: "Developers read my technical blogs" },
-    { label: "Speed", value: "3x", desc: "Faster backend response with Rivet" },
+    { label: "Users Served", value: "200k+", desc: "Traffic handled with zero downtime" },
+    { label: "Performance", value: "300%", desc: "Speedup vs standard Express.js backends" },
+    { label: "Ship Speed", value: "14 Days", desc: "From concept to production delivery" },
 ];
 
 export default function TechPresence() {
@@ -25,20 +25,33 @@ export default function TechPresence() {
                     </h2>
                     <p className="text-gray-400 text-lg leading-relaxed mb-8 font-mono">
                         I actively shape the ecosystem. I organized <strong>Cloud Community Days Kolkata</strong> (2700+ attendees).
-                        I've delivered sessions at <strong>DevFest Ahlen</strong>, <strong>Flutter India Roadshow</strong>, and <strong>GDG Kolkata/Bangladesh</strong>.
-                        I also serve as a judge for high-stakes hackathons like <strong>Diversion 2025</strong> and <strong>Rebase 01</strong>.
+                        I've delivered sessions at <strong>20+ tech summits</strong> globally, including <strong>DevFest Ahlen</strong>, <strong>Flutter India Roadshow</strong>, and <strong>GDG Kolkata/Bangladesh</strong>.
+                        I also serve as a judge for numerous high-stakes hackathons like <strong>Diversion 2025</strong>, <strong>Rebase 01</strong>, and many others.
                     </p>
 
                     <div className="flex flex-wrap gap-4 mb-8">
                         <a href="https://www.youtube.com/live/I58UFC0EZMY?si=_fHmMbe_n8eQNqT1" target="_blank" className="group flex items-center gap-2 px-5 py-3 border border-white/20 hover:border-[#5FF2D6] bg-white/5 hover:bg-[#5FF2D6]/10 transition-all font-mono text-white text-sm">
-                            <span className="text-[#5FF2D6] group-hover:text-white">▶</span> WATCH_TALK_01
+                            <svg className="w-5 h-5 text-[#5FF2D6] group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                            </svg>
+                            WATCH_TALK_01
                         </a>
                         <a href="https://youtu.be/CY7yXHgQAck?si=mOiVER5DW_M5i3Xx" target="_blank" className="group flex items-center gap-2 px-5 py-3 border border-white/20 hover:border-[#5FF2D6] bg-white/5 hover:bg-[#5FF2D6]/10 transition-all font-mono text-white text-sm">
-                            <span className="text-[#5FF2D6] group-hover:text-white">▶</span> WATCH_TALK_02
+                            <svg className="w-5 h-5 text-[#5FF2D6] group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                            </svg>
+                            WATCH_TALK_02
                         </a>
                     </div>
 
-                    <div className="flex gap-4">
+                    <div className="flex flex-wrap gap-4">
+                        <a
+                            href="https://drive.google.com/file/d/1BNJo-xoCDvlqwTgs-FLqKZTX1019gQTR/view?usp=sharing"
+                            target="_blank"
+                            className="px-8 py-3 bg-[#5FF2D6] text-black font-bold hover:bg-white transition-colors font-mono uppercase text-sm border border-transparent shadow-[0_0_20px_-5px_#5FF2D6]"
+                        >
+                            [ View / Download CV ]
+                        </a>
                         <a href="https://github.com/supratim1609" target="_blank" className="px-8 py-3 bg-white text-black font-bold hover:bg-[#5FF2D6] transition-colors font-mono uppercase text-sm border border-transparent hover:border-black/20">
                             [ GitHub ]
                         </a>
