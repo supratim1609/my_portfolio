@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
@@ -27,6 +28,7 @@ export default function RootLayout({
         <SmoothScroll />
         <ScrollToTop />
         {children}
+        <GoogleAnalytics gaId="MEASUREMENT-ID-HERE" />
       </body>
     </html>
   );
