@@ -41,7 +41,9 @@ export default function ScrollyCanvas() {
                     const img = new Image();
                     // Pad number with leading zeros (e.g., frame_000.webp)
                     const paddedIndex = i.toString().padStart(3, '0');
-                    img.src = `/sequence/frame_${paddedIndex}.webp`;
+                    // Add basePath for GitHub Pages
+                    const basePath = '/my_portfolio';
+                    img.src = `${basePath}/sequence/frame_${paddedIndex}.webp`;
 
                     try {
                         // Force decode the image first
