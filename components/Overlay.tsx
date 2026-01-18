@@ -76,7 +76,7 @@ export default function Overlay({ scrollYProgress }: OverlayProps) {
                         Leadership
                     </h2>
                     <p className="text-lg text-gray-400 font-mono border-r-2 border-[#5FF2D6] pr-4">
-                        Calvert CTO. Scaling vision to reality.
+                        CTO @ Calverts Digital technology
                     </p>
                 </div>
             </motion.div>
