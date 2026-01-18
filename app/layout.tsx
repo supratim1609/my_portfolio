@@ -28,7 +28,7 @@ export default function RootLayout({
         <SmoothScroll />
         <ScrollToTop />
         {children}
-        <GoogleAnalytics gaId="MEASUREMENT-ID-HERE" />
+        <GoogleAnalytics gaId="G-VCR0CSHJD6" />
       </body>
     </html>
   );
