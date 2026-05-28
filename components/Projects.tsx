@@ -11,10 +11,10 @@ const PROJECTS = [
     link: "https://www.bechohub.com/",
   },
   {
-    title: "Rivet AI Framework",
-    description: "An orchestration layer for autonomous agents and complex LLM workflows. Designed to provide deterministic execution in probabilistic environments.",
+    title: "Rivet Framework",
+    description: "A robust backend framework built entirely on Dart. Designed to provide scalable infrastructure and deterministic execution for modern applications.",
     role: "Creator",
-    link: "#",
+    link: "https://supratim1609.github.io/rivet_landing/",
   },
   {
     title: "Elections Observer App",
