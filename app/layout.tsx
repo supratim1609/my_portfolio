@@ -1,4 +1,5 @@
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
@@ -45,9 +46,9 @@ export default function RootLayout({
         className={`${plusJakartaSans.variable} ${jetbrainsMono.variable} font-sans antialiased bg-[#050505] text-[#E5E5E5] selection:bg-[#FF3B30] selection:text-white overflow-x-hidden`}
       >
         <SmoothScroll />
-
         {children}
         <GoogleAnalytics gaId="G-VCR0CSHJD6" />
+        <Analytics />
       </body>
     </html>
   );
