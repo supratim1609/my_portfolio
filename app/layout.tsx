@@ -1,18 +1,37 @@
 import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
-import ScrollToTop from "@/components/ScrollToTop";
+
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-sans",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+});
 
 const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains",
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Supratim Dhara | Systems Engineer",
-  description: "Portfolio of Supratim Dhara - CTO, Architect, and Creator of Rivet.",
+  title: "Supratim Dhara | Systems Architect & Founder",
+  description: "I build scalable digital infrastructure, AI-powered systems, commerce ecosystems, and operational technology products for the next era.",
+  keywords: ["Supratim Dhara", "Systems Architect", "CTO", "Founder", "Rivet Framework", "Software Infrastructure", "AI Systems", "Civic Tech", "Mobile Engineer"],
+  authors: [{ name: "Supratim Dhara" }],
+  openGraph: {
+    title: "Supratim Dhara | Systems Architect & Founder",
+    description: "I build scalable digital infrastructure, AI-powered systems, commerce ecosystems, and operational technology products for the next era.",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Supratim Dhara | Systems Architect & Founder",
+    description: "I build scalable digital infrastructure, AI-powered systems, commerce ecosystems, and operational technology products for the next era.",
+  }
 };
 
 export default function RootLayout({
@@ -21,12 +40,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark scroll-smooth">
       <body
-        className={`${jetbrainsMono.variable} font-mono antialiased`}
+        className={`${plusJakartaSans.variable} ${jetbrainsMono.variable} font-sans antialiased bg-[#050505] text-[#E5E5E5] selection:bg-[#FF3B30] selection:text-white overflow-x-hidden`}
       >
         <SmoothScroll />
-        <ScrollToTop />
+
         {children}
         <GoogleAnalytics gaId="G-VCR0CSHJD6" />
       </body>

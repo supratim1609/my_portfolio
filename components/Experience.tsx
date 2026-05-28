@@ -1,115 +1,92 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
-const experiences = [
-    {
-        id: 1,
-        role: "Cofounder & CTO",
-        company: "Calvert Digital Technologies",
-        period: "Jul 2025 – Present",
-        description: [
-            "Architected QR access system for MassArt Festival (200,000+ passes).",
-            "Orchestrated Firebase, Twilio, and SES for zero-downtime operations.",
-            "Delivered production MVP in 2 weeks for peak traffic load."
-        ]
-    },
-    {
-        id: 2,
-        role: "Creator & Maintainer",
-        company: "Rivet Backend Framework",
-        period: "2025 – Present",
-        description: [
-            "Built a high-performance Dart framework with 3-4x speedup vs Express.js.",
-            "Implemented zero-copy streaming, WebSockets, and isolate concurrency.",
-            "Active open-source maintenance on pub.dev with roadmap for ORM/Cloud."
-        ]
-    },
-    {
-        id: 3,
-        role: "Founding Engineer",
-        company: "PegMan India",
-        period: "Mar 2024 – May 2025",
-        description: [
-            "Developed production-ready Flutter app with MVVM architecture.",
-            "Significantly optimized UX/UI flows and improved stability."
-        ]
-    },
-    {
-        id: 4,
-        role: "Frontend Developer",
-        company: "WaterDrops Pvt Ltd",
-        period: "Aug 2023 – Sep 2023",
-        description: [
-            "Integrated Firebase across encryption/auth modules.",
-            "Redesigned core UI flows to boost user conversion rates."
-        ]
-    }
+const EXPERIENCES = [
+  {
+    role: "Founder & Architect",
+    subtitle: "(Chief Yap Engineer)",
+    company: "Bechohub",
+    period: "2025 — Present",
+    description: "Currently building a scalable commerce ecosystem from the ground up. Directing engineering for real-time inventory management, payment gateways, and a microservices-based backend using Node.js and AWS. It's not done, but we have a domain name.",
+  },
+  {
+    role: "CTO",
+    subtitle: "(Professional Firefighter)",
+    company: "Calverts Digital Technology",
+    period: "2024 — 2025",
+    description: "Led technical strategy and engineering teams to build robust digital solutions. Oversaw the development of core platforms, optimizing performance and establishing technical best practices.",
+  },
+  {
+    role: "Software Engineer & Freelance",
+    subtitle: "(Will code for server costs)",
+    company: "Multiple Companies",
+    period: "2021 — 2024",
+    description: "Operated as both an in-house software engineer and a freelance consultant across various organizations. Engineered robust web applications and backend systems, driving product development from 0 to 1.",
+  }
 ];
 
 export default function Experience() {
-    return (
-        <section className="relative w-full py-32 px-6 md:px-12 bg-[#121212] z-20 overflow-hidden">
-            {/* Background Grid Accent */}
-            <div className="absolute top-0 right-0 w-1/3 h-full bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none opacity-50" />
+  return (
+    <section className="py-32 px-6 lg:px-8 bg-[#050505]">
+      <div className="max-w-5xl mx-auto">
+        <div className="mb-20">
+          <h2 className="text-xs font-medium tracking-widest text-[#A1A1A1] uppercase mb-6">Experience</h2>
+          <div className="h-px w-full bg-white/[0.06]" />
+        </div>
 
-            <div className="max-w-5xl mx-auto relative z-10">
-                <div className="flex items-end justify-between mb-20 border-b border-white/10 pb-6">
-                    <div>
-                        <h3 className="text-sm font-mono text-[#5FF2D6] mb-2 uppercase tracking-widest">[ SYSTEM_LOGS ]</h3>
-                        <h2 className="text-4xl md:text-5xl font-bold text-white font-mono uppercase">Role_History</h2>
-                    </div>
-                    <div className="text-right hidden md:block">
-                        <p className="font-mono text-xs text-gray-500">// CHRONOLOGICAL_ORDER_ASC</p>
-                    </div>
-                </div>
+        <div className="space-y-16">
+          {EXPERIENCES.map((exp, idx) => (
+            <motion.div 
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: idx * 0.1 }}
+              className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8"
+            >
+              <div className="md:col-span-1 text-[#888888] font-mono text-sm pt-1">
+                {exp.period}
+              </div>
+              <div className="md:col-span-3">
+                <h3 className="text-xl font-medium text-white mb-1 tracking-tight">
+                  {exp.role} <span className="text-[#888888] text-sm font-normal ml-2">{exp.subtitle}</span>
+                </h3>
+                <h4 className="text-[#A1A1A1] font-medium mb-4">{exp.company}</h4>
+                <p className="text-[#888888] font-light leading-relaxed max-w-2xl text-sm sm:text-base">
+                  {exp.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
 
-                <div className="relative border-l border-white/10 ml-0 md:ml-4 space-y-12">
-                    {experiences.map((exp, index) => (
-                        <motion.div
-                            key={exp.id}
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                            viewport={{ once: true }}
-                            className="group relative pl-8 md:pl-16 font-mono"
-                        >
-                            {/* Timeline Node */}
-                            <div className="absolute -left-[5px] md:-left-[5px] top-6 w-[9px] h-[9px] bg-[#121212] border border-gray-500 group-hover:border-[#5FF2D6] group-hover:bg-[#5FF2D6] transition-colors duration-300 z-10" />
+        <div className="mt-32 mb-20">
+          <h2 className="text-xs font-medium tracking-widest text-[#A1A1A1] uppercase mb-6">Education</h2>
+          <div className="h-px w-full bg-white/[0.06]" />
+        </div>
 
-                            <div className="relative p-6 md:p-8 border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#5FF2D6]/30 transition-all duration-300">
-                                {/* Decorator Corner */}
-                                <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <span className="text-[10px] text-[#5FF2D6]">:: ACTIVE_NODE ::</span>
-                                </div>
-
-                                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
-                                    <div>
-                                        <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-[#5FF2D6] transition-colors">
-                                            {exp.company}
-                                        </h3>
-                                        <p className="text-sm md:text-base text-gray-400 mt-1 uppercase tracking-wider">
-                                            // {exp.role}
-                                        </p>
-                                    </div>
-                                    <div className="py-1 px-3 border border-white/10 rounded bg-white/5 whitespace-nowrap">
-                                        <span className="text-xs text-gray-400 group-hover:text-white transition-colors">{exp.period}</span>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-3">
-                                    {exp.description.map((point, i) => (
-                                        <div key={i} className="flex gap-3 text-sm md:text-base text-gray-400 group-hover:text-gray-300 transition-colors">
-                                            <span className="text-[#5FF2D6] opacity-50 group-hover:opacity-100">»</span>
-                                            <p className="leading-relaxed">{point}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
+        <div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6 }}
+            className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8"
+          >
+            <div className="md:col-span-1 text-[#888888] font-mono text-sm pt-1">
+              2021 — 2025
             </div>
-        </section>
-    );
+            <div className="md:col-span-3">
+              <h3 className="text-xl font-medium text-white mb-1 tracking-tight">Bachelor of Technology (B.Tech) <span className="text-[#888888] text-sm font-normal ml-2">(Proof I can sit through lectures)</span></h3>
+              <h4 className="text-[#A1A1A1] font-medium mb-4">University of Engineering & Management (UEM), Kolkata</h4>
+              <p className="text-[#888888] font-light leading-relaxed max-w-2xl text-sm sm:text-base">
+                Focused on systems engineering, software development, and modern architectural patterns.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
 }
