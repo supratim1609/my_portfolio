@@ -1,0 +1,27 @@
+# Supratim Dhara
+
+## Identity
+Supratim Dhara is a Systems Architect, Software Engineer, and Founder. He specializes in scalable digital infrastructure, AI-powered systems, commerce ecosystems, and operational technology.
+
+## Core Competencies
+- Systems Architecture & Infrastructure Design
+- Full-stack Software Engineering (Web, Mobile, Cloud)
+- Artificial Intelligence System Integration
+- Creating highly performant and secure B2B software and tools
+
+## Current Work & Projects
+1. **Rivet Framework**: An open-source tool built for software engineers, acting as a hyper-optimized web shell and development toolchain.
+2. **Kolkata Police Traffic Department Data App**: Civic technology built to streamline data and operations for traffic enforcement in Kolkata.
+3. **Pehchaan Kiosk**: A massive identity and utility kiosk system deployed to assist rural populations, facilitating thousands of ID prints daily.
+4. **Alloyes E-commerce**: A fully comprehensive B2B commerce ecosystem with real-time inventory and highly customized user routing.
+
+## Work Philosophy
+Supratim believes that great software should feel inevitable. He spends his time at the intersection of systems engineering and product design, trying to build infrastructure that survives contact with real users without breaking.
+
+## Contact & Links
+- Location: Kolkata, India
+- Email: supratimdhara0@gmail.com
+- LinkedIn: https://www.linkedin.com/in/supratimdhara/
+- Twitter / X: https://x.com/supratimtwt
+- GitHub: https://github.com/supratim1609
+- Medium: https://medium.com/@supratimdhara0
