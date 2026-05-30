@@ -18,6 +18,10 @@ export default function CustomCursor() {
   const cursorYSpringInner = useSpring(cursorY, springConfigInner);
 
   useEffect(() => {
+    // Detect touch device
+    const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    if (isTouchDevice) return;
+
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX - 16); // Center the outer circle
       cursorY.set(e.clientY - 16);
@@ -26,7 +30,12 @@ export default function CustomCursor() {
     
     document.body.style.cursor = "none";
     const styleElement = document.createElement("style");
-    styleElement.innerHTML = `* { cursor: none !important; }`;
+    styleElement.innerHTML = `
+      * { cursor: none !important; }
+      @media (pointer: coarse) {
+        * { cursor: auto !important; }
+      }
+    `;
     document.head.appendChild(styleElement);
 
     window.addEventListener("mousemove", moveCursor);
@@ -34,11 +43,15 @@ export default function CustomCursor() {
     return () => {
       window.removeEventListener("mousemove", moveCursor);
       document.body.style.cursor = "auto";
-      document.head.removeChild(styleElement);
+      if (document.head.contains(styleElement)) {
+        document.head.removeChild(styleElement);
+      }
     };
   }, [cursorX, cursorY, isVisible]);
 
-  if (!isVisible) return null;
+  // Don't render anything if it's a touch device or not visible yet
+  const isTouch = typeof window !== 'undefined' && ("ontouchstart" in window || navigator.maxTouchPoints > 0);
+  if (isTouch || !isVisible) return null;
 
   return (
     <>
