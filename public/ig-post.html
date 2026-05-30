@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Post Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #111;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        .ig-square {
+            width: 1080px;
+            height: 1080px;
+            background: radial-gradient(circle at 80% 20%, rgba(255, 59, 48, 0.15), #050505 60%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            /* Grid background overlay */
+            background-image: 
+                radial-gradient(circle at 80% 20%, rgba(255, 59, 48, 0.15), transparent 60%),
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+            background-color: #050505;
+        }
+        .browser-mockup {
+            width: 900px;
+            height: 600px;
+            background: #050505;
+            border-radius: 16px;
+            box-shadow: 
+                0 50px 100px -20px rgba(0,0,0,1),
+                0 0 0 1px rgba(255,255,255,0.1),
+                0 0 40px rgba(255, 59, 48, 0.05);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: translateY(-40px);
+        }
+        .browser-header {
+            height: 48px;
+            background: rgba(25, 25, 25, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+        .mac-dots {
+            display: flex;
+            gap: 8px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot.close { background: #FF5F56; }
+        .dot.min { background: #FFBD2E; }
+        .dot.max { background: #27C93F; }
+        .url-bar {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.5);
+            padding: 6px 120px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .iframe-wrapper {
+            flex: 1;
+            background: #050505;
+            position: relative;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        /* Cover the scrollbar of the iframe */
+        .iframe-cover {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 100%;
+            background: #050505;
+        }
+        .badge-text {
+            position: absolute;
+            bottom: 120px;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 8px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+        .badge-sub {
+            position: absolute;
+            bottom: 80px;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            color: #A1A1A1;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <!-- Instructions for the user -->
+    <div style="position: absolute; top: 20px; left: 20px; color: white; max-width: 300px;">
+        <h3>How to use:</h3>
+        <p>1. Make sure your local server is running (npm run dev).</p>
+        <p>2. Zoom your browser out or resize so you can see this entire square.</p>
+        <p>3. Take a square screenshot of the 1080x1080 box!</p>
+    </div>
+
+    <div class="ig-square">
+        <div class="browser-mockup">
+            <div class="browser-header">
+                <div class="mac-dots">
+                    <div class="dot close"></div>
+                    <div class="dot min"></div>
+                    <div class="dot max"></div>
+                </div>
+                <div class="url-bar">supratimdev.qzz.io</div>
+            </div>
+            <div class="iframe-wrapper">
+                <iframe src="/"></iframe>
+                <div class="iframe-cover"></div>
+            </div>
+        </div>
+        <div class="badge-text">v2.0 LIVE</div>
+        <div class="badge-sub">Engineering the Inevitable</div>
+    </div>
+</body>
+</html>

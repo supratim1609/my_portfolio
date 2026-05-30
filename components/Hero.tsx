@@ -1,11 +1,21 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 import WarpingGrid from "./WarpingGrid";
 
 export default function Hero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const containerRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -22,9 +32,11 @@ export default function Hero() {
   const words = headline.split(" ");
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-12 overflow-hidden selection:bg-white selection:text-black">
-      {/* The Warping Grid Background */}
-      <WarpingGrid />
+    <section id="home" ref={containerRef} className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-12 overflow-hidden selection:bg-white selection:text-black">
+      {/* The Warping Grid Background with Parallax */}
+      <motion.div className="absolute inset-0 z-0" style={{ y: backgroundY }}>
+        <WarpingGrid />
+      </motion.div>
 
       {/* Subtle Red Spot Glow on Mouse */}
       <motion.div 
@@ -35,12 +47,15 @@ export default function Hero() {
         transition={{ type: "tween", ease: "linear", duration: 0.1 }}
       />
 
-      <div className="max-w-5xl mx-auto px-6 lg:px-8 relative z-10 w-full">
+      <motion.div 
+        className="max-w-5xl mx-auto px-6 lg:px-8 relative z-10 w-full"
+        style={{ y: textY, opacity }}
+      >
 
 
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-medium tracking-tight text-white mb-8 leading-[1.05] flex flex-wrap justify-start gap-x-4 gap-y-2">
+        <h1 className="text-[11vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] font-medium tracking-tight text-white mb-6 sm:mb-8 leading-[1.1] sm:leading-[1.05] flex flex-wrap justify-start gap-x-3 sm:gap-x-4 gap-y-1 sm:gap-y-2">
           {words.map((word, idx) => (
-            <span key={idx} className="overflow-hidden pb-4 -mb-4">
+            <span key={idx} className="overflow-hidden pb-2 sm:pb-4 -mb-2 sm:-mb-4">
               <motion.span
                 className={`inline-block ${idx >= 2 ? "text-white/40" : ""}`}
                 initial={{ y: "100%" }}
@@ -65,7 +80,7 @@ export default function Hero() {
         >
           I design scalable digital infrastructure, AI-powered ecosystems, and other expensive buzzwords that basically mean I make sure servers don&apos;t catch fire at 3 AM.
         </motion.p>
-      </div>
+      </motion.div>
     </section>
   );
 }

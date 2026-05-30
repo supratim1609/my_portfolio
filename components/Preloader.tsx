@@ -17,7 +17,7 @@ export default function Preloader() {
   const [currentLogIdx, setCurrentLogIdx] = useState(0);
 
   useEffect(() => {
-    const duration = 2400; // Total duration to boot
+    const duration = 1200; // Total duration to boot
     const intervalTime = 30;
     const steps = duration / intervalTime;
     let step = 0;
