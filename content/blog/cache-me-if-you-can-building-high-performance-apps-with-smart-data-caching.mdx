@@ -60,32 +60,32 @@ Dio is a powerful HTTP client that can be extended with interceptors to handle 
 
 import 'package:dio/dio.dart';  
   
-class CachingInterceptor extends Interceptor {  
-  final Map&lt;String, Response&gt; cache = {};  
+class CachingInterceptor extends Interceptor &#123;  
+  final Map&lt;String, Response&gt; cache = &#123;&#125;;  
   
   @override  
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {  
-    if (cache.containsKey(options.uri.toString())) {  
-      print("Serving from cache: ${options.uri}");  
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) &#123;  
+    if (cache.containsKey(options.uri.toString())) &#123;  
+      print("Serving from cache: $&#123;options.uri&#125;");  
       return handler.resolve(cache\[options.uri.toString()\]!);  
-    }  
+    &#125;  
     handler.next(options);  
-  }  
+  &#125;  
   
   @override  
-  void onResponse(Response response, ResponseInterceptorHandler handler) {  
+  void onResponse(Response response, ResponseInterceptorHandler handler) &#123;  
     cache\[response.requestOptions.uri.toString()\] = response;  
     handler.next(response);  
-  }  
-}  
+  &#125;  
+&#125;  
   
-void main() async {  
+void main() async &#123;  
   final dio = Dio();  
   dio.interceptors.add(CachingInterceptor());  
   
   final response = await dio.get('https://jsonplaceholder.typicode.com/posts');  
   print(response.data);  
-}
+&#125;
 
 #### b. Hive for Persistent Caching:
 
@@ -95,20 +95,20 @@ Hive is a fast and lightweight key-value store for Flutter. It’s perfect for s
 
 import 'package:hive/hive.dart';  
   
-Future<void> cacheData(String key, dynamic data, {Duration ttl = const Duration(minutes: 30)}) async {  
+Future<void> cacheData(String key, dynamic data, &#123;Duration ttl = const Duration(minutes: 30)&#125;) async &#123;  
   final box = await Hive.openBox('cacheBox');  
   final expiration = DateTime.now().add(ttl).millisecondsSinceEpoch;  
-  box.put(key, {'data': data, 'expires\_at': expiration});  
-}  
+  box.put(key, &#123;'data': data, 'expires\_at': expiration&#125;);  
+&#125;  
   
-Future<dynamic> getCachedData(String key) async {  
+Future<dynamic> getCachedData(String key) async &#123;  
   final box = await Hive.openBox('cacheBox');  
   final cache = box.get(key);  
-  if (cache != null && DateTime.now().millisecondsSinceEpoch < cache\['expires\_at'\]) {  
+  if (cache != null && DateTime.now().millisecondsSinceEpoch < cache\['expires\_at'\]) &#123;  
     return cache\['data'\];  
-  }  
+  &#125;  
   return null;  
-}
+&#125;
 
 ### Real-World Use Case: Offline News App with Caching (Tech Breakdown)
 

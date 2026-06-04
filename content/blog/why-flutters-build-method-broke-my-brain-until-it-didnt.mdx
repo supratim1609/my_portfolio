@@ -20,7 +20,7 @@ Just a counter.
 int counter = 0;  
   
 @override  
-Widget build(BuildContext context) {  
+Widget build(BuildContext context) &#123;  
   print("Building... again?");  
   return Scaffold(  
     body: Center(  
@@ -29,18 +29,18 @@ Widget build(BuildContext context) {
         children: \[  
           Text('$counter'),  
           TextButton(  
-            onPressed: () {  
-              setState(() {  
+            onPressed: () &#123;  
+              setState(() &#123;  
                 counter++;  
-              });  
-            },  
+              &#125;);  
+            &#125;,  
             child: Text("Click Me"),  
           ),  
         \],  
       ),  
     ),  
   );  
-}
+&#125;
 
 And suddenly, **my entire app started rebuilding like it was in therapy.**  
 Every click? build().  
@@ -73,14 +73,14 @@ Let’s break it down:
 
 #### Here’s What _Not_ to Do
 
-Widget build(BuildContext context) {  
+Widget build(BuildContext context) &#123;  
   return Column(  
     children: \[  
       Text('$counter'),  
       MyHeavyWidget(), // rebuilds every time unnecessarily  
     \],  
   );  
-}
+&#125;
 
 You just made MyHeavyWidget() rebuild **every single time**, even if it has nothing to do with counter.
 
@@ -98,16 +98,16 @@ You save time, memory, and probably your sanity.
 
 Break things down like modular code. Smaller widgets = better control.
 
-class CounterText extends StatelessWidget {  
+class CounterText extends StatelessWidget &#123;  
   final int counter;  
-  const CounterText(this.counter, {super.key});  
+  const CounterText(this.counter, &#123;super.key&#125;);  
   
   @override  
-  Widget build(BuildContext context) {  
+  Widget build(BuildContext context) &#123;  
     print("⏱️ CounterText rebuilt");  
     return Text('$counter');  
-  }  
-}
+  &#125;  
+&#125;
 
 Now your layout becomes:
 
