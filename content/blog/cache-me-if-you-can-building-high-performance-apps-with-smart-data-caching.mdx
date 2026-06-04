@@ -95,13 +95,13 @@ Hive is a fast and lightweight key-value store for Flutter. It’s perfect for s
 
 import 'package:hive/hive.dart';  
   
-Future<void> cacheData(String key, dynamic data, &#123;Duration ttl = const Duration(minutes: 30)&#125;) async &#123;  
+Future&lt;void&gt; cacheData(String key, dynamic data, &#123;Duration ttl = const Duration(minutes: 30)&#125;) async &#123;  
   final box = await Hive.openBox('cacheBox');  
   final expiration = DateTime.now().add(ttl).millisecondsSinceEpoch;  
   box.put(key, &#123;'data': data, 'expires\_at': expiration&#125;);  
 &#125;  
   
-Future<dynamic> getCachedData(String key) async &#123;  
+Future&lt;dynamic&gt; getCachedData(String key) async &#123;  
   final box = await Hive.openBox('cacheBox');  
   final cache = box.get(key);  
   if (cache != null && DateTime.now().millisecondsSinceEpoch < cache\['expires\_at'\]) &#123;  
