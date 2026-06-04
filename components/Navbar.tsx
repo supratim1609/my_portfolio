@@ -19,10 +19,11 @@ export function Navbar() {
   }, [isOpen]);
 
   const links = [
-    { name: "Home", href: "#home" },
-    { name: "Work", href: "#work" },
-    { name: "Experience", href: "#experience" },
-    { name: "Presence", href: "#presence" },
+    { name: "Home", href: "/#home" },
+    { name: "Work", href: "/#work" },
+    { name: "Experience", href: "/#experience" },
+    { name: "Presence", href: "/#presence" },
+    { name: "Articles", href: "/blog" },
   ];
 
   return (
