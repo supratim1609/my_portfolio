@@ -45,8 +45,25 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
     notFound();
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.metadata.title,
+    "description": post.metadata.description,
+    "datePublished": new Date(post.metadata.date).toISOString(),
+    "author": {
+      "@type": "Person",
+      "name": "Supratim Dhara",
+      "url": "https://supratimdev.qzz.io/"
+    }
+  };
+
   return (
     <article className="min-h-screen bg-black text-white pt-32 pb-20 px-6 sm:px-12 md:px-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-2xl mx-auto">
         <Link href="/blog" className="inline-flex items-center text-xs font-mono text-[#A1A1A1] uppercase tracking-widest hover:text-white transition-colors mb-12">
           <ArrowLeft className="w-3 h-3 mr-2" /> Back to Notes
