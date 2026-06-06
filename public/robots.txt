@@ -1,24 +1,4 @@
 User-agent: *
 Allow: /
 
-# Explicitly allow AI/LLM crawlers for maximum visibility on LLM search
-User-agent: GPTBot
-Allow: /
-User-agent: ChatGPT-User
-Allow: /
-User-agent: ClaudeBot
-Allow: /
-User-agent: Claude-Web
-Allow: /
-User-agent: PerplexityBot
-Allow: /
-User-agent: anthropic-ai
-Allow: /
-User-agent: Omgili
-Allow: /
-User-agent: Omgilibot
-Allow: /
-User-agent: Google-Extended
-Allow: /
-
 Sitemap: https://supratimdev.qzz.io/sitemap.xml
