@@ -20,7 +20,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://supratimdev.qzz.io"),
-  title: "Supratim Dhara | Systems Architect & Founder",
+  title: "Supratim Dhara",
   description: "I build scalable digital infrastructure, AI-powered systems, commerce ecosystems, and operational technology products for the next era.",
   keywords: ["Supratim Dhara", "Systems Architect", "CTO", "Founder", "Rivet Framework", "Software Infrastructure", "AI Systems", "Civic Tech", "Mobile Engineer"],
   authors: [{ name: "Supratim Dhara", url: "https://supratimdev.qzz.io" }],
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Supratim Dhara | Systems Architect & Founder",
+    title: "Supratim Dhara",
     description: "I build scalable digital infrastructure, AI-powered systems, commerce ecosystems, and operational technology products for the next era.",
     url: "https://supratimdev.qzz.io",
     siteName: "Supratim Dhara Portfolio",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Supratim Dhara | Systems Architect & Founder",
+    title: "Supratim Dhara",
     description: "I build scalable digital infrastructure, AI-powered systems, commerce ecosystems, and operational technology products for the next era.",
     creator: "@supratimtwt",
   }
