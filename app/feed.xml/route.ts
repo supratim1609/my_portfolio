@@ -17,11 +17,11 @@ export async function GET() {
       .map((post) => {
         return `
     <item>
-      <title><![CDATA[${post.metadata.title}]]></title>
+      <title><![CDATA[${post.title}]]></title>
       <link>${siteUrl}/blog/${post.slug}</link>
       <guid>${siteUrl}/blog/${post.slug}</guid>
-      <pubDate>${new Date(post.metadata.date).toUTCString()}</pubDate>
-      <description><![CDATA[${post.metadata.description}]]></description>
+      <pubDate>${new Date(post.date).toUTCString()}</pubDate>
+      <description><![CDATA[${post.description}]]></description>
     </item>`;
       })
       .join("")}
