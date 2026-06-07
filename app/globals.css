@@ -17,12 +17,19 @@
   --color-card-border-hover: rgba(255, 255, 255, 0.15);
 }
 
-body {
+html, body {
   background: var(--background);
   color: var(--foreground);
-  overflow-x: hidden;
+  overflow-x: hidden !important;
+  width: 100%;
+  max-width: 100vw;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+img, video, svg, canvas {
+  max-width: 100%;
+  height: auto;
 }
 
 /* Custom utility classes for Preloader & aesthetics */

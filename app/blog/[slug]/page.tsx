@@ -3,6 +3,10 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import SystemDiagram from "@/components/mdx/SystemDiagram";
+import Readout from "@/components/mdx/Readout";
+import ReadingProgress from "@/components/ReadingProgress";
+import BackToTop from "@/components/BackToTop";
 
 export async function generateStaticParams() {
   const posts = getSortedPostsData();
@@ -35,6 +39,8 @@ const components = {
   code: (props: any) => <code className="bg-white/5 text-[#E5E5E5] px-1.5 py-0.5 rounded text-sm font-mono" {...props} />,
   pre: (props: any) => <pre className="bg-[#111] p-6 rounded-lg overflow-x-auto border border-white/5 mb-8" {...props} />,
   strong: (props: any) => <strong className="font-semibold text-white" {...props} />,
+  SystemDiagram: (props: any) => <SystemDiagram {...props} />,
+  Readout: (props: any) => <Readout {...props} />,
 };
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
@@ -59,37 +65,42 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
   };
 
   return (
-    <article className="min-h-screen bg-black text-white pt-32 pb-20 px-6 sm:px-12 md:px-24">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <div className="max-w-2xl mx-auto">
-        <Link href="/blog" className="inline-flex items-center text-xs font-mono text-[#A1A1A1] uppercase tracking-widest hover:text-white transition-colors mb-12">
-          <ArrowLeft className="w-3 h-3 mr-2" /> Back to Notes
-        </Link>
-        
-        <header className="mb-12">
-          <h1 className="text-3xl sm:text-5xl font-bold tracking-tighter mb-4 leading-tight">
-            {post.metadata.title}
-          </h1>
-          <div className="flex flex-wrap items-center text-xs font-mono text-[#555] uppercase tracking-widest gap-2">
-            <time dateTime={post.metadata.date}>
-              {new Date(post.metadata.date).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })}
-            </time>
-            {post.metadata.tags && post.metadata.tags.length > 0 && (
-              <>
-                <span>•</span>
-                <span>{post.metadata.tags.join(", ")}</span>
-              </>
-            )}
-          </div>
-        </header>
+    <>
+      <ReadingProgress />
+      <article className="min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-black text-white pt-32 pb-20 px-5 pr-16 sm:px-12 md:px-24 relative break-words">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <div className="max-w-2xl mx-auto">
+          <Link href="/blog" className="inline-flex items-center text-[#A1A1A1] hover:text-white mb-12 transition-colors">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to all posts
+          </Link>
+          
+          <header className="mb-12">
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tighter mb-4 leading-tight">
+              {post.metadata.title}
+            </h1>
+            <div className="flex flex-wrap items-center text-xs font-mono text-[#555] uppercase tracking-widest gap-2">
+              <time dateTime={post.metadata.date}>
+                {new Date(post.metadata.date).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })}
+              </time>
+              {post.metadata.tags && post.metadata.tags.length > 0 && (
+                <>
+                  <span>•</span>
+                  <span>{post.metadata.tags.join(", ")}</span>
+                </>
+              )}
+            </div>
+          </header>
 
-        <div className="text-lg">
-          <MDXRemote source={post.content} components={components} />
+          <div className="prose prose-invert prose-sm sm:prose-base max-w-3xl font-sans mt-12 w-full break-words">
+            <MDXRemote source={post.content} components={components} />
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
+      <BackToTop />
+    </>
   );
 }

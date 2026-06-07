@@ -10,7 +10,7 @@ export default function Blog() {
   const posts = getSortedPostsData();
 
   return (
-    <div className="min-h-screen bg-black text-white pt-32 pb-20 px-6 sm:px-12 md:px-24 relative overflow-hidden">
+    <div className="min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-black text-white pt-32 pb-20 px-5 pr-16 sm:px-12 md:px-24 relative">
       
       {/* Background glowing orb */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#FF3B30]/10 blur-[120px] rounded-[100%] pointer-events-none opacity-50 mix-blend-screen" />

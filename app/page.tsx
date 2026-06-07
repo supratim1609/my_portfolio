@@ -14,7 +14,7 @@ export default function Home() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-      className="bg-[#050505] min-h-screen selection:bg-white selection:text-black"
+      className="bg-[#050505] min-h-screen w-full max-w-[100vw] overflow-x-hidden selection:bg-white selection:text-black"
     >
       <Hero />
       <Manifesto />
