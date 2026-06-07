@@ -22,6 +22,9 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://supratimdev.qzz.io"),
   alternates: {
     canonical: "https://supratimdev.qzz.io",
+    types: {
+      "application/rss+xml": "https://supratimdev.qzz.io/feed.xml",
+    },
   },
   title: "Supratim Dhara",
   description: "I build scalable digital infrastructure, AI-powered systems, commerce ecosystems, and operational technology products for the next era.",
