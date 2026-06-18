@@ -78,8 +78,22 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="text-lg sm:text-xl text-[#A1A1A1] max-w-2xl font-light leading-relaxed"
         >
-          I design scalable digital infrastructure, AI-powered ecosystems, and other expensive buzzwords that basically mean I make sure servers don&apos;t catch fire at 3 AM.
+          <span className="text-white font-normal">Flutter Engineer</span> who evolved into a <span className="text-white font-normal">Systems Architect</span>. I build resilient digital infrastructure, scalable backend systems, and highly secure platforms engineered to thrive under extreme reliability constraints.
         </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-8 flex items-center flex-wrap gap-x-3 gap-y-2 text-xs sm:text-sm font-mono text-[#777777]"
+        >
+          {["Flutter", "Dart", "Mobile Architecture", "State Management", "Performance", "Scalability"].map((tech, i, arr) => (
+            <div key={tech} className="flex items-center gap-3">
+              <span className="uppercase tracking-widest hover:text-white transition-colors duration-300 cursor-default">{tech}</span>
+              {i !== arr.length - 1 && <span className="text-white/[0.1]">•</span>}
+            </div>
+          ))}
+        </motion.div>
       </motion.div>
     </section>
   );

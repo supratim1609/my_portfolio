@@ -3,8 +3,8 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
-const text1 = "I believe that great software should feel inevitable. It rarely does. It usually feels like layers of duct tape holding back an ocean of panic.";
-const text2 = "I spend my time at the intersection of systems engineering and product design—trying to build infrastructure that actually survives contact with real users without waking me up.";
+const text1 = "I believe that critical software should feel inevitable. It must be resilient by default, built to scale, and designed to withstand heavy usage.";
+const text2 = "I spend my time at the intersection of systems engineering and backend architecture—building the robust digital infrastructure that modern applications and enterprises rely on.";
 
 const splitWords = (text: string) => {
   return text.split(" ").map((word, index) => {
@@ -13,8 +13,11 @@ const splitWords = (text: string) => {
       word.includes("inevitable.") || 
       word.includes("systems") || 
       word.includes("engineering") || 
-      word.includes("product") || 
-      word.includes("design—trying");
+      word.includes("backend") || 
+      word.includes("architecture—building") ||
+      word.includes("infrastructure") ||
+      word.includes("resilient") ||
+      word.includes("scale,");
     
     return (
       <motion.span

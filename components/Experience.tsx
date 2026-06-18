@@ -4,25 +4,28 @@ import { motion } from "framer-motion";
 
 const EXPERIENCES = [
   {
-    role: "Founder & Architect",
-    subtitle: "(Chief Yap Engineer)",
+    role: "CTO & Co-founder",
+    subtitle: "(Commerce Infrastructure)",
     company: "Bechohub",
     period: "2025 — Present",
     description: "Currently building a scalable commerce ecosystem from the ground up. Directing engineering for real-time inventory management, payment gateways, and a microservices-based backend using Node.js and AWS. It's not done, but we have a domain name.",
+    metrics: "Scale & Impact: Architecting for 5k+ concurrent inventory mutations/sec with a 99.99% uptime target across distributed microservices."
   },
   {
-    role: "CTO",
-    subtitle: "(Professional Firefighter)",
+    role: "Chief Technology Officer",
+    subtitle: "(Digital Transformation)",
     company: "Calverts Digital Technology",
     period: "2024 — 2025",
     description: "Led technical strategy and engineering teams to build robust digital solutions. Oversaw the development of core platforms, optimizing performance and establishing technical best practices.",
+    metrics: "Scale & Impact: Scaled platform infrastructure to support 200k+ MAU while reducing average response latency by 40%."
   },
   {
-    role: "Software Engineer & Freelance",
-    subtitle: "(Will code for server costs)",
+    role: "Systems Engineer & Consultant",
+    subtitle: "(Global Tech Ecosystems)",
     company: "Multiple Companies",
     period: "2021 — 2024",
     description: "Operated as both an in-house software engineer and a freelance consultant across various organizations. Engineered robust web applications and backend systems, driving product development from 0 to 1.",
+    metrics: "Scale & Impact: Delivered 12+ enterprise-grade applications, establishing baseline Flutter and backend architectures for engineering teams of 5-15 developers."
   }
 ];
 
@@ -56,6 +59,11 @@ export default function Experience() {
                 <p className="text-[#888888] font-light leading-relaxed max-w-2xl text-sm sm:text-base">
                   {exp.description}
                 </p>
+                {exp.metrics && (
+                  <p className="text-white/[0.85] font-medium leading-relaxed max-w-2xl text-sm mt-3 border-l-2 border-white/[0.15] pl-3 py-0.5">
+                    {exp.metrics}
+                  </p>
+                )}
               </div>
             </motion.div>
           ))}
@@ -78,7 +86,7 @@ export default function Experience() {
               2021 — 2025
             </div>
             <div className="md:col-span-3">
-              <h3 className="text-xl font-medium text-white mb-1 tracking-tight">Bachelor of Technology (B.Tech) <span className="text-[#888888] text-sm font-normal ml-2">(Proof I can sit through lectures)</span></h3>
+              <h3 className="text-xl font-medium text-white mb-1 tracking-tight">Bachelor of Technology (B.Tech)</h3>
               <h4 className="text-[#A1A1A1] font-medium mb-4">University of Engineering & Management (UEM), Kolkata</h4>
               <p className="text-[#888888] font-light leading-relaxed max-w-2xl text-sm sm:text-base">
                 Focused on systems engineering, software development, and modern architectural patterns.
