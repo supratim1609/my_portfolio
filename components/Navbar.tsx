@@ -24,6 +24,7 @@ export function Navbar() {
     { name: "Experience", href: "/#experience" },
     { name: "Presence", href: "/#presence" },
     { name: "Articles", href: "/blog" },
+    { name: "ScatterJS", href: "/scatterjs" },
   ];
 
   return (
@@ -57,7 +58,7 @@ export function Navbar() {
               </svg>
             </button>
 
-            <div className="flex flex-col items-center gap-8 sm:gap-12">
+            <div className="flex flex-col items-center gap-6 sm:gap-8">
               {links.map((link, idx) => (
                 <motion.a
                   key={link.name}
@@ -67,7 +68,7 @@ export function Navbar() {
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -40, opacity: 0 }}
                   transition={{ duration: 0.5, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-4xl sm:text-7xl md:text-8xl font-bold text-white tracking-tighter hover:text-[#FF3B30] transition-colors duration-500"
+                  className="text-4xl sm:text-5xl md:text-6xl font-semibold text-white tracking-tight hover:text-[#FF3B30] hover:scale-105 transition-all duration-500"
                 >
                   {link.name}
                 </motion.a>
