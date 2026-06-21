@@ -36,7 +36,7 @@ export default function FlockHomePage() {
             className="flex items-center space-x-2 border border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors rounded-full px-5 py-2 text-sm font-mono text-emerald-400 backdrop-blur-md cursor-pointer group"
           >
             <GitBranch size={16} />
-            <span>FlockML v1.0.0 is officially live on GitHub</span>
+            <span>🚀 FlockML v1.0.0 launching tomorrow @ 12 PM</span>
             <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
           </motion.a>
           
@@ -75,11 +75,17 @@ export default function FlockHomePage() {
                   <span className="text-xs text-[#555] font-mono ml-4 flex-1 text-left">bash</span>
                 </div>
                 <div className="flex items-center justify-between p-4">
-                  <div className="flex items-center space-x-3 text-base font-mono text-[#A1A1A1]">
-                    <span className="text-emerald-500 font-bold">$</span>
-                    <span className="text-white">npm i flock-ml</span>
+                  <div className="flex flex-col space-y-1 text-sm font-mono text-[#A1A1A1]">
+                    <div className="flex items-center space-x-3">
+                      <span className="text-emerald-500 font-bold">$</span>
+                      <span className="text-white">npm i flock-ml</span>
+                    </div>
+                    <div className="flex items-center space-x-3 opacity-60">
+                      <span className="text-emerald-500 font-bold opacity-0">$</span>
+                      <span># Available tomorrow at 12 PM</span>
+                    </div>
                   </div>
-                  <button className="text-[#555] group-hover:text-white transition-colors">
+                  <button className="text-[#555] group-hover:text-white transition-colors self-start mt-1">
                     {copied ? <Check size={18} className="text-emerald-500" /> : <Copy size={18} />}
                   </button>
                 </div>
@@ -91,20 +97,20 @@ export default function FlockHomePage() {
 
       {/* Feature Cards */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 pb-40">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           
           <motion.div 
             initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }}
             className="group relative"
           >
             <div className="absolute -inset-px bg-gradient-to-b from-yellow-500/20 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="relative h-full bg-[#0A0A0A]/50 backdrop-blur-sm border border-white/5 p-10 rounded-3xl group-hover:-translate-y-2 transition-transform duration-500 shadow-2xl hover:shadow-yellow-500/10 space-y-6">
-              <div className="w-14 h-14 bg-yellow-500/10 rounded-2xl flex items-center justify-center border border-yellow-500/20 group-hover:scale-110 transition-transform duration-500">
-                <Cpu className="text-yellow-500" size={28} />
+            <div className="relative h-full bg-[#0A0A0A]/50 backdrop-blur-sm border border-white/5 p-8 rounded-3xl group-hover:-translate-y-2 transition-transform duration-500 shadow-2xl hover:shadow-yellow-500/10 space-y-6">
+              <div className="w-12 h-12 bg-yellow-500/10 rounded-2xl flex items-center justify-center border border-yellow-500/20 group-hover:scale-110 transition-transform duration-500">
+                <Cpu className="text-yellow-500" size={24} />
               </div>
-              <h3 className="text-2xl font-bold text-white tracking-tight">8-Bit Quantization</h3>
-              <p className="text-[#888] leading-relaxed text-lg">
-                Min-Max quantization compresses Float32 network weights down to Int8 matrices, radically reducing WebSocket payload size and browser memory constraints.
+              <h3 className="text-xl font-bold text-white tracking-tight">Zero-Latency Protobufs</h3>
+              <p className="text-[#888] leading-relaxed text-base">
+                Float32 networks are quantized to 8-bit integers and strictly encoded into raw binary Protocol Buffers, reducing payloads by 90% for instant WebSocket transmission.
               </p>
             </div>
           </motion.div>
@@ -113,14 +119,14 @@ export default function FlockHomePage() {
             initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }}
             className="group relative"
           >
-            <div className="absolute -inset-px bg-gradient-to-b from-blue-500/20 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="relative h-full bg-[#0A0A0A]/50 backdrop-blur-sm border border-white/5 p-10 rounded-3xl group-hover:-translate-y-2 transition-transform duration-500 shadow-2xl hover:shadow-blue-500/10 space-y-6">
-              <div className="w-14 h-14 bg-blue-500/10 rounded-2xl flex items-center justify-center border border-blue-500/20 group-hover:scale-110 transition-transform duration-500">
-                <Shield className="text-blue-500" size={28} />
+            <div className="absolute -inset-px bg-gradient-to-b from-purple-500/20 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="relative h-full bg-[#0A0A0A]/50 backdrop-blur-sm border border-white/5 p-8 rounded-3xl group-hover:-translate-y-2 transition-transform duration-500 shadow-2xl hover:shadow-purple-500/10 space-y-6">
+              <div className="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center border border-purple-500/20 group-hover:scale-110 transition-transform duration-500">
+                <Shield className="text-purple-500" size={24} />
               </div>
-              <h3 className="text-2xl font-bold text-white tracking-tight">Differential Privacy</h3>
-              <p className="text-[#888] leading-relaxed text-lg">
-                Cryptographic Laplacian noise is injected directly into browser gradients, making it mathematically impossible to reverse-engineer user training data.
+              <h3 className="text-xl font-bold text-white tracking-tight">WebGPU Acceleration</h3>
+              <p className="text-[#888] leading-relaxed text-base">
+                Powered by @tensorflow/tfjs. It delegates massive matrix multiplications directly to the physical GPU, handling models with 100,000,000+ parameters natively in the browser.
               </p>
             </div>
           </motion.div>
@@ -129,14 +135,30 @@ export default function FlockHomePage() {
             initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.3 }}
             className="group relative"
           >
-            <div className="absolute -inset-px bg-gradient-to-b from-emerald-500/20 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="relative h-full bg-[#0A0A0A]/50 backdrop-blur-sm border border-white/5 p-10 rounded-3xl group-hover:-translate-y-2 transition-transform duration-500 shadow-2xl hover:shadow-emerald-500/10 space-y-6">
-              <div className="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center border border-emerald-500/20 group-hover:scale-110 transition-transform duration-500">
-                <Network className="text-emerald-500" size={28} />
+            <div className="absolute -inset-px bg-gradient-to-b from-blue-500/20 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="relative h-full bg-[#0A0A0A]/50 backdrop-blur-sm border border-white/5 p-8 rounded-3xl group-hover:-translate-y-2 transition-transform duration-500 shadow-2xl hover:shadow-blue-500/10 space-y-6">
+              <div className="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center border border-blue-500/20 group-hover:scale-110 transition-transform duration-500">
+                <Network className="text-blue-500" size={24} />
               </div>
-              <h3 className="text-2xl font-bold text-white tracking-tight">Federated Averaging</h3>
-              <p className="text-[#888] leading-relaxed text-lg">
-                The lightweight Node.js Coordinator scales horizontally to aggregate and execute FedAvg on thousands of concurrent WebWorker payloads simultaneously.
+              <h3 className="text-xl font-bold text-white tracking-tight">Differential Privacy</h3>
+              <p className="text-[#888] leading-relaxed text-base">
+                Cryptographic Laplacian noise is injected directly into browser gradients, making it mathematically impossible to reverse-engineer user training data.
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.4 }}
+            className="group relative"
+          >
+            <div className="absolute -inset-px bg-gradient-to-b from-emerald-500/20 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="relative h-full bg-[#0A0A0A]/50 backdrop-blur-sm border border-white/5 p-8 rounded-3xl group-hover:-translate-y-2 transition-transform duration-500 shadow-2xl hover:shadow-emerald-500/10 space-y-6">
+              <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center border border-emerald-500/20 group-hover:scale-110 transition-transform duration-500">
+                <Check className="text-emerald-500" size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-white tracking-tight">Dynamic Profiling</h3>
+              <p className="text-[#888] leading-relaxed text-base">
+                The web worker silently profiles the visitor's hardware FLOPS, dynamically scaling batch sizes to maximize utilization without disrupting the user experience.
               </p>
             </div>
           </motion.div>
