@@ -26,6 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const components = {
   h1: (props: any) => <h1 className="text-4xl font-bold mt-12 mb-6 tracking-tighter" {...props} />,
   h2: (props: any) => <h2 className="text-2xl font-bold mt-10 mb-4 tracking-tight" {...props} />,

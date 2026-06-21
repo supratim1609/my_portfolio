@@ -22,6 +22,7 @@ export default function FlockDocsPage() {
             <h4 className="text-xs font-bold text-white uppercase tracking-widest">Getting Started</h4>
             <div className="flex flex-col space-y-2 text-sm font-medium text-[#888]">
               <a href="#installation" className="hover:text-white transition-colors">Installation</a>
+              <a href="#dual-distribution" className="hover:text-white transition-colors">Dual Distribution Strategy</a>
               <a href="#architecture" className="hover:text-white transition-colors">Architecture Overview</a>
             </div>
           </div>
@@ -47,6 +48,7 @@ export default function FlockDocsPage() {
             <div className="flex flex-col space-y-2 text-sm font-medium text-[#888]">
               <a href="/flock-ml/math" className="hover:text-white transition-colors">Differential Privacy</a>
               <a href="/flock-ml/math" className="hover:text-white transition-colors">8-Bit Quantization</a>
+              <a href="#speed-paradox" className="hover:text-white transition-colors">The 8-Bit Speed Paradox</a>
               <a href="/flock-ml/math" className="hover:text-white transition-colors">Federated Averaging</a>
             </div>
           </div>
@@ -81,6 +83,30 @@ export default function FlockDocsPage() {
               </div>
               <div className="p-4 text-[#E5E5E5]">
                 <span className="text-emerald-500 mr-2">$</span>npm install flock-ml
+              </div>
+            </div>
+          </section>
+
+          {/* Dual Distribution */}
+          <section id="dual-distribution" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
+            <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
+              <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
+              Dual Distribution Strategy
+            </h2>
+            <p className="text-[#A1A1A1] leading-relaxed text-lg">
+              FlockML is designed to be completely frictionless whether you are building a new AI startup from scratch or integrating into an enterprise legacy system. We provide two separate implementation paths:
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4">
+                <div className="text-emerald-400 font-mono text-sm mb-2 border border-emerald-500/20 bg-emerald-500/10 inline-block px-2 py-1 rounded">For Old Projects</div>
+                <h3 className="text-white font-bold text-xl">The Drop-in SDK</h3>
+                <p className="text-[#888] text-sm leading-relaxed">Install via <code className="bg-white/10 px-1 rounded text-white text-xs">npm install flock-ml</code>. Import the <code className="bg-white/10 px-1 rounded text-white text-xs">{"<FlockNode />"}</code> component into your existing React or Vanilla JS application. It immediately hooks into your frontend without disrupting your current architecture or build steps.</p>
+              </div>
+              <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4">
+                <div className="text-purple-400 font-mono text-sm mb-2 border border-purple-500/20 bg-purple-500/10 inline-block px-2 py-1 rounded">For New Projects</div>
+                <h3 className="text-white font-bold text-xl">The Scaffold CLI</h3>
+                <p className="text-[#888] text-sm leading-relaxed">Run <code className="bg-white/10 px-1 rounded text-white text-xs">npx create-flock-app</code>. This instantly generates a boilerplate Next.js frontend alongside a pre-configured Python or Node.js backend. You get a production-ready Federated Learning loop running in under 60 seconds.</p>
               </div>
             </div>
           </section>
@@ -195,6 +221,46 @@ export default function FlockDocsPage() {
               <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                 <h3 className="text-emerald-400 font-mono text-sm">Coordinator.compression</h3>
                 <p className="text-[#888] text-sm leading-relaxed">Toggle 8-bit Quantization logic. Enabled by default. Turning this off falls back to standard 32-bit Float arrays which increases payload size by 400%.</p>
+              </div>
+            </div>
+          </section>
+
+          {/* The 8-Bit Speed Paradox */}
+          <section id="speed-paradox" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
+            <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
+              <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
+              The 8-Bit Speed Paradox
+            </h2>
+            <p className="text-[#A1A1A1] leading-relaxed text-lg">
+              Compressing 32-bit floating-point numbers down to 8-bit integers fundamentally loses mathematical precision. In standard AI training, this loss of precision forces the model to take more epochs (more time) to converge. So why does FlockML use 8-bit?
+            </p>
+            <p className="text-white font-medium text-lg mt-4">
+              Because in a decentralized environment, 8-bit training is actually significantly faster.
+            </p>
+
+            <div className="space-y-6 mt-8">
+              <div className="flex gap-4 items-start">
+                <div className="w-8 h-8 rounded-full bg-[#111] border border-white/10 flex items-center justify-center shrink-0 text-emerald-500 font-mono text-sm">1</div>
+                <div>
+                  <h4 className="text-white font-bold mb-1">Error Feedback Memory</h4>
+                  <p className="text-[#888] leading-relaxed text-sm">When FlockML compresses gradients to 8-bit, it does not discard the lost decimal data. Instead, it caches the &quot;quantization error&quot; locally in the browser. On the next training loop, it adds that error back in. This mathematical trick ensures the model converges in the exact same number of steps as full 32-bit precision.</p>
+                </div>
+              </div>
+              
+              <div className="flex gap-4 items-start">
+                <div className="w-8 h-8 rounded-full bg-[#111] border border-white/10 flex items-center justify-center shrink-0 text-emerald-500 font-mono text-sm">2</div>
+                <div>
+                  <h4 className="text-white font-bold mb-1">Network Latency Dominance</h4>
+                  <p className="text-[#888] leading-relaxed text-sm">The primary bottleneck in Federated Learning is the internet, not the GPU. Sending 100MB 32-bit payloads over WebSockets takes seconds. Shrinking payloads to 25MB (via 8-bit quantization) removes network latency entirely, allowing the browser to process drastically more training loops per minute.</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 items-start">
+                <div className="w-8 h-8 rounded-full bg-[#111] border border-white/10 flex items-center justify-center shrink-0 text-emerald-500 font-mono text-sm">3</div>
+                <div>
+                  <h4 className="text-white font-bold mb-1">Massive Asynchronous Parallelism</h4>
+                  <p className="text-[#888] leading-relaxed text-sm">One AWS A100 GPU is fast, but it computes sequentially. FlockML leverages web traffic to achieve massive concurrency. 10,000 visitors mean 10,000 edge GPUs processing gradients in parallel. The aggregate throughput heavily outperforms single-node cloud clusters.</p>
+                </div>
               </div>
             </div>
           </section>
