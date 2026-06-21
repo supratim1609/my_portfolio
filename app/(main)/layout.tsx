@@ -14,7 +14,7 @@ export default function MainLayout({
         <div className="flex items-center space-x-2 text-xs sm:text-sm font-mono text-emerald-500">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse hidden sm:block"></span>
           <span><strong className="text-white">FlockML:</strong> Decentralizing AI in the browser.</span>
-          <span className="text-[#A1A1A1] pl-2 hidden sm:inline">Now Live on NPM.</span>
+          <span className="text-[#A1A1A1] pl-2 hidden sm:inline">Dropping Tomorrow @ 12 PM.</span>
           <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
         </div>
       </Link>
