@@ -24,7 +24,7 @@ export function Navbar() {
     { name: "Experience", href: "/#experience" },
     { name: "Presence", href: "/#presence" },
     { name: "Articles", href: "/blog" },
-    { name: "ScatterJS", href: "/scatterjs" },
+    { name: "FlockML", href: "/flock-ml" },
   ];
 
   return (

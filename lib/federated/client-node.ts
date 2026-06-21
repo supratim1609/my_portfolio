@@ -3,14 +3,14 @@ import { Quantizer, QuantizedPayload } from './quantization';
 import { DifferentialPrivacy } from './privacy';
 
 /**
- * The Swarm-AI Client Node.
+ * The FlockML Client Node.
  * 
  * This is the wrapper that end-developers import into their Next.js/React apps.
  * It encapsulates the neural network, the privacy engine, and the quantization engine.
  * In a full production build, this entire class would be serialized into a Blob 
  * and executed inside a background Web Worker to keep the UI at 60fps.
  */
-export class SwarmNode {
+export class FlockNode {
   network: NeuralNetwork;
   isConnected: boolean = false;
   isTraining: boolean = false;
@@ -25,9 +25,9 @@ export class SwarmNode {
    */
   connect(websocketUrl: string): void {
     // Mocking WebSocket connection for the MVP
-    console.log(`[Swarm] Connecting to ${websocketUrl}...`);
+    console.log(`[FlockML] Connecting to ${websocketUrl}...`);
     this.isConnected = true;
-    console.log(`[Swarm] Connected. Awaiting global weights.`);
+    console.log(`[FlockML] Connected. Awaiting global weights.`);
   }
 
   /**
@@ -49,7 +49,7 @@ export class SwarmNode {
    * Performs one local training epoch on a batch of data.
    */
   trainLocalBatch(inputs: number[][], targets: number[][]): void {
-    if (!this.isConnected) throw new Error("SwarmNode is not connected to a coordinator.");
+    if (!this.isConnected) throw new Error("FlockNode is not connected to a coordinator.");
     
     this.isTraining = true;
     
