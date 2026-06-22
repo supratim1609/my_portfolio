@@ -33,8 +33,7 @@ export default function FlockHomePage() {
           <motion.a 
             href="https://github.com/supratim1609/flock-ml" target="_blank" rel="noopener noreferrer"
             initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: "easeOut" }}
-            className="flex items-center space-x-2 border border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors rounded-full px-5 py-2 text-sm font-mono text-emerald-400 backdrop-blur-md cursor-pointer group"
-          >
+            className="flex items-center space-x-2 border border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm font-mono text-emerald-400 backdrop-blur-md cursor-pointer group text-center"
             <GitBranch size={16} />
             <span>FlockML v1.0.0 is officially live on GitHub</span>
             <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
@@ -42,7 +41,7 @@ export default function FlockHomePage() {
           
           <motion.h1 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-            className="text-6xl sm:text-7xl lg:text-9xl font-black tracking-tighter leading-[1.05] max-w-6xl text-transparent bg-clip-text bg-gradient-to-b from-white to-[#777]"
+            className="text-5xl sm:text-7xl lg:text-9xl font-black tracking-tighter leading-[1.05] max-w-6xl text-transparent bg-clip-text bg-gradient-to-b from-white to-[#777]"
           >
             Decentralize your <br className="hidden md:block"/> AI infrastructure.
           </motion.h1>
