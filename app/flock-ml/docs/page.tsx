@@ -126,7 +126,7 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-blue-500/20 space-y-4 max-w-2xl">
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      Unlike Python libraries where you have to set up messy Conda environments and run <code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-white text-sm">pip install</code>, FlockML uses the browser as the execution environment. The user just visits your webpage, and the JavaScript engine natively handles the compute.
+                      In college, they teach you to build AI using Python, which forces users to install heavy libraries and download massive datasets. FlockML completely flips this. The user doesn&apos;t install anything. They just open your website, and their browser&apos;s JavaScript engine acts as the runtime environment to train the model.
                     </p>
                   </div>
                 )}
@@ -173,15 +173,15 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4">
-                      <h3 className="text-white font-bold text-xl">Standard Cloud AI</h3>
+                      <h3 className="text-white font-bold text-xl">The Old Way (Centralized AI)</h3>
                       <p className="text-[#CCCCCC] text-sm leading-relaxed">
-                        Imagine writing a massive <code className="bg-white/10 px-1 py-0.5 rounded font-mono text-xs">for</code> loop that needs to process a billion records. Usually, you rent a $5,000/month supercomputer from AWS to run that single process because a normal computer would crash.
+                        Usually, to process a million pieces of data, you write a giant <code className="bg-white/10 px-1 py-0.5 rounded font-mono text-xs">for</code> loop. Because that loop is so huge, a normal computer would crash, so you have to rent a $5,000/month supercomputer from AWS to run it.
                       </p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-blue-500/20 bg-blue-500/5 space-y-4">
-                      <h3 className="text-white font-bold text-xl">The FlockML Way (MapReduce)</h3>
+                      <h3 className="text-white font-bold text-xl">The FlockML Way (Distributed)</h3>
                       <p className="text-[#CCCCCC] text-sm leading-relaxed">
-                        Instead of one giant server, you break the array into tiny chunks. You hand each chunk to 10,000 website visitors. Their laptops run a tiny local loop, calculate a fraction of the math, and send just the result back to your backend.
+                        Instead of running 1,000,000 loops on one expensive server, you run 100 loops on 10,000 different laptops (your website visitors). Everyone does a tiny fraction of the math for free, and your server just adds the final answers together.
                       </p>
                     </div>
                   </div>
@@ -211,10 +211,10 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      If you put a heavy <code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-sm text-white">while(true)</code> loop in standard JavaScript, the browser completely freezes because JS is naturally single-threaded.
+                      In your first semester, you learn that code runs line-by-line. If you write an infinite <code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-sm text-white">while(true)</code> loop, the program hangs. Browsers do the exact same thing because JavaScript is naturally single-threaded.
                     </p>
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      FlockML prevents this by using a <strong>Web Worker</strong>. This is identical to spawning a new background thread in C++ or Java. The heavy math runs entirely on this separate thread, meaning the main thread handling the UI and scrolling never drops a single frame.
+                      To fix this, FlockML uses a <strong>Web Worker</strong>. This is identical to spawning a new background thread in C++ or Java. The heavy math runs entirely on this separate background thread, meaning the main thread handling the webpage scrolling and animations never lags or drops a frame.
                     </p>
                   </div>
                 )}
@@ -243,10 +243,10 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      What if a user opens the Chrome DevTools and intentionally sends corrupted arrays to your server to poison the model?
+                      What if a user opens their browser console and intentionally sends corrupted arrays to your server to poison the AI model?
                     </p>
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      We use a concept called <strong>Byzantine Fault Tolerance</strong>. Because the Node.js backend calculates the mathematical mean of <em>thousands</em> of arrays at once, a single manipulated array is treated as a statistical outlier. The legitimate data mathematically drowns out the hacker&apos;s malicious data instantly.
+                      Think of it like calculating an average score in a class of 10,000 students. If 9,999 students score a 50, and 1 hacker submits a fake score of 1,000,000, it could ruin the average. FlockML automatically detects and clamps these crazy mathematical outliers. The hacker&apos;s bad data gets completely drowned out by the good data from normal users.
                     </p>
                   </div>
                 )}
@@ -294,7 +294,7 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      You initialize a simple WebSocket client in your frontend code. When it connects, it downloads a multi-dimensional array from your server. It updates the array mathematically using the background GPU, and sends the diff back.
+                      You just write a simple React <code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-sm text-white">useEffect</code> function. When the user opens your website, their browser connects to your server using WebSockets. It downloads an array of numbers, mathematically updates the array using their GPU, and sends the newly updated array back to your server.
                     </p>
                   </div>
                 )}
@@ -341,7 +341,7 @@ export default function FlockDocsPage() {
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <h3 className="text-blue-400 font-bold text-xl mb-2">The Node.js Backend</h3>
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      The server is literally just a basic Node.js WebSocket instance. It accepts binary arrays from all the connected users, stores them in memory, and once an hour, it runs a loop to calculate the average of all the arrays.
+                      Instead of doing the heavy math, your Node.js backend just acts like a bucket. It collects arrays from thousands of WebSockets, calculates the mathematical average of all of them, and sends the updated array back out.
                     </p>
                   </div>
                 )}
@@ -377,15 +377,15 @@ export default function FlockDocsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-blue-400 font-bold text-lg">Batch Size</h3>
-                      <p className="text-[#CCCCCC] text-sm leading-relaxed">How many pieces of data the browser processes in a loop before making a single WebSocket <code className="bg-white/10 px-1 py-0.5 rounded font-mono">send()</code> request to the server.</p>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">How many loop iterations the browser runs before sending a single WebSocket network request back to the server.</p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-blue-400 font-bold text-lg">Learning Rate</h3>
-                      <p className="text-[#CCCCCC] text-sm leading-relaxed">The scaling factor. If you set this too high, the mathematical array updates overshoot the target and the model breaks.</p>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">A simple multiplier variable. If you set this too high, the mathematical array updates overshoot the target and the code breaks.</p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-blue-400 font-bold text-lg">minClients</h3>
-                      <p className="text-[#CCCCCC] text-sm leading-relaxed">An <code className="bg-white/10 px-1 py-0.5 rounded font-mono">if()</code> condition on the server that prevents the averaging function from running until enough distinct WebSockets have transmitted their data.</p>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">An <code className="bg-white/10 px-1 py-0.5 rounded font-mono text-white text-xs">if()</code> statement on the server that stops the averaging function from running until at least 100 arrays have arrived.</p>
                     </div>
                   </div>
                 )}
@@ -424,10 +424,10 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      Transmitting massive <code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-sm text-white">Float32</code> arrays over JSON is incredibly slow. FlockML solves this by type-casting the floats into 8-bit integers (<code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-sm text-white">Int8</code>), shrinking network traffic by 75%.
+                      Transmitting massive arrays of <code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-sm text-white">float</code> numbers takes up huge amounts of memory and network bandwidth. FlockML solves this by type-casting the floats down to bytes (<code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-sm text-white">int8</code>), shrinking the file size by 75% so it uploads instantly.
                     </p>
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      To prevent the math from losing accuracy due to the dropped decimals, we cache the remainder (the lost decimals) in the browser&apos;s IndexedDB. During the next loop, we just add the remainder back!
+                      But when you cast a float to an int, you lose the decimal points! To fix this, we save the lost decimals in a local browser variable, and simply add them back during the next loop.
                     </p>
                   </div>
                 )}
@@ -461,10 +461,10 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      To ensure the backend server can&apos;t reverse-engineer a user&apos;s private data from the array, the browser literally just adds random, mathematically generated noise (Laplacian distribution) to the array before sending it. 
+                      How do we make sure the server can&apos;t reverse-engineer a user&apos;s private data from the array? We add randomly generated noise (just random numbers) to the array before sending it.
                     </p>
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      When the server computes the mean average of 10,000 noisy arrays, the random noise perfectly cancels itself out, leaving only the correct data.
+                      Because the server calculates the mathematical average of thousands of arrays together, the random noise perfectly cancels out to zero, leaving only the real data behind.
                     </p>
                   </div>
                 )}
