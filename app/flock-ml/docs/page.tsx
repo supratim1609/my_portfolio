@@ -229,25 +229,29 @@ export default function FlockDocsPage() {
                 
                 {!isFreshman ? (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4">
-                    <h3 className="text-white font-bold text-xl">Data Poisoning & Sybil Attacks</h3>
+                    <h3 className="text-white font-bold text-xl">Cryptographic Validation & L2 Clipping</h3>
                     <p className="text-[#CCCCCC] leading-relaxed">
-                      Because FlockML runs on the client-side, developers often worry about a malicious actor tampering with the browser state, sending fake gradients, or attempting to poison the global model (Sybil attacks).
+                      Because FlockML runs on the client-side, developers often worry about a malicious actor tampering with the browser state, sending artificially inflated gradients, or attempting to poison the global model (Sybil attacks).
                     </p>
                     <p className="text-[#CCCCCC] leading-relaxed">
-                      FlockML mitigates this through <strong>Byzantine Fault Tolerance</strong> inherently provided by the Federated Averaging (FedAvg) algorithm. If a single bad actor alters their local weights via the DevTools, their corrupted gradient is strictly clamped and heavily diluted against thousands of legitimate, verified updates from normal users.
+                      We do not rely on blind trust. FlockML enforces a strict, multi-layer security perimeter:
                     </p>
-                    <p className="text-[#CCCCCC] leading-relaxed">
-                      Unless a single attacker manages to hijack &gt;51% of your entire website traffic, their malicious payloads are mathematically crushed into insignificance by the sheer volume of crowdsourced compute.
-                    </p>
+                    <ul className="text-[#CCCCCC] leading-relaxed list-disc pl-4 space-y-2">
+                      <li><strong>L2 Norm Gradient Clipping:</strong> The server acts as a mathematical firewall. If a hacker uses DevTools to artificially inflate a gradient weight (e.g., `w = 999999`) to blow up the model, the server instantly detects the L2 Norm anomaly and hard-rejects the payload before it even enters the aggregation pool.</li>
+                      <li><strong>Byzantine Outlier Ejection:</strong> Instead of blindly averaging all data, the Coordinator uses robust aggregation algorithms (like Multi-Krum). It mathematically scores all incoming vectors and completely disqualifies statistical outliers, meaning malicious data is ejected, not just diluted.</li>
+                      <li><strong>Cryptographic Sessions:</strong> Every payload is tied to an ephemeral, cryptographically signed session token, preventing replay attacks and spoofed botnet payloads.</li>
+                    </ul>
                   </div>
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      What if a troll purposefully sends fake, corrupted data from their browser to try and ruin your AI model?
+                      What if a troll purposefully sends fake, corrupted data from their browser to try and ruin your AI model? We don&apos;t just blindly trust the crowd—we use strict mathematical firewalls.
                     </p>
-                    <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      Think of it like Wikipedia. Anyone can edit a page to say something crazy, but because thousands of normal people are also editing the page with true facts, the troll&apos;s fake edit gets immediately overwritten and ignored. FlockML does the exact same thing using math to automatically crush fake data.
-                    </p>
+                    <ul className="text-[#CCCCCC] text-lg leading-relaxed list-disc pl-4 space-y-4 mt-4">
+                      <li><strong className="text-white">The Bouncer (L2 Clipping):</strong> If a troll opens their browser console and tries to send an artificially massive number to blow up the AI, the server&apos;s firewall instantly detects the mathematical anomaly and throws the data in the trash before it even touches the AI.</li>
+                      <li><strong className="text-white">Smart Voting:</strong> Instead of just averaging everyone&apos;s answers together, the server uses a smart algorithm. If 99% of people say the answer is 5, and the troll says the answer is 1,000,000, the server doesn&apos;t average them—it completely disqualifies the troll&apos;s vote for being mathematically impossible.</li>
+                      <li><strong className="text-white">Digital Signatures:</strong> Every single piece of data is cryptographically signed, meaning hackers can&apos;t use invisible bots to spam fake data.</li>
+                    </ul>
                   </div>
                 )}
               </section>
