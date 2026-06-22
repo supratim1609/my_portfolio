@@ -24,7 +24,6 @@ export default function FlockDocsPage() {
             <h4 className="text-xs font-bold text-white uppercase tracking-widest">Getting Started</h4>
             <div className="flex flex-col space-y-2 text-sm font-medium text-[#888]">
               <a href="#installation" className="hover:text-white transition-colors">Installation</a>
-              <a href="#dual-distribution" className="hover:text-white transition-colors">Distribution Strategy</a>
               <a href="#architecture" className="hover:text-white transition-colors">Architecture Overview</a>
             </div>
           </div>
@@ -48,6 +47,7 @@ export default function FlockDocsPage() {
             <h4 className="text-xs font-bold text-white uppercase tracking-widest">Concepts</h4>
             <div className="flex flex-col space-y-2 text-sm font-medium text-[#888]">
               <a href="#speed-paradox" className="hover:text-white transition-colors">The 8-Bit Speed Paradox</a>
+              <a href="#privacy" className="hover:text-white transition-colors">Differential Privacy</a>
               <a href="#comparison" className="hover:text-white transition-colors">FlockML vs Cloud AI</a>
             </div>
           </div>
@@ -62,7 +62,7 @@ export default function FlockDocsPage() {
               <p className="text-lg sm:text-xl text-[#A1A1A1] font-light leading-relaxed max-w-2xl">
                 {isEli5 
                   ? "Learn how to build a giant LEGO castle for free by inviting your friends to a party."
-                  : "Learn how to integrate the open-source federated learning infrastructure into your React and Node.js applications."}
+                  : "An exhaustive developer guide for integrating decentralized, privacy-preserving federated learning into your applications."}
               </p>
             </div>
 
@@ -107,7 +107,7 @@ export default function FlockDocsPage() {
                 {!isEli5 ? (
                   <>
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
-                      FlockML is available as an NPM package. It contains both the browser-side <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code> and the server-side <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">Coordinator</code>.
+                      FlockML is available as a single NPM package. It contains both the browser-side WebWorker environment (<code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code>) and the Node.js server-side aggregator (<code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">Coordinator</code>).
                     </p>
                     <div className="bg-[#111] border border-white/10 rounded-lg overflow-hidden font-mono text-xs sm:text-sm max-w-full w-full">
                       <div className="px-4 py-2 border-b border-white/5 bg-[#1A1A1A] text-[#888] text-[10px] sm:text-xs flex justify-between items-center">
@@ -138,14 +138,36 @@ export default function FlockDocsPage() {
                 </h2>
                 
                 {!isEli5 ? (
-                  <>
+                  <div className="space-y-6">
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
-                      Standard AI training requires massive centralized GPU clusters. FlockML reverses this by shipping the neural network directly to your users&apos; browsers via WebGPU. 
+                      FlockML completely eliminates the need for centralized AWS/GCP GPU clusters. By distributing the training workload across your website visitors&apos; browsers via WebGPU, it enables zero-cost, privacy-preserving machine learning.
                     </p>
-                    <p className="text-[#A1A1A1] leading-relaxed text-lg">
-                      When a user visits your website, a background Web Worker silently computes gradients on local data. It then encrypts these gradients with <strong>Laplacian Noise</strong>, compresses them into <strong>8-Bit Integers</strong>, and transmits them to your Node.js server via WebSockets.
+                    <p className="text-[#A1A1A1] leading-relaxed text-lg mb-4">
+                      The core engine executes five distinct steps per training iteration:
                     </p>
-                  </>
+                    <div className="space-y-4">
+                      <div className="bg-[#111] border border-white/5 p-4 rounded-xl flex gap-4">
+                        <span className="text-emerald-500 font-bold font-mono">1</span>
+                        <div><strong className="text-white block mb-1">Model Distribution</strong>The Node.js Coordinator broadcasts the global Float32 weights to connected browser clients via WebSockets.</div>
+                      </div>
+                      <div className="bg-[#111] border border-white/5 p-4 rounded-xl flex gap-4">
+                        <span className="text-emerald-500 font-bold font-mono">2</span>
+                        <div><strong className="text-white block mb-1">Local SGD Compute</strong>The browser&apos;s WebWorker computes gradients against local private data using `@tensorflow/tfjs-backend-webgpu`.</div>
+                      </div>
+                      <div className="bg-[#111] border border-white/5 p-4 rounded-xl flex gap-4">
+                        <span className="text-emerald-500 font-bold font-mono">3</span>
+                        <div><strong className="text-white block mb-1">Privacy Injection</strong>Laplacian noise is cryptographically injected into the raw gradients before leaving the device.</div>
+                      </div>
+                      <div className="bg-[#111] border border-white/5 p-4 rounded-xl flex gap-4">
+                        <span className="text-emerald-500 font-bold font-mono">4</span>
+                        <div><strong className="text-white block mb-1">Quantization</strong>Noisy Float32 gradients are mathematically compressed into 8-Bit Integers and serialized to Protocol Buffers.</div>
+                      </div>
+                      <div className="bg-[#111] border border-white/5 p-4 rounded-xl flex gap-4">
+                        <span className="text-emerald-500 font-bold font-mono">5</span>
+                        <div><strong className="text-white block mb-1">Global Aggregation</strong>The server receives the Protobufs, waits for a batch, and executes Federated Averaging (FedAvg).</div>
+                      </div>
+                    </div>
+                  </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4">
@@ -168,13 +190,16 @@ export default function FlockDocsPage() {
               <section id="flocknode" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
                 <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
                   <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
-                  Client Integration
+                  Client Setup (FlockNode)
                 </h2>
                 
                 {!isEli5 ? (
                   <>
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
-                      Initialize the <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code> at the root of your application. It runs entirely off the main thread, ensuring your React UI maintains 60fps.
+                      The <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code> is designed to run in the browser. It automatically spawns Web Workers to ensure your UI never drops frames while executing massive matrix operations.
+                    </p>
+                    <p className="text-[#888] leading-relaxed">
+                      Mount the node at the absolute root of your React application (e.g. `layout.tsx`) so it runs persistently across page navigations.
                     </p>
                     <div className="bg-[#111] border border-white/10 rounded-lg overflow-hidden max-w-full w-full">
                       <div className="px-4 py-2 border-b border-white/5 bg-[#1A1A1A] text-[#888] text-[10px] sm:text-xs font-mono">app/layout.tsx</div>
@@ -184,13 +209,14 @@ export default function FlockDocsPage() {
                         <br />
                         <p><span className="text-purple-400">export default function</span> <span className="text-blue-400">RootLayout</span>({"{ children }"}: {"{ children: React.ReactNode }"}) {"{"}</p>
                         <p className="pl-4"><span className="text-blue-400">useEffect</span>(() {"=>"} {"{"}</p>
-                        <p className="pl-8 text-[#888]">{"// Hook into your WebSocket server"}</p>
+                        <p className="pl-8 text-[#888]">{"// 1. Hook into your WebSocket server"}</p>
                         <p className="pl-8">FlockNode.<span className="text-yellow-200">connect</span>(<span className="text-green-400">&apos;wss://api.yourdomain.com/flock&apos;</span>);</p>
                         <br />
-                        <p className="pl-8 text-[#888]">{"// Set Privacy parameters (Higher Epsilon = Less Noise)"}</p>
+                        <p className="pl-8 text-[#888]">{"// 2. Configure Cryptographic Privacy & Hyperparameters"}</p>
                         <p className="pl-8">FlockNode.<span className="text-teal-400">privacyEpsilon</span> = <span className="text-orange-400">1.5</span>;</p>
+                        <p className="pl-8">FlockNode.<span className="text-teal-400">batchSize</span> = <span className="text-orange-400">32</span>;</p>
                         <br />
-                        <p className="pl-8 text-[#888]">{"// Spawns Web Worker and begins background compute"}</p>
+                        <p className="pl-8 text-[#888]">{"// 3. Spawns Web Worker and begins background WebGPU compute"}</p>
                         <p className="pl-8">FlockNode.<span className="text-yellow-200">startTraining</span>();</p>
                         <p className="pl-4">{"}, []);"}</p>
                         <br />
@@ -202,10 +228,10 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      You don&apos;t want anyone knowing which friend touched which LEGO piece (because privacy is important). 
+                      You stand at the front door of the party. As every single friend walks in, you hand them a small instruction manual.
                     </p>
                     <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      So before they are allowed to give their finished piece back to you, you make them spray-paint it with a completely random color (this is called <strong>Differential Privacy</strong>). Now, nobody can track who built what!
+                      The instruction manual says: <strong className="text-emerald-400">&quot;Pick up a blue LEGO, snap it onto a red LEGO, and then go enjoy the party.&quot;</strong> That&apos;s it! They do exactly what they are told without you needing to supervise them.
                     </p>
                   </div>
                 )}
@@ -215,13 +241,13 @@ export default function FlockDocsPage() {
               <section id="coordinator" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
                 <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
                   <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
-                  Server Integration
+                  Server Setup (Coordinator)
                 </h2>
                 
                 {!isEli5 ? (
                   <>
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
-                      The <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">Coordinator</code> class manages the global weights. As quantized payloads stream in from clients via WebSocket, it queues them up and executes the Federated Averaging algorithm.
+                      The <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">Coordinator</code> is the central Node.js authority. As 8-Bit quantized Protobuf payloads stream in from thousands of clients, it queues them up and executes the mathematical FedAvg algorithm.
                     </p>
                     <div className="bg-[#111] border border-white/10 rounded-lg overflow-hidden max-w-full w-full">
                       <div className="px-4 py-2 border-b border-white/5 bg-[#1A1A1A] text-[#888] text-[10px] sm:text-xs font-mono">server.ts</div>
@@ -229,19 +255,21 @@ export default function FlockDocsPage() {
                         <p><span className="text-purple-400">import</span> {"{ Coordinator }"} <span className="text-purple-400">from</span> <span className="text-green-400">&apos;flockml&apos;</span>;</p>
                         <p><span className="text-purple-400">import</span> {"{ WebSocketServer }"} <span className="text-purple-400">from</span> <span className="text-green-400">&apos;ws&apos;</span>;</p>
                         <br />
-                        <p className="text-[#888]">{"// Initialize network architecture"}</p>
+                        <p className="text-[#888]">{"// 1. Initialize Network Architecture (Input, Hidden, Output)"}</p>
                         <p><span className="text-purple-400">const</span> coordinator = <span className="text-purple-400">new</span> <span className="text-yellow-200">Coordinator</span>(<span className="text-orange-400">128</span>, <span className="text-orange-400">64</span>, <span className="text-orange-400">10</span>);</p>
                         <p><span className="text-purple-400">const</span> wss = <span className="text-purple-400">new</span> <span className="text-yellow-200">WebSocketServer</span>({"{ port: "}<span className="text-orange-400">8080</span> {"}"});</p>
                         <br />
                         <p>wss.<span className="text-yellow-200">on</span>(<span className="text-green-400">&apos;connection&apos;</span>, (ws) {"=>"} {"{"}</p>
-                        <p className="pl-4">ws.<span className="text-yellow-200">on</span>(<span className="text-green-400">&apos;message&apos;</span>, (payload) {"=>"} {"{"}</p>
+                        <p className="pl-4 text-[#888]">{"// 2. Listen for incoming Protobuf binary payloads"}</p>
+                        <p className="pl-4">ws.<span className="text-yellow-200">on</span>(<span className="text-green-400">&apos;message&apos;</span>, (payload: <span className="text-teal-400">Buffer</span>) {"=>"} {"{"}</p>
                         <p className="pl-8">coordinator.<span className="text-yellow-200">receiveUpdate</span>(payload);</p>
                         <p className="pl-4">{"});"}</p>
                         <p>{"});"}</p>
                         <br />
-                        <p className="text-[#888]">{"// Run FedAvg every 10 minutes"}</p>
+                        <p className="text-[#888]">{"// 3. Execute Federated Averaging every 10 minutes"}</p>
                         <p><span className="text-blue-400">setInterval</span>(() {"=>"} {"{"}</p>
                         <p className="pl-4">coordinator.<span className="text-yellow-200">aggregate</span>();</p>
+                        <p className="pl-4 text-[#888]">{"// (Optional) Broadcast updated Float32 weights back to clients"}</p>
                         <p>{"}, "}<span className="text-orange-400">600000</span>{");"}</p>
                       </div>
                     </div>
@@ -267,18 +295,22 @@ export default function FlockDocsPage() {
                 </h2>
                 
                 {!isEli5 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-emerald-400 font-mono text-sm">FlockNode.batchSize</h3>
-                      <p className="text-[#888] text-sm leading-relaxed">Controls the amount of data processed locally before generating a gradient update. Smaller batch sizes lead to more frequent WebSocket transmissions but lower memory usage.</p>
+                      <p className="text-[#888] text-sm leading-relaxed">Controls the amount of data processed locally before generating a gradient update.</p>
+                      <ul className="text-xs text-[#555] space-y-1 list-disc pl-4">
+                        <li><strong>Small (8):</strong> High network chatter, low memory footprint.</li>
+                        <li><strong>Large (128):</strong> Minimal chatter, prolonged WebGPU compute.</li>
+                      </ul>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-emerald-400 font-mono text-sm">FlockNode.learningRate</h3>
-                      <p className="text-[#888] text-sm leading-relaxed">The step size for local SGD. Because gradients are aggregated globally via FedAvg, it&apos;s recommended to keep local learning rates slightly lower to prevent gradient explosion.</p>
+                      <p className="text-[#888] text-sm leading-relaxed">The step size for local SGD. Because gradients are globally aggregated, keep this strictly lower than centralized ML to prevent global gradient explosion.</p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-emerald-400 font-mono text-sm">Coordinator.minClients</h3>
-                      <p className="text-[#888] text-sm leading-relaxed">The minimum number of Web Workers required before the Coordinator performs an aggregation step. Essential for Differential Privacy to ensure noise cancels out.</p>
+                      <p className="text-[#888] text-sm leading-relaxed">The absolute minimum payloads required before `.aggregate()` executes. Essential to mathematically guarantee Laplacian noise cancellation.</p>
                     </div>
                   </div>
                 ) : (
@@ -309,21 +341,22 @@ export default function FlockDocsPage() {
                 {!isEli5 ? (
                   <>
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
-                      Compressing 32-bit floating-point numbers down to 8-bit integers fundamentally loses mathematical precision. In standard AI training, this loss of precision forces the model to take more epochs (more time) to converge. So why does FlockML use 8-bit?
+                      Compressing a 32-bit floating-point network down to an 8-bit integer array reduces network payloads by exactly 75%. However, this loss of mathematical precision traditionally forces models to take exponentially more epochs to converge. 
                     </p>
                     <div className="space-y-6 mt-8">
                       <div className="flex gap-4 items-start">
                         <div className="w-8 h-8 rounded-full bg-[#111] border border-white/10 flex items-center justify-center shrink-0 text-emerald-500 font-mono text-sm">1</div>
                         <div>
                           <h4 className="text-white font-bold mb-1">Error Feedback Memory</h4>
-                          <p className="text-[#888] leading-relaxed text-sm">When FlockML compresses gradients to 8-bit, it does not discard the lost decimal data. Instead, it caches the &quot;quantization error&quot; locally in the browser. On the next training loop, it adds that error back in. This ensures the model converges in the exact same number of steps.</p>
+                          <p className="text-[#888] leading-relaxed text-sm mb-2">When FlockML compresses gradients to 8-bit using `Q(x) = round((x-min)/(max-min)*255)`, it does not discard the lost decimal data. Instead, it caches the &quot;quantization error&quot; locally in the browser&apos;s IndexedDB.</p>
+                          <p className="text-[#888] leading-relaxed text-sm">On the next training loop, the Web Worker retrieves that exact error and adds it back into the new gradient computation. This perfectly offsets the precision loss, ensuring convergence in the exact same number of steps as a pure Float32 network.</p>
                         </div>
                       </div>
                       <div className="flex gap-4 items-start">
                         <div className="w-8 h-8 rounded-full bg-[#111] border border-white/10 flex items-center justify-center shrink-0 text-emerald-500 font-mono text-sm">2</div>
                         <div>
-                          <h4 className="text-white font-bold mb-1">Network Latency Dominance</h4>
-                          <p className="text-[#888] leading-relaxed text-sm">The primary bottleneck in Federated Learning is the internet. Shrinking payloads to exactly 91 bytes via Protobufs removes network latency entirely.</p>
+                          <h4 className="text-white font-bold mb-1">Zero-Latency Serialization</h4>
+                          <p className="text-[#888] leading-relaxed text-sm">The Int8 arrays are encoded directly into raw binary Protocol Buffers (not JSON). The resulting payloads are as small as 91 bytes, making WebSocket transmission instantaneous even on 3G mobile networks.</p>
                         </div>
                       </div>
                     </div>
@@ -338,6 +371,43 @@ export default function FlockDocsPage() {
                     </p>
                     <p className="text-[#E5E5E5] text-lg leading-relaxed">
                       This means they can build 100x faster without ever ruining the final castle!
+                    </p>
+                  </div>
+                )}
+              </section>
+
+              {/* Differential Privacy */}
+              <section id="privacy" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
+                <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
+                  <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
+                  Differential Privacy
+                </h2>
+                
+                {!isEli5 ? (
+                  <>
+                    <p className="text-[#A1A1A1] leading-relaxed text-lg">
+                      FlockML guarantees mathematically provable privacy. Because raw gradients can theoretically be reverse-engineered to expose training data, the Server Coordinator never sees raw gradients.
+                    </p>
+                    <div className="mt-6 space-y-6">
+                      <div className="bg-[#111] p-6 rounded-xl border border-white/5">
+                        <h4 className="text-emerald-400 font-mono text-sm mb-3">FlockNode.privacyEpsilon (ε)</h4>
+                        <p className="text-[#888] text-sm leading-relaxed mb-4">
+                          Before quantization, the browser injects cryptographic noise sampled from a Laplace distribution. The variance of this noise is controlled by the Epsilon parameter.
+                        </p>
+                        <ul className="text-xs text-[#555] space-y-2 list-disc pl-4">
+                          <li><strong>High Epsilon (e.g., 5.0):</strong> Minimal noise injection. Fast convergence, but weaker privacy guarantees.</li>
+                          <li><strong>Low Epsilon (e.g., 0.1):</strong> Heavy noise injection. Extreme privacy, but requires massive scale (1000+ `minClients`) to mathematically average out the noise on the server.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
+                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
+                      You don&apos;t want anyone knowing which friend touched which LEGO piece (because privacy is important). 
+                    </p>
+                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
+                      So before they are allowed to give their finished piece back to you, you make them spray-paint it with a completely random color (this is called <strong>Laplacian Noise</strong>). Now, nobody can ever track who built what!
                     </p>
                   </div>
                 )}
@@ -362,17 +432,17 @@ export default function FlockDocsPage() {
                     <tbody className="divide-y divide-white/5">
                       <tr>
                         <td className="px-6 py-4 text-[#888]">Cost</td>
-                        <td className="px-6 py-4 text-emerald-400 font-medium">$0 (Free Pizza)</td>
+                        <td className="px-6 py-4 text-emerald-400 font-medium">$0 (Free Compute)</td>
                         <td className="px-6 py-4 text-[#E5E5E5]">$5,000 / month</td>
                       </tr>
                       <tr>
                         <td className="px-6 py-4 text-[#888]">Privacy</td>
-                        <td className="px-6 py-4 text-emerald-400 font-medium">100% Private (Spray-painted)</td>
-                        <td className="px-6 py-4 text-[#E5E5E5]">They steal your data</td>
+                        <td className="px-6 py-4 text-emerald-400 font-medium">100% Private (Differential)</td>
+                        <td className="px-6 py-4 text-[#E5E5E5]">Vulnerable Centralized Data</td>
                       </tr>
                       <tr>
                         <td className="px-6 py-4 text-[#888]">Scalability</td>
-                        <td className="px-6 py-4 text-emerald-400 font-medium">10,000 friends = 10,000 workers</td>
+                        <td className="px-6 py-4 text-emerald-400 font-medium">Infinite (Scales with Traffic)</td>
                         <td className="px-6 py-4 text-[#E5E5E5]">Bottlenecked by server limits</td>
                       </tr>
                     </tbody>
