@@ -63,7 +63,7 @@ export default function FlockDocsPage() {
               <h1 className="text-3xl sm:text-6xl font-black tracking-tight text-white mb-4 break-words">FlockML Documentation</h1>
               <p className="text-lg sm:text-xl text-[#A1A1A1] font-light leading-relaxed max-w-2xl">
                 {isFreshman 
-                  ? "Understand decentralized machine learning using the basic CS concepts you learned in your first semester."
+                  ? "Understand decentralized machine learning through simple, everyday analogies designed for Junior Developers."
                   : "An exhaustive developer guide for integrating decentralized, privacy-preserving federated learning into your applications."}
               </p>
             </div>
@@ -84,7 +84,7 @@ export default function FlockDocsPage() {
               >
                 {isFreshman && <motion.div layoutId="docToggle" className="absolute inset-0 bg-blue-500/10 rounded-xl sm:rounded-full border border-blue-500/20" />}
                 <GraduationCap size={16} className="relative z-10 shrink-0" />
-                <span className="relative z-10 whitespace-nowrap">B.Tech 1st Year Mode</span>
+                <span className="relative z-10 whitespace-nowrap">Junior Dev Mode</span>
               </button>
             </div>
           </div>
@@ -126,7 +126,7 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-blue-500/20 space-y-4 max-w-2xl">
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      In college, they teach you to build AI using Python, which forces users to install heavy libraries and download massive datasets. FlockML completely flips this. The user doesn&apos;t install anything. They just open your website, and their browser&apos;s JavaScript engine acts as the runtime environment to train the model.
+                      Instead of forcing users to install messy Python environments or download gigabytes of data, FlockML runs natively in the browser. The user literally just visits your website, and their JavaScript engine instantly becomes the AI training environment. Zero setup required.
                     </p>
                   </div>
                 )}
@@ -175,13 +175,13 @@ export default function FlockDocsPage() {
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4">
                       <h3 className="text-white font-bold text-xl">The Old Way (Centralized AI)</h3>
                       <p className="text-[#CCCCCC] text-sm leading-relaxed">
-                        Usually, to process a million pieces of data, you write a giant <code className="bg-white/10 px-1 py-0.5 rounded font-mono text-xs">for</code> loop. Because that loop is so huge, a normal computer would crash, so you have to rent a $5,000/month supercomputer from AWS to run it.
+                        Imagine a college professor grading 10,000 exams alone. It takes weeks of exhausting work, and the professor demands a huge salary (renting a massive $5,000/month AWS server).
                       </p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-blue-500/20 bg-blue-500/5 space-y-4">
                       <h3 className="text-white font-bold text-xl">The FlockML Way (Distributed)</h3>
                       <p className="text-[#CCCCCC] text-sm leading-relaxed">
-                        Instead of running 1,000,000 loops on one expensive server, you run 100 loops on 10,000 different laptops (your website visitors). Everyone does a tiny fraction of the math for free, and your server just adds the final answers together.
+                        Instead of grading them alone, the professor hands 1 exam to each of the 10,000 students to grade themselves. The students finish in 5 minutes, hand the grades back, and the professor just calculates the class average. It costs $0 and finishes instantly!
                       </p>
                     </div>
                   </div>
@@ -192,7 +192,7 @@ export default function FlockDocsPage() {
               <section id="ui-performance" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
                 <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
                   <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
-                  {isFreshman ? "Why doesn't the webpage freeze?" : "UI Performance (Zero Stutters)"}
+                  {isFreshman ? "Will this make my website lag?" : "UI Performance (Zero Stutters)"}
                 </h2>
                 
                 {!isFreshman ? (
@@ -211,10 +211,10 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      In your first semester, you learn that code runs line-by-line. If you write an infinite <code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-sm text-white">while(true)</code> loop, the program hangs. Browsers do the exact same thing because JavaScript is naturally single-threaded.
+                      You know how playing a heavy video game while trying to download a huge file makes your computer lag? That&apos;s what happens if you try to run heavy math on the main thread of your website.
                     </p>
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      To fix this, FlockML uses a <strong>Web Worker</strong>. This is identical to spawning a new background thread in C++ or Java. The heavy math runs entirely on this separate background thread, meaning the main thread handling the webpage scrolling and animations never lags or drops a frame.
+                      FlockML prevents this completely. It opens a secret, invisible background process (called a Web Worker). The heavy AI math runs over there, leaving your main webpage totally untouched so scrolling and animations stay buttery smooth at 60 frames per second.
                     </p>
                   </div>
                 )}
@@ -224,7 +224,7 @@ export default function FlockDocsPage() {
               <section id="security" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
                 <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
                   <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
-                  {isFreshman ? "Defending Against Hackers" : "Security & Malicious Actors"}
+                  {isFreshman ? "Defending Against Trolls" : "Security & Malicious Actors"}
                 </h2>
                 
                 {!isFreshman ? (
@@ -243,10 +243,10 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      What if a user opens their browser console and intentionally sends corrupted arrays to your server to poison the AI model?
+                      What if a troll purposefully sends fake, corrupted data from their browser to try and ruin your AI model?
                     </p>
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      Think of it like calculating an average score in a class of 10,000 students. If 9,999 students score a 50, and 1 hacker submits a fake score of 1,000,000, it could ruin the average. FlockML automatically detects and clamps these crazy mathematical outliers. The hacker&apos;s bad data gets completely drowned out by the good data from normal users.
+                      Think of it like Wikipedia. Anyone can edit a page to say something crazy, but because thousands of normal people are also editing the page with true facts, the troll&apos;s fake edit gets immediately overwritten and ignored. FlockML does the exact same thing using math to automatically crush fake data.
                     </p>
                   </div>
                 )}
@@ -294,7 +294,7 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      You just write a simple React <code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-sm text-white">useEffect</code> function. When the user opens your website, their browser connects to your server using WebSockets. It downloads an array of numbers, mathematically updates the array using their GPU, and sends the newly updated array back to your server.
+                      You just paste 3 lines of code into your React app. It automatically connects to your server, downloads the latest AI brain, trains it a little bit using the user&apos;s graphics card, and sends the newly trained brain back to the server. You don&apos;t have to write any heavy math yourself!
                     </p>
                   </div>
                 )}
@@ -339,9 +339,8 @@ export default function FlockDocsPage() {
                   </>
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
-                    <h3 className="text-blue-400 font-bold text-xl mb-2">The Node.js Backend</h3>
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      Instead of doing the heavy math, your Node.js backend just acts like a bucket. It collects arrays from thousands of WebSockets, calculates the mathematical average of all of them, and sends the updated array back out.
+                      The backend server is literally just a giant Dropbox folder. It doesn&apos;t do any AI training itself. It just sits there, collects all the tiny AI brains from the users, merges them into one giant super-smart AI brain, and sends it back out to everyone.
                     </p>
                   </div>
                 )}
@@ -351,7 +350,7 @@ export default function FlockDocsPage() {
               <section id="advanced-config" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
                 <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
                   <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
-                  {isFreshman ? "Variables & Thresholds" : "Advanced Configuration"}
+                  {isFreshman ? "Fine-Tuning" : "Advanced Configuration"}
                 </h2>
                 
                 {!isFreshman ? (
@@ -377,15 +376,15 @@ export default function FlockDocsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-blue-400 font-bold text-lg">Batch Size</h3>
-                      <p className="text-[#CCCCCC] text-sm leading-relaxed">How many loop iterations the browser runs before sending a single WebSocket network request back to the server.</p>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">How much homework a user does on their own laptop before finally submitting it to the server.</p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-blue-400 font-bold text-lg">Learning Rate</h3>
-                      <p className="text-[#CCCCCC] text-sm leading-relaxed">A simple multiplier variable. If you set this too high, the mathematical array updates overshoot the target and the code breaks.</p>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">How much we trust each user&apos;s homework. If we trust it too much (high learning rate), one wrong answer ruins the whole project.</p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-blue-400 font-bold text-lg">minClients</h3>
-                      <p className="text-[#CCCCCC] text-sm leading-relaxed">An <code className="bg-white/10 px-1 py-0.5 rounded font-mono text-white text-xs">if()</code> statement on the server that stops the averaging function from running until at least 100 arrays have arrived.</p>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">The server refuses to calculate the final class average until at least 100 students have handed in their homework.</p>
                     </div>
                   </div>
                 )}
@@ -395,7 +394,7 @@ export default function FlockDocsPage() {
               <section id="speed-paradox" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
                 <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
                   <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
-                  {isFreshman ? "Casting Data Types" : "The 8-Bit Speed Paradox"}
+                  {isFreshman ? "Compressing the AI" : "The 8-Bit Speed Paradox"}
                 </h2>
                 
                 {!isFreshman ? (
@@ -424,10 +423,10 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      Transmitting massive arrays of <code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-sm text-white">float</code> numbers takes up huge amounts of memory and network bandwidth. FlockML solves this by type-casting the floats down to bytes (<code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-sm text-white">int8</code>), shrinking the file size by 75% so it uploads instantly.
+                      Imagine trying to send a massive 4K Ultra HD video over a slow 3G network—it would take forever. 
                     </p>
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      But when you cast a float to an int, you lose the decimal points! To fix this, we save the lost decimals in a local browser variable, and simply add them back during the next loop.
+                      FlockML automatically compresses the AI model down to a tiny 144p video (8-bit) so it uploads instantly! To make sure the AI doesn&apos;t become blurry forever, the browser remembers exactly which pixels were compressed away, and magically adds them back during the next round. It&apos;s like zipping a file, sending it super fast, and unzipping it perfectly on the other side.
                     </p>
                   </div>
                 )}
@@ -461,10 +460,10 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      How do we make sure the server can&apos;t reverse-engineer a user&apos;s private data from the array? We add randomly generated noise (just random numbers) to the array before sending it.
+                      If you send your raw data to the server, the server knows exactly what you did. To protect your privacy, FlockML intentionally blurs your data with &quot;static noise&quot; before uploading it.
                     </p>
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      Because the server calculates the mathematical average of thousands of arrays together, the random noise perfectly cancels out to zero, leaving only the real data behind.
+                      When the server merges your blurry data with 10,000 other people&apos;s blurry data, the static noise perfectly cancels out, revealing the true picture, but nobody can ever trace your specific data back to you.
                     </p>
                   </div>
                 )}
