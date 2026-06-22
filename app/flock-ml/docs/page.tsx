@@ -58,8 +58,8 @@ export default function FlockDocsPage() {
           
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white mb-4">FlockML Documentation</h1>
-              <p className="text-xl text-[#A1A1A1] font-light leading-relaxed max-w-2xl">
+              <h1 className="text-3xl sm:text-6xl font-black tracking-tight text-white mb-4 break-words">FlockML Documentation</h1>
+              <p className="text-lg sm:text-xl text-[#A1A1A1] font-light leading-relaxed max-w-2xl">
                 {isEli5 
                   ? "Learn how to build a giant LEGO castle for free by inviting your friends to a party."
                   : "Learn how to integrate the open-source federated learning infrastructure into your React and Node.js applications."}
@@ -67,22 +67,22 @@ export default function FlockDocsPage() {
             </div>
 
             {/* Global Toggle */}
-            <div className="inline-flex bg-[#111] border border-white/10 rounded-full p-1 relative z-10">
+            <div className="flex flex-col sm:flex-row sm:inline-flex w-full sm:w-auto bg-[#111] border border-white/10 rounded-2xl sm:rounded-full p-1 relative z-10">
               <button 
                 onClick={() => setIsEli5(false)}
-                className={`relative px-6 py-2 rounded-full text-sm font-bold flex items-center space-x-2 transition-colors ${!isEli5 ? 'text-white' : 'text-[#888] hover:text-white'}`}
+                className={`relative px-4 sm:px-6 py-3 sm:py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold flex justify-center items-center space-x-2 transition-colors ${!isEli5 ? 'text-white' : 'text-[#888] hover:text-white'}`}
               >
-                {!isEli5 && <motion.div layoutId="docToggle" className="absolute inset-0 bg-white/10 rounded-full border border-white/5" />}
-                <Code2 size={16} className="relative z-10" />
-                <span className="relative z-10">Engineer Mode</span>
+                {!isEli5 && <motion.div layoutId="docToggle" className="absolute inset-0 bg-white/10 rounded-xl sm:rounded-full border border-white/5" />}
+                <Code2 size={16} className="relative z-10 shrink-0" />
+                <span className="relative z-10 whitespace-nowrap">Engineer Mode</span>
               </button>
               <button 
                 onClick={() => setIsEli5(true)}
-                className={`relative px-6 py-2 rounded-full text-sm font-bold flex items-center space-x-2 transition-colors ${isEli5 ? 'text-emerald-400' : 'text-[#888] hover:text-white'}`}
+                className={`relative px-4 sm:px-6 py-3 sm:py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold flex justify-center items-center space-x-2 transition-colors ${isEli5 ? 'text-emerald-400' : 'text-[#888] hover:text-white'}`}
               >
-                {isEli5 && <motion.div layoutId="docToggle" className="absolute inset-0 bg-emerald-500/10 rounded-full border border-emerald-500/20" />}
-                <Baby size={16} className="relative z-10" />
-                <span className="relative z-10">5-Year-Old Mode</span>
+                {isEli5 && <motion.div layoutId="docToggle" className="absolute inset-0 bg-emerald-500/10 rounded-xl sm:rounded-full border border-emerald-500/20" />}
+                <Baby size={16} className="relative z-10 shrink-0" />
+                <span className="relative z-10 whitespace-nowrap">5-Year-Old Mode</span>
               </button>
             </div>
           </div>
