@@ -172,13 +172,13 @@ export default function FlockDocsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4">
                       <h3 className="text-white font-bold text-xl">The Old Way (Amazon AWS)</h3>
-                      <p className="text-[#888] text-sm leading-relaxed">
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">
                         You want to build a giant 100-million piece LEGO castle. So, you hire a massive, expensive construction company to build the castle in a giant warehouse. You pay them $5,000 a month. They do a great job, but it costs all your allowance.
                       </p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-emerald-500/20 bg-emerald-500/5 space-y-4">
                       <h3 className="text-white font-bold text-xl">The FlockML Way</h3>
-                      <p className="text-[#888] text-sm leading-relaxed">
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">
                         You throw a massive party and invite 10,000 friends (your <strong>Website Visitors</strong>). When they walk in the door, you secretly hand them exactly one LEGO piece and instructions on how to snap it together. They do it automatically!
                       </p>
                     </div>
@@ -298,7 +298,7 @@ export default function FlockDocsPage() {
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-emerald-400 font-mono text-sm">FlockNode.batchSize</h3>
-                      <p className="text-[#888] text-sm leading-relaxed">Controls the amount of data processed locally before generating a gradient update.</p>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">Controls the amount of data processed locally before generating a gradient update.</p>
                       <ul className="text-xs text-[#555] space-y-1 list-disc pl-4">
                         <li><strong>Small (8):</strong> High network chatter, low memory footprint.</li>
                         <li><strong>Large (128):</strong> Minimal chatter, prolonged WebGPU compute.</li>
@@ -306,26 +306,26 @@ export default function FlockDocsPage() {
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-emerald-400 font-mono text-sm">FlockNode.learningRate</h3>
-                      <p className="text-[#888] text-sm leading-relaxed">The step size for local SGD. Because gradients are globally aggregated, keep this strictly lower than centralized ML to prevent global gradient explosion.</p>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">The step size for local SGD. Because gradients are globally aggregated, keep this strictly lower than centralized ML to prevent global gradient explosion.</p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-emerald-400 font-mono text-sm">Coordinator.minClients</h3>
-                      <p className="text-[#888] text-sm leading-relaxed">The absolute minimum payloads required before `.aggregate()` executes. Essential to mathematically guarantee Laplacian noise cancellation.</p>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">The absolute minimum payloads required before `.aggregate()` executes. Essential to mathematically guarantee Laplacian noise cancellation.</p>
                     </div>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-emerald-400 font-bold text-lg">How many pieces they hold</h3>
-                      <p className="text-[#888] text-sm leading-relaxed">You can tell your friends to only hold 32 pieces at a time so their hands don&apos;t get full (<strong>Batch Size</strong>).</p>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">You can tell your friends to only hold 32 pieces at a time so their hands don&apos;t get full (<strong>Batch Size</strong>).</p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-emerald-400 font-bold text-lg">How fast they snap</h3>
-                      <p className="text-[#888] text-sm leading-relaxed">You can tell them to build slowly and carefully so they don&apos;t break the blocks (<strong>Learning Rate</strong>).</p>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">You can tell them to build slowly and carefully so they don&apos;t break the blocks (<strong>Learning Rate</strong>).</p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-emerald-400 font-bold text-lg">Waiting for enough friends</h3>
-                      <p className="text-[#888] text-sm leading-relaxed">The magic bucket refuses to shake itself until at least 100 friends have thrown pieces in (<strong>minClients</strong>).</p>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">The magic bucket refuses to shake itself until at least 100 friends have thrown pieces in (<strong>minClients</strong>).</p>
                     </div>
                   </div>
                 )}
@@ -348,15 +348,15 @@ export default function FlockDocsPage() {
                         <div className="w-8 h-8 rounded-full bg-[#111] border border-white/10 flex items-center justify-center shrink-0 text-emerald-500 font-mono text-sm">1</div>
                         <div>
                           <h4 className="text-white font-bold mb-1">Error Feedback Memory</h4>
-                          <p className="text-[#888] leading-relaxed text-sm mb-2">When FlockML compresses gradients to 8-bit using `Q(x) = round((x-min)/(max-min)*255)`, it does not discard the lost decimal data. Instead, it caches the &quot;quantization error&quot; locally in the browser&apos;s IndexedDB.</p>
-                          <p className="text-[#888] leading-relaxed text-sm">On the next training loop, the Web Worker retrieves that exact error and adds it back into the new gradient computation. This perfectly offsets the precision loss, ensuring convergence in the exact same number of steps as a pure Float32 network.</p>
+                          <p className="text-[#CCCCCC] leading-relaxed text-sm mb-2">When FlockML compresses gradients to 8-bit using `Q(x) = round((x-min)/(max-min)*255)`, it does not discard the lost decimal data. Instead, it caches the &quot;quantization error&quot; locally in the browser&apos;s IndexedDB.</p>
+                          <p className="text-[#CCCCCC] leading-relaxed text-sm">On the next training loop, the Web Worker retrieves that exact error and adds it back into the new gradient computation. This perfectly offsets the precision loss, ensuring convergence in the exact same number of steps as a pure Float32 network.</p>
                         </div>
                       </div>
                       <div className="flex gap-4 items-start">
                         <div className="w-8 h-8 rounded-full bg-[#111] border border-white/10 flex items-center justify-center shrink-0 text-emerald-500 font-mono text-sm">2</div>
                         <div>
                           <h4 className="text-white font-bold mb-1">Zero-Latency Serialization</h4>
-                          <p className="text-[#888] leading-relaxed text-sm">The Int8 arrays are encoded directly into raw binary Protocol Buffers (not JSON). The resulting payloads are as small as 91 bytes, making WebSocket transmission instantaneous even on 3G mobile networks.</p>
+                          <p className="text-[#CCCCCC] leading-relaxed text-sm">The Int8 arrays are encoded directly into raw binary Protocol Buffers (not JSON). The resulting payloads are as small as 91 bytes, making WebSocket transmission instantaneous even on 3G mobile networks.</p>
                         </div>
                       </div>
                     </div>
@@ -391,10 +391,10 @@ export default function FlockDocsPage() {
                     <div className="mt-6 space-y-6">
                       <div className="bg-[#111] p-6 rounded-xl border border-white/5">
                         <h4 className="text-emerald-400 font-mono text-sm mb-3">FlockNode.privacyEpsilon (ε)</h4>
-                        <p className="text-[#888] text-sm leading-relaxed mb-4">
+                        <p className="text-[#CCCCCC] text-sm leading-relaxed mb-4">
                           Before quantization, the browser injects cryptographic noise sampled from a Laplace distribution. The variance of this noise is controlled by the Epsilon parameter.
                         </p>
-                        <ul className="text-xs text-[#555] space-y-2 list-disc pl-4">
+                        <ul className="text-sm text-[#A1A1A1] space-y-3 list-disc pl-4">
                           <li><strong>High Epsilon (e.g., 5.0):</strong> Minimal noise injection. Fast convergence, but weaker privacy guarantees.</li>
                           <li><strong>Low Epsilon (e.g., 0.1):</strong> Heavy noise injection. Extreme privacy, but requires massive scale (1000+ `minClients`) to mathematically average out the noise on the server.</li>
                         </ul>
