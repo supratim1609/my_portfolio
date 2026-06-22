@@ -69,7 +69,7 @@ export default function FlockDocsPage() {
             </div>
 
             {/* Global Toggle */}
-            <div className="flex flex-col sm:flex-row sm:inline-flex w-full sm:w-auto bg-[#111] border border-white/10 rounded-2xl sm:rounded-full p-1 relative z-10">
+            <div className="flex flex-col sm:flex-row sm:inline-flex items-center w-full sm:w-auto bg-[#111] border border-white/10 rounded-2xl sm:rounded-full p-1.5 relative z-10">
               <button 
                 onClick={() => setIsFreshman(false)}
                 className={`relative px-4 sm:px-6 py-3 sm:py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold flex justify-center items-center space-x-2 transition-colors ${!isFreshman ? 'text-white' : 'text-[#888] hover:text-white'}`}
