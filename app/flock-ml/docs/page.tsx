@@ -124,10 +124,26 @@ export default function FlockDocsPage() {
                     </div>
                   </>
                 ) : (
-                  <div className="bg-[#111] p-6 rounded-xl border border-blue-500/20 space-y-4 max-w-2xl">
-                    <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      Instead of forcing users to install messy Python environments or download gigabytes of data, FlockML runs natively in the browser. The user literally just visits your website, and their JavaScript engine instantly becomes the AI training environment. Zero setup required.
-                    </p>
+                  <div className="space-y-6">
+                    <div className="bg-[#111] border border-blue-500/20 rounded-lg overflow-hidden font-mono text-xs sm:text-sm max-w-full w-full">
+                      <div className="px-4 py-2 border-b border-white/5 bg-[#1A1A1A] text-[#888] text-[10px] sm:text-xs flex justify-between items-center">
+                        <span>Terminal (You)</span>
+                        <button onClick={() => handleCopy('npm install flockml')} className="text-[#555] hover:text-white transition-colors">
+                          {copied ? <Check size={14} className="text-blue-500" /> : <Copy size={14} />}
+                        </button>
+                      </div>
+                      <div className="p-4 overflow-x-auto text-[#E5E5E5] whitespace-nowrap">
+                        <span className="text-blue-500 mr-2">$</span>npm install flockml
+                      </div>
+                    </div>
+                    <div className="bg-[#111] p-6 rounded-xl border border-blue-500/20 space-y-4 max-w-2xl">
+                      <p className="text-[#CCCCCC] text-lg leading-relaxed">
+                        All you do is run that single command and sip your coffee. 
+                      </p>
+                      <p className="text-[#CCCCCC] text-lg leading-relaxed">
+                        For your users? Zero setup. No messy Python environments, no downloading gigabytes of PyTorch data. They literally just visit your website, and their browser secretly starts doing all your heavy AI math for free while they scroll!
+                      </p>
+                    </div>
                   </div>
                 )}
               </section>
