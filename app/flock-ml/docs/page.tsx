@@ -94,7 +94,7 @@ export default function FlockDocsPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
-              className="space-y-24"
+              className="space-y-24 w-full min-w-0"
             >
               
               {/* Installation */}
@@ -109,14 +109,14 @@ export default function FlockDocsPage() {
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
                       FlockML is available as an NPM package. It contains both the browser-side <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code> and the server-side <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">Coordinator</code>.
                     </p>
-                    <div className="bg-[#111] border border-white/10 rounded-lg overflow-hidden font-mono text-sm max-w-2xl">
-                      <div className="px-4 py-2 border-b border-white/5 bg-[#1A1A1A] text-[#888] text-xs flex justify-between items-center">
+                    <div className="bg-[#111] border border-white/10 rounded-lg overflow-hidden font-mono text-xs sm:text-sm max-w-full w-full">
+                      <div className="px-4 py-2 border-b border-white/5 bg-[#1A1A1A] text-[#888] text-[10px] sm:text-xs flex justify-between items-center">
                         <span>Terminal</span>
                         <button onClick={() => handleCopy('npm install flockml')} className="text-[#555] hover:text-white transition-colors">
                           {copied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
                         </button>
                       </div>
-                      <div className="p-4 text-[#E5E5E5]">
+                      <div className="p-4 overflow-x-auto text-[#E5E5E5] whitespace-nowrap">
                         <span className="text-emerald-500 mr-2">$</span>npm install flockml
                       </div>
                     </div>
@@ -176,9 +176,9 @@ export default function FlockDocsPage() {
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
                       Initialize the <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code> at the root of your application. It runs entirely off the main thread, ensuring your React UI maintains 60fps.
                     </p>
-                    <div className="bg-[#111] border border-white/10 rounded-lg overflow-hidden max-w-3xl">
-                      <div className="px-4 py-2 border-b border-white/5 bg-[#1A1A1A] text-[#888] text-xs font-mono">app/layout.tsx</div>
-                      <div className="p-6 text-sm font-mono overflow-x-auto text-[#E5E5E5] leading-relaxed">
+                    <div className="bg-[#111] border border-white/10 rounded-lg overflow-hidden max-w-full w-full">
+                      <div className="px-4 py-2 border-b border-white/5 bg-[#1A1A1A] text-[#888] text-[10px] sm:text-xs font-mono">app/layout.tsx</div>
+                      <div className="p-4 sm:p-6 text-xs sm:text-sm font-mono overflow-x-auto text-[#E5E5E5] leading-relaxed whitespace-nowrap custom-scrollbar">
                         <p><span className="text-purple-400">import</span> {"{ useEffect }"} <span className="text-purple-400">from</span> <span className="text-green-400">&apos;react&apos;</span>;</p>
                         <p><span className="text-purple-400">import</span> {"{ FlockNode }"} <span className="text-purple-400">from</span> <span className="text-green-400">&apos;flockml&apos;</span>;</p>
                         <br />
@@ -223,9 +223,9 @@ export default function FlockDocsPage() {
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
                       The <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">Coordinator</code> class manages the global weights. As quantized payloads stream in from clients via WebSocket, it queues them up and executes the Federated Averaging algorithm.
                     </p>
-                    <div className="bg-[#111] border border-white/10 rounded-lg overflow-hidden max-w-3xl">
-                      <div className="px-4 py-2 border-b border-white/5 bg-[#1A1A1A] text-[#888] text-xs font-mono">server.ts</div>
-                      <div className="p-6 text-sm font-mono overflow-x-auto text-[#E5E5E5] leading-relaxed">
+                    <div className="bg-[#111] border border-white/10 rounded-lg overflow-hidden max-w-full w-full">
+                      <div className="px-4 py-2 border-b border-white/5 bg-[#1A1A1A] text-[#888] text-[10px] sm:text-xs font-mono">server.ts</div>
+                      <div className="p-4 sm:p-6 text-xs sm:text-sm font-mono overflow-x-auto text-[#E5E5E5] leading-relaxed whitespace-nowrap custom-scrollbar">
                         <p><span className="text-purple-400">import</span> {"{ Coordinator }"} <span className="text-purple-400">from</span> <span className="text-green-400">&apos;flockml&apos;</span>;</p>
                         <p><span className="text-purple-400">import</span> {"{ WebSocketServer }"} <span className="text-purple-400">from</span> <span className="text-green-400">&apos;ws&apos;</span>;</p>
                         <br />
@@ -350,8 +350,8 @@ export default function FlockDocsPage() {
                   {isEli5 ? "Why this is better" : "FlockML vs Cloud AI"}
                 </h2>
                 
-                <div className="overflow-x-auto rounded-lg border border-white/10 bg-[#0A0A0A]">
-                  <table className="w-full text-left text-sm">
+                <div className="overflow-x-auto rounded-lg border border-white/10 bg-[#0A0A0A] w-full max-w-full">
+                  <table className="w-full min-w-[500px] text-left text-xs sm:text-sm">
                     <thead className="bg-[#111] border-b border-white/10 text-[#A1A1A1] font-mono text-xs uppercase">
                       <tr>
                         <th className="px-6 py-4">Metric</th>
