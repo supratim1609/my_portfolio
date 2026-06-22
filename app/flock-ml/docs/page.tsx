@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Copy, Check, Hash, Code2, Baby } from 'lucide-react';
+import { Copy, Check, Hash, Code2, GraduationCap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function FlockDocsPage() {
   const [copied, setCopied] = useState(false);
-  const [isEli5, setIsEli5] = useState(false);
+  const [isFreshman, setIsFreshman] = useState(false);
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -62,8 +62,8 @@ export default function FlockDocsPage() {
             <div>
               <h1 className="text-3xl sm:text-6xl font-black tracking-tight text-white mb-4 break-words">FlockML Documentation</h1>
               <p className="text-lg sm:text-xl text-[#A1A1A1] font-light leading-relaxed max-w-2xl">
-                {isEli5 
-                  ? "Learn how to build a giant LEGO castle for free by inviting your friends to a party."
+                {isFreshman 
+                  ? "Understand decentralized machine learning using the basic CS concepts you learned in your first semester."
                   : "An exhaustive developer guide for integrating decentralized, privacy-preserving federated learning into your applications."}
               </p>
             </div>
@@ -71,27 +71,27 @@ export default function FlockDocsPage() {
             {/* Global Toggle */}
             <div className="flex flex-col sm:flex-row sm:inline-flex w-full sm:w-auto bg-[#111] border border-white/10 rounded-2xl sm:rounded-full p-1 relative z-10">
               <button 
-                onClick={() => setIsEli5(false)}
-                className={`relative px-4 sm:px-6 py-3 sm:py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold flex justify-center items-center space-x-2 transition-colors ${!isEli5 ? 'text-white' : 'text-[#888] hover:text-white'}`}
+                onClick={() => setIsFreshman(false)}
+                className={`relative px-4 sm:px-6 py-3 sm:py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold flex justify-center items-center space-x-2 transition-colors ${!isFreshman ? 'text-white' : 'text-[#888] hover:text-white'}`}
               >
-                {!isEli5 && <motion.div layoutId="docToggle" className="absolute inset-0 bg-white/10 rounded-xl sm:rounded-full border border-white/5" />}
+                {!isFreshman && <motion.div layoutId="docToggle" className="absolute inset-0 bg-white/10 rounded-xl sm:rounded-full border border-white/5" />}
                 <Code2 size={16} className="relative z-10 shrink-0" />
                 <span className="relative z-10 whitespace-nowrap">Engineer Mode</span>
               </button>
               <button 
-                onClick={() => setIsEli5(true)}
-                className={`relative px-4 sm:px-6 py-3 sm:py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold flex justify-center items-center space-x-2 transition-colors ${isEli5 ? 'text-emerald-400' : 'text-[#888] hover:text-white'}`}
+                onClick={() => setIsFreshman(true)}
+                className={`relative px-4 sm:px-6 py-3 sm:py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold flex justify-center items-center space-x-2 transition-colors ${isFreshman ? 'text-blue-400' : 'text-[#888] hover:text-white'}`}
               >
-                {isEli5 && <motion.div layoutId="docToggle" className="absolute inset-0 bg-emerald-500/10 rounded-xl sm:rounded-full border border-emerald-500/20" />}
-                <Baby size={16} className="relative z-10 shrink-0" />
-                <span className="relative z-10 whitespace-nowrap">5-Year-Old Mode</span>
+                {isFreshman && <motion.div layoutId="docToggle" className="absolute inset-0 bg-blue-500/10 rounded-xl sm:rounded-full border border-blue-500/20" />}
+                <GraduationCap size={16} className="relative z-10 shrink-0" />
+                <span className="relative z-10 whitespace-nowrap">B.Tech 1st Year Mode</span>
               </button>
             </div>
           </div>
 
           <AnimatePresence mode="wait">
             <motion.div 
-              key={isEli5 ? 'eli5' : 'engineer'}
+              key={isFreshman ? 'freshman' : 'engineer'}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
@@ -106,7 +106,7 @@ export default function FlockDocsPage() {
                   Installation
                 </h2>
                 
-                {!isEli5 ? (
+                {!isFreshman ? (
                   <>
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
                       FlockML is available as a single NPM package. It contains both the browser-side WebWorker environment (<code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code>) and the Node.js server-side aggregator (<code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">Coordinator</code>).
@@ -124,9 +124,9 @@ export default function FlockDocsPage() {
                     </div>
                   </>
                 ) : (
-                  <div className="bg-[#111] p-6 rounded-xl border border-emerald-500/20 space-y-4 max-w-2xl">
-                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      There is literally nothing for your friends to install! When they walk into your party (visit your website), you automatically hand them a LEGO piece. They don&apos;t have to download any tools or bring anything with them.
+                  <div className="bg-[#111] p-6 rounded-xl border border-blue-500/20 space-y-4 max-w-2xl">
+                    <p className="text-[#CCCCCC] text-lg leading-relaxed">
+                      Unlike Python libraries where you have to set up messy Conda environments and run <code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-white text-sm">pip install</code>, FlockML uses the browser as the execution environment. The user just visits your webpage, and the JavaScript engine natively handles the compute.
                     </p>
                   </div>
                 )}
@@ -139,7 +139,7 @@ export default function FlockDocsPage() {
                   Architecture Overview
                 </h2>
                 
-                {!isEli5 ? (
+                {!isFreshman ? (
                   <div className="space-y-6">
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
                       FlockML completely eliminates the need for centralized AWS/GCP GPU clusters. By distributing the training workload across your website visitors&apos; browsers via WebGPU, it enables zero-cost, privacy-preserving machine learning.
@@ -173,15 +173,15 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4">
-                      <h3 className="text-white font-bold text-xl">The Old Way (Amazon AWS)</h3>
+                      <h3 className="text-white font-bold text-xl">Standard Cloud AI</h3>
                       <p className="text-[#CCCCCC] text-sm leading-relaxed">
-                        You want to build a giant 100-million piece LEGO castle. So, you hire a massive, expensive construction company to build the castle in a giant warehouse. You pay them $5,000 a month. They do a great job, but it costs all your allowance.
+                        Imagine writing a massive <code className="bg-white/10 px-1 py-0.5 rounded font-mono text-xs">for</code> loop that needs to process a billion records. Usually, you rent a $5,000/month supercomputer from AWS to run that single process because a normal computer would crash.
                       </p>
                     </div>
-                    <div className="bg-[#111] p-6 rounded-xl border border-emerald-500/20 bg-emerald-500/5 space-y-4">
-                      <h3 className="text-white font-bold text-xl">The FlockML Way</h3>
+                    <div className="bg-[#111] p-6 rounded-xl border border-blue-500/20 bg-blue-500/5 space-y-4">
+                      <h3 className="text-white font-bold text-xl">The FlockML Way (MapReduce)</h3>
                       <p className="text-[#CCCCCC] text-sm leading-relaxed">
-                        You throw a massive party and invite 10,000 friends (your <strong>Website Visitors</strong>). When they walk in the door, you secretly hand them exactly one LEGO piece and instructions on how to snap it together. They do it automatically!
+                        Instead of one giant server, you break the array into tiny chunks. You hand each chunk to 10,000 website visitors. Their laptops run a tiny local loop, calculate a fraction of the math, and send just the result back to your backend.
                       </p>
                     </div>
                   </div>
@@ -192,10 +192,10 @@ export default function FlockDocsPage() {
               <section id="ui-performance" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
                 <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
                   <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
-                  {isEli5 ? "Does it ruin the party?" : "UI Performance (Zero Stutters)"}
+                  {isFreshman ? "Why doesn't the webpage freeze?" : "UI Performance (Zero Stutters)"}
                 </h2>
                 
-                {!isEli5 ? (
+                {!isFreshman ? (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4">
                     <h3 className="text-white font-bold text-xl">100% Off-Main-Thread Architecture</h3>
                     <p className="text-[#CCCCCC] leading-relaxed">
@@ -210,11 +210,11 @@ export default function FlockDocsPage() {
                   </div>
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
-                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      If you make all your friends build LEGOs, will they be too distracted to enjoy the party? Will the party get boring?
+                    <p className="text-[#CCCCCC] text-lg leading-relaxed">
+                      If you put a heavy <code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-sm text-white">while(true)</code> loop in standard JavaScript, the browser completely freezes because JS is naturally single-threaded.
                     </p>
-                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      Absolutely not! You tell them to build the LEGOs outside in the backyard (<strong>The Web Worker</strong>). This leaves the dance floor completely empty and perfectly smooth, so the party keeps rocking at 60 frames per second!
+                    <p className="text-[#CCCCCC] text-lg leading-relaxed">
+                      FlockML prevents this by using a <strong>Web Worker</strong>. This is identical to spawning a new background thread in C++ or Java. The heavy math runs entirely on this separate thread, meaning the main thread handling the UI and scrolling never drops a single frame.
                     </p>
                   </div>
                 )}
@@ -224,10 +224,10 @@ export default function FlockDocsPage() {
               <section id="security" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
                 <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
                   <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
-                  {isEli5 ? "What about bad friends?" : "Security & Malicious Actors"}
+                  {isFreshman ? "Defending Against Hackers" : "Security & Malicious Actors"}
                 </h2>
                 
-                {!isEli5 ? (
+                {!isFreshman ? (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4">
                     <h3 className="text-white font-bold text-xl">Data Poisoning & Sybil Attacks</h3>
                     <p className="text-[#CCCCCC] leading-relaxed">
@@ -242,11 +242,11 @@ export default function FlockDocsPage() {
                   </div>
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
-                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      What if a bad friend comes to the party and tries to build the LEGO castle totally wrong on purpose just to ruin it?
+                    <p className="text-[#CCCCCC] text-lg leading-relaxed">
+                      What if a user opens the Chrome DevTools and intentionally sends corrupted arrays to your server to poison the model?
                     </p>
-                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      It doesn&apos;t matter! Because there are 10,000 good friends building it perfectly, and only 1 bad friend making a mess. When you shake the magic bucket, the one bad LEGO piece gets completely crushed by the thousands of good pieces. The bad friend can&apos;t ruin the castle!
+                    <p className="text-[#CCCCCC] text-lg leading-relaxed">
+                      We use a concept called <strong>Byzantine Fault Tolerance</strong>. Because the Node.js backend calculates the mathematical mean of <em>thousands</em> of arrays at once, a single manipulated array is treated as a statistical outlier. The legitimate data mathematically drowns out the hacker&apos;s malicious data instantly.
                     </p>
                   </div>
                 )}
@@ -259,7 +259,7 @@ export default function FlockDocsPage() {
                   Client Setup (FlockNode)
                 </h2>
                 
-                {!isEli5 ? (
+                {!isFreshman ? (
                   <>
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
                       The <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code> is designed to run in the browser. It automatically spawns Web Workers to ensure your UI never drops frames while executing massive matrix operations.
@@ -293,11 +293,8 @@ export default function FlockDocsPage() {
                   </>
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
-                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      You stand at the front door of the party. As every single friend walks in, you hand them a small instruction manual.
-                    </p>
-                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      The instruction manual says: <strong className="text-emerald-400">&quot;Pick up a blue LEGO, snap it onto a red LEGO, and then go enjoy the party.&quot;</strong> That&apos;s it! They do exactly what they are told without you needing to supervise them.
+                    <p className="text-[#CCCCCC] text-lg leading-relaxed">
+                      You initialize a simple WebSocket client in your frontend code. When it connects, it downloads a multi-dimensional array from your server. It updates the array mathematically using the background GPU, and sends the diff back.
                     </p>
                   </div>
                 )}
@@ -310,7 +307,7 @@ export default function FlockDocsPage() {
                   Server Setup (Coordinator)
                 </h2>
                 
-                {!isEli5 ? (
+                {!isFreshman ? (
                   <>
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
                       The <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">Coordinator</code> is the central Node.js authority. As 8-Bit quantized Protobuf payloads stream in from thousands of clients, it queues them up and executes the mathematical FedAvg algorithm.
@@ -342,12 +339,9 @@ export default function FlockDocsPage() {
                   </>
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
-                    <h3 className="text-emerald-400 font-bold text-xl mb-2">The Magic Bucket</h3>
-                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      All the spray-painted LEGO pieces are tossed into a giant bucket sitting in the corner of the room (the <strong>Server Coordinator</strong>). 
-                    </p>
-                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      Every 10 minutes, the bucket magically shakes itself (this is <strong>Federated Averaging</strong>) and the pieces snap together perfectly. The castle builds itself, your friends did all the work, and it cost you $0!
+                    <h3 className="text-blue-400 font-bold text-xl mb-2">The Node.js Backend</h3>
+                    <p className="text-[#CCCCCC] text-lg leading-relaxed">
+                      The server is literally just a basic Node.js WebSocket instance. It accepts binary arrays from all the connected users, stores them in memory, and once an hour, it runs a loop to calculate the average of all the arrays.
                     </p>
                   </div>
                 )}
@@ -357,10 +351,10 @@ export default function FlockDocsPage() {
               <section id="advanced-config" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
                 <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
                   <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
-                  {isEli5 ? "Party Rules" : "Advanced Configuration"}
+                  {isFreshman ? "Variables & Thresholds" : "Advanced Configuration"}
                 </h2>
                 
-                {!isEli5 ? (
+                {!isFreshman ? (
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-emerald-400 font-mono text-sm">FlockNode.batchSize</h3>
@@ -382,16 +376,16 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
-                      <h3 className="text-emerald-400 font-bold text-lg">How many pieces they hold</h3>
-                      <p className="text-[#CCCCCC] text-sm leading-relaxed">You can tell your friends to only hold 32 pieces at a time so their hands don&apos;t get full (<strong>Batch Size</strong>).</p>
+                      <h3 className="text-blue-400 font-bold text-lg">Batch Size</h3>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">How many pieces of data the browser processes in a loop before making a single WebSocket <code className="bg-white/10 px-1 py-0.5 rounded font-mono">send()</code> request to the server.</p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
-                      <h3 className="text-emerald-400 font-bold text-lg">How fast they snap</h3>
-                      <p className="text-[#CCCCCC] text-sm leading-relaxed">You can tell them to build slowly and carefully so they don&apos;t break the blocks (<strong>Learning Rate</strong>).</p>
+                      <h3 className="text-blue-400 font-bold text-lg">Learning Rate</h3>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">The scaling factor. If you set this too high, the mathematical array updates overshoot the target and the model breaks.</p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
-                      <h3 className="text-emerald-400 font-bold text-lg">Waiting for enough friends</h3>
-                      <p className="text-[#CCCCCC] text-sm leading-relaxed">The magic bucket refuses to shake itself until at least 100 friends have thrown pieces in (<strong>minClients</strong>).</p>
+                      <h3 className="text-blue-400 font-bold text-lg">minClients</h3>
+                      <p className="text-[#CCCCCC] text-sm leading-relaxed">An <code className="bg-white/10 px-1 py-0.5 rounded font-mono">if()</code> condition on the server that prevents the averaging function from running until enough distinct WebSockets have transmitted their data.</p>
                     </div>
                   </div>
                 )}
@@ -401,10 +395,10 @@ export default function FlockDocsPage() {
               <section id="speed-paradox" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
                 <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
                   <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
-                  {isEli5 ? "The Fast Builder Trick" : "The 8-Bit Speed Paradox"}
+                  {isFreshman ? "Casting Data Types" : "The 8-Bit Speed Paradox"}
                 </h2>
                 
-                {!isEli5 ? (
+                {!isFreshman ? (
                   <>
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
                       Compressing a 32-bit floating-point network down to an 8-bit integer array reduces network payloads by exactly 75%. However, this loss of mathematical precision traditionally forces models to take exponentially more epochs to converge. 
@@ -429,14 +423,11 @@ export default function FlockDocsPage() {
                   </>
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
-                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      If you force your friends to build super fast, they make mistakes (this is called <strong>8-Bit Quantization Loss</strong>). 
+                    <p className="text-[#CCCCCC] text-lg leading-relaxed">
+                      Transmitting massive <code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-sm text-white">Float32</code> arrays over JSON is incredibly slow. FlockML solves this by type-casting the floats into 8-bit integers (<code className="bg-white/10 px-1.5 py-0.5 rounded font-mono text-sm text-white">Int8</code>), shrinking network traffic by 75%.
                     </p>
-                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      But FlockML is smart. It tells your friends to write down exactly where they made a mistake on a piece of paper. The next time they pick up a LEGO block, they look at the paper and fix their previous mistake!
-                    </p>
-                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      This means they can build 100x faster without ever ruining the final castle!
+                    <p className="text-[#CCCCCC] text-lg leading-relaxed">
+                      To prevent the math from losing accuracy due to the dropped decimals, we cache the remainder (the lost decimals) in the browser&apos;s IndexedDB. During the next loop, we just add the remainder back!
                     </p>
                   </div>
                 )}
@@ -449,7 +440,7 @@ export default function FlockDocsPage() {
                   Differential Privacy
                 </h2>
                 
-                {!isEli5 ? (
+                {!isFreshman ? (
                   <>
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
                       FlockML guarantees mathematically provable privacy. Because raw gradients can theoretically be reverse-engineered to expose training data, the Server Coordinator never sees raw gradients.
@@ -469,11 +460,11 @@ export default function FlockDocsPage() {
                   </>
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
-                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      You don&apos;t want anyone knowing which friend touched which LEGO piece (because privacy is important). 
+                    <p className="text-[#CCCCCC] text-lg leading-relaxed">
+                      To ensure the backend server can&apos;t reverse-engineer a user&apos;s private data from the array, the browser literally just adds random, mathematically generated noise (Laplacian distribution) to the array before sending it. 
                     </p>
-                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      So before they are allowed to give their finished piece back to you, you make them spray-paint it with a completely random color (this is called <strong>Laplacian Noise</strong>). Now, nobody can ever track who built what!
+                    <p className="text-[#CCCCCC] text-lg leading-relaxed">
+                      When the server computes the mean average of 10,000 noisy arrays, the random noise perfectly cancels itself out, leaving only the correct data.
                     </p>
                   </div>
                 )}
@@ -483,7 +474,7 @@ export default function FlockDocsPage() {
               <section id="comparison" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
                 <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
                   <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
-                  {isEli5 ? "Why this is better" : "FlockML vs Cloud AI"}
+                  {isFreshman ? "Why do this?" : "FlockML vs Cloud AI"}
                 </h2>
                 
                 <div className="overflow-x-auto rounded-lg border border-white/10 bg-[#0A0A0A] w-full max-w-full">
@@ -491,8 +482,8 @@ export default function FlockDocsPage() {
                     <thead className="bg-[#111] border-b border-white/10 text-[#A1A1A1] font-mono text-xs uppercase">
                       <tr>
                         <th className="px-6 py-4">Metric</th>
-                        <th className="px-6 py-4 text-white">FlockML (The Party)</th>
-                        <th className="px-6 py-4">Traditional Cloud AI (The Company)</th>
+                        <th className="px-6 py-4 text-white">FlockML (Decentralized)</th>
+                        <th className="px-6 py-4">Traditional Cloud AI (AWS)</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/5">
