@@ -23,6 +23,7 @@ export default function FlockDocsPage() {
             <div className="flex flex-col space-y-2 text-sm font-medium text-[#888]">
               <a href="#installation" className="hover:text-white transition-colors">Installation</a>
               <a href="#dual-distribution" className="hover:text-white transition-colors">Dual Distribution Strategy</a>
+              <a href="#eli5-mode" className="hover:text-white transition-colors text-emerald-400 font-bold">Explain Like I&apos;m 5</a>
               <a href="#architecture" className="hover:text-white transition-colors">Architecture Overview</a>
             </div>
           </div>
@@ -108,6 +109,43 @@ export default function FlockDocsPage() {
                 <h3 className="text-white font-bold text-xl">The Scaffold CLI</h3>
                 <p className="text-[#888] text-sm leading-relaxed">Run <code className="bg-white/10 px-1 rounded text-white text-xs">npx create-flock-app</code>. This instantly generates a boilerplate Next.js frontend alongside a pre-configured Python or Node.js backend. You get a production-ready Federated Learning loop running in under 60 seconds.</p>
               </div>
+            </div>
+          </section>
+
+          {/* Explain Like I'm 5 */}
+          <section id="eli5-mode" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
+            <h2 className="text-3xl font-bold text-emerald-400 flex items-center group cursor-pointer">
+              <Hash size={24} className="mr-2 text-emerald-500/50 group-hover:text-emerald-400 transition-colors" />
+              Explain Like I&apos;m 5
+            </h2>
+            <p className="text-[#A1A1A1] leading-relaxed text-lg">
+              Let&apos;s pretend you want to build a gigantic, complicated LEGO Castle (this is the <strong>Machine Learning Model</strong>). It has 100 million pieces.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4">
+                <h3 className="text-white font-bold text-xl">The Old Way (Amazon AWS)</h3>
+                <p className="text-[#888] text-sm leading-relaxed">
+                  You hire a massive, expensive construction company to build the castle in a giant warehouse. You pay them $5,000 a month. They do a great job, but it costs all your allowance.
+                </p>
+              </div>
+              <div className="bg-[#111] p-6 rounded-xl border border-emerald-500/20 bg-emerald-500/5 space-y-4">
+                <h3 className="text-white font-bold text-xl">The FlockML Way</h3>
+                <p className="text-[#888] text-sm leading-relaxed">
+                  You throw a massive party and invite 10,000 friends (your <strong>Website Visitors</strong>). When they walk in the door, you hand them exactly one LEGO piece and instructions on how to snap it together (the <strong>Browser Worker</strong>).
+                </p>
+              </div>
+            </div>
+            
+            <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 mt-6">
+                <h3 className="text-white font-bold text-xl">But wait, what about Privacy?</h3>
+                <p className="text-[#888] text-sm leading-relaxed">
+                  You don&apos;t want anyone knowing which friend touched which LEGO piece (because privacy is important). So before they throw their piece into the giant bucket, you have them spray-paint it with a random color (this is <strong>Differential Privacy</strong>). Now, nobody can track who built what! 
+                </p>
+                <div className="border-t border-white/10 my-4"></div>
+                <h3 className="text-white font-bold text-xl">The Magic Bucket</h3>
+                <p className="text-[#888] text-sm leading-relaxed">
+                  All the spray-painted pieces are tossed into a giant bucket (the <strong>Server Coordinator</strong>). The bucket magically shakes itself (this is <strong>Federated Averaging</strong>) and the giant LEGO castle is built perfectly. You didn&apos;t have to build it yourself, your friends did all the work in the background without noticing, and it cost you exactly $0!
+                </p>
             </div>
           </section>
 

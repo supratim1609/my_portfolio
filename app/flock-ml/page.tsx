@@ -36,7 +36,7 @@ export default function FlockHomePage() {
             className="flex items-center space-x-2 border border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors rounded-full px-5 py-2 text-sm font-mono text-emerald-400 backdrop-blur-md cursor-pointer group"
           >
             <GitBranch size={16} />
-            <span>🚀 FlockML v1.0.0 launching tomorrow @ 12 PM</span>
+            <span>FlockML v1.0.0 is officially live on GitHub</span>
             <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
           </motion.a>
           
@@ -75,17 +75,11 @@ export default function FlockHomePage() {
                   <span className="text-xs text-[#555] font-mono ml-4 flex-1 text-left">bash</span>
                 </div>
                 <div className="flex items-center justify-between p-4">
-                  <div className="flex flex-col space-y-1 text-sm font-mono text-[#A1A1A1]">
-                    <div className="flex items-center space-x-3">
-                      <span className="text-emerald-500 font-bold">$</span>
-                      <span className="text-white">npm i flock-ml</span>
-                    </div>
-                    <div className="flex items-center space-x-3 opacity-60">
-                      <span className="text-emerald-500 font-bold opacity-0">$</span>
-                      <span># Available tomorrow at 12 PM</span>
-                    </div>
+                  <div className="flex items-center space-x-3 text-base font-mono text-[#A1A1A1]">
+                    <span className="text-emerald-500 font-bold">$</span>
+                    <span className="text-white">npm i flockml</span>
                   </div>
-                  <button className="text-[#555] group-hover:text-white transition-colors self-start mt-1">
+                  <button className="text-[#555] group-hover:text-white transition-colors">
                     {copied ? <Check size={18} className="text-emerald-500" /> : <Copy size={18} />}
                   </button>
                 </div>
