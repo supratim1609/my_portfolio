@@ -46,6 +46,8 @@ export default function FlockDocsPage() {
           <div className="space-y-3">
             <h4 className="text-xs font-bold text-white uppercase tracking-widest">Concepts</h4>
             <div className="flex flex-col space-y-2 text-sm font-medium text-[#888]">
+              <a href="#ui-performance" className="hover:text-white transition-colors">UI Performance (60fps)</a>
+              <a href="#security" className="hover:text-white transition-colors">Security & Poisoning</a>
               <a href="#speed-paradox" className="hover:text-white transition-colors">The 8-Bit Speed Paradox</a>
               <a href="#privacy" className="hover:text-white transition-colors">Differential Privacy</a>
               <a href="#comparison" className="hover:text-white transition-colors">FlockML vs Cloud AI</a>
@@ -186,6 +188,70 @@ export default function FlockDocsPage() {
                 )}
               </section>
 
+              {/* UI Performance & Freezing */}
+              <section id="ui-performance" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
+                <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
+                  <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
+                  {isEli5 ? "Does it ruin the party?" : "UI Performance (Zero Stutters)"}
+                </h2>
+                
+                {!isEli5 ? (
+                  <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4">
+                    <h3 className="text-white font-bold text-xl">100% Off-Main-Thread Architecture</h3>
+                    <p className="text-[#CCCCCC] leading-relaxed">
+                      A common developer concern is whether executing heavy neural network mathematics in the browser will freeze React or cause UI stutters.
+                    </p>
+                    <p className="text-[#CCCCCC] leading-relaxed">
+                      FlockML strictly guarantees <strong>Zero UI Freezes</strong>. The moment you initialize <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code>, it immediately spawns a dedicated Web Worker that runs entirely in the background. Furthermore, because we delegate all matrix multiplications to the physical GPU via <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">@tensorflow/tfjs-backend-webgpu</code>, the main JavaScript execution thread is completely untouched.
+                    </p>
+                    <p className="text-[#CCCCCC] leading-relaxed">
+                      Your website animations, Framer Motion transitions, and interactive elements will maintain a perfectly locked 60fps while models train silently in the background.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
+                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
+                      If you make all your friends build LEGOs, will they be too distracted to enjoy the party? Will the party get boring?
+                    </p>
+                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
+                      Absolutely not! You tell them to build the LEGOs outside in the backyard (<strong>The Web Worker</strong>). This leaves the dance floor completely empty and perfectly smooth, so the party keeps rocking at 60 frames per second!
+                    </p>
+                  </div>
+                )}
+              </section>
+
+              {/* Security & Poisoning */}
+              <section id="security" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
+                <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
+                  <Hash size={24} className="mr-2 text-[#333] group-hover:text-emerald-500 transition-colors" />
+                  {isEli5 ? "What about bad friends?" : "Security & Malicious Actors"}
+                </h2>
+                
+                {!isEli5 ? (
+                  <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4">
+                    <h3 className="text-white font-bold text-xl">Data Poisoning & Sybil Attacks</h3>
+                    <p className="text-[#CCCCCC] leading-relaxed">
+                      Because FlockML runs on the client-side, developers often worry about a malicious actor tampering with the browser state, sending fake gradients, or attempting to poison the global model (Sybil attacks).
+                    </p>
+                    <p className="text-[#CCCCCC] leading-relaxed">
+                      FlockML mitigates this through <strong>Byzantine Fault Tolerance</strong> inherently provided by the Federated Averaging (FedAvg) algorithm. If a single bad actor alters their local weights via the DevTools, their corrupted gradient is strictly clamped and heavily diluted against thousands of legitimate, verified updates from normal users.
+                    </p>
+                    <p className="text-[#CCCCCC] leading-relaxed">
+                      Unless a single attacker manages to hijack &gt;51% of your entire website traffic, their malicious payloads are mathematically crushed into insignificance by the sheer volume of crowdsourced compute.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
+                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
+                      What if a bad friend comes to the party and tries to build the LEGO castle totally wrong on purpose just to ruin it?
+                    </p>
+                    <p className="text-[#E5E5E5] text-lg leading-relaxed">
+                      It doesn&apos;t matter! Because there are 10,000 good friends building it perfectly, and only 1 bad friend making a mess. When you shake the magic bucket, the one bad LEGO piece gets completely crushed by the thousands of good pieces. The bad friend can&apos;t ruin the castle!
+                    </p>
+                  </div>
+                )}
+              </section>
+
               {/* Client Setup */}
               <section id="flocknode" className="space-y-6 scroll-mt-24 border-t border-white/10 pt-16">
                 <h2 className="text-3xl font-bold text-white flex items-center group cursor-pointer">
@@ -299,7 +365,7 @@ export default function FlockDocsPage() {
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-emerald-400 font-mono text-sm">FlockNode.batchSize</h3>
                       <p className="text-[#CCCCCC] text-sm leading-relaxed">Controls the amount of data processed locally before generating a gradient update.</p>
-                      <ul className="text-xs text-[#555] space-y-1 list-disc pl-4">
+                      <ul className="text-sm text-[#A1A1A1] space-y-2 list-disc pl-4">
                         <li><strong>Small (8):</strong> High network chatter, low memory footprint.</li>
                         <li><strong>Large (128):</strong> Minimal chatter, prolonged WebGPU compute.</li>
                       </ul>
