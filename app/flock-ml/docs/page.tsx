@@ -16,7 +16,7 @@ export default function FlockDocsPage() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-[#E5E5E5] font-sans selection:bg-[#FF3B30] selection:text-white pt-24 pb-32">
-      <div className="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-start gap-16">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col lg:flex-row items-start gap-16 min-w-0">
         
         {/* Left Sidebar (Sticky) */}
         <aside className="hidden lg:block sticky top-24 w-64 shrink-0 space-y-8 overflow-y-auto max-h-[calc(100vh-6rem)] custom-scrollbar pb-10">
@@ -124,7 +124,7 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-emerald-500/20 space-y-4 max-w-2xl">
                     <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      There is literally nothing for your friends to install! When they walk into your party (visit your website), you automatically hand them a LEGO piece. They don't have to download any tools or bring anything with them.
+                      There is literally nothing for your friends to install! When they walk into your party (visit your website), you automatically hand them a LEGO piece. They don&apos;t have to download any tools or bring anything with them.
                     </p>
                   </div>
                 )}
@@ -202,7 +202,7 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <p className="text-[#E5E5E5] text-lg leading-relaxed">
-                      You don't want anyone knowing which friend touched which LEGO piece (because privacy is important). 
+                      You don&apos;t want anyone knowing which friend touched which LEGO piece (because privacy is important). 
                     </p>
                     <p className="text-[#E5E5E5] text-lg leading-relaxed">
                       So before they are allowed to give their finished piece back to you, you make them spray-paint it with a completely random color (this is called <strong>Differential Privacy</strong>). Now, nobody can track who built what!
@@ -285,11 +285,11 @@ export default function FlockDocsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-emerald-400 font-bold text-lg">How many pieces they hold</h3>
-                      <p className="text-[#888] text-sm leading-relaxed">You can tell your friends to only hold 32 pieces at a time so their hands don't get full (<strong>Batch Size</strong>).</p>
+                      <p className="text-[#888] text-sm leading-relaxed">You can tell your friends to only hold 32 pieces at a time so their hands don&apos;t get full (<strong>Batch Size</strong>).</p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-emerald-400 font-bold text-lg">How fast they snap</h3>
-                      <p className="text-[#888] text-sm leading-relaxed">You can tell them to build slowly and carefully so they don't break the blocks (<strong>Learning Rate</strong>).</p>
+                      <p className="text-[#888] text-sm leading-relaxed">You can tell them to build slowly and carefully so they don&apos;t break the blocks (<strong>Learning Rate</strong>).</p>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">
                       <h3 className="text-emerald-400 font-bold text-lg">Waiting for enough friends</h3>
