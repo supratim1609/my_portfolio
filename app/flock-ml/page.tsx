@@ -34,6 +34,7 @@ export default function FlockHomePage() {
             href="https://github.com/supratim1609/flock-ml" target="_blank" rel="noopener noreferrer"
             initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: "easeOut" }}
             className="flex items-center space-x-2 border border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm font-mono text-emerald-400 backdrop-blur-md cursor-pointer group text-center"
+          >
             <GitBranch size={16} />
             <span>FlockML v1.0.0 is officially live on GitHub</span>
             <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
