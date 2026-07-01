@@ -109,7 +109,7 @@ export default function FlockDocsPage() {
                 {!isFreshman ? (
                   <>
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
-                      FlockML is available as a single NPM package. It contains both the browser-side WebWorker environment (<code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code>) and the Node.js server-side aggregator (<code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">Coordinator</code>).
+                      FlockML is available as a single NPM package. It contains both the browser-side WebAssembly client (<code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code>) and the Node.js server-side aggregator (<code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">Coordinator</code>).
                     </p>
                     <div className="bg-[#111] border border-white/10 rounded-lg overflow-hidden font-mono text-xs sm:text-sm max-w-full w-full">
                       <div className="px-4 py-2 border-b border-white/5 bg-[#1A1A1A] text-[#888] text-[10px] sm:text-xs flex justify-between items-center">
@@ -158,7 +158,7 @@ export default function FlockDocsPage() {
                 {!isFreshman ? (
                   <div className="space-y-6">
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
-                      FlockML completely eliminates the need for centralized AWS/GCP GPU clusters. By distributing the training workload across your website visitors&apos; browsers via WebGPU, it enables zero-cost, privacy-preserving machine learning.
+                      FlockML completely eliminates the need for centralized AWS/GCP GPU clusters. By distributing the training workload across your website visitors&apos; browsers via WebAssembly, it enables zero-cost, privacy-preserving machine learning.
                     </p>
                     <p className="text-[#A1A1A1] leading-relaxed text-lg mb-4">
                       The core engine executes five distinct steps per training iteration:
@@ -170,7 +170,7 @@ export default function FlockDocsPage() {
                       </div>
                       <div className="bg-[#111] border border-white/5 p-4 rounded-xl flex gap-4">
                         <span className="text-emerald-500 font-bold font-mono">2</span>
-                        <div><strong className="text-white block mb-1">Local SGD Compute</strong>The browser&apos;s WebWorker computes gradients against local private data using `@tensorflow/tfjs-backend-webgpu`.</div>
+                        <div><strong className="text-white block mb-1">Local SGD Compute</strong>The browser&apos;s WebWorker computes gradients against local private data using our pure Rust WebAssembly engine.</div>
                       </div>
                       <div className="bg-[#111] border border-white/5 p-4 rounded-xl flex gap-4">
                         <span className="text-emerald-500 font-bold font-mono">3</span>
@@ -218,7 +218,7 @@ export default function FlockDocsPage() {
                       A common developer concern is whether executing heavy neural network mathematics in the browser will freeze React or cause UI stutters.
                     </p>
                     <p className="text-[#CCCCCC] leading-relaxed">
-                      FlockML strictly guarantees <strong>Zero UI Freezes</strong>. The moment you initialize <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code>, it immediately spawns a dedicated Web Worker that runs entirely in the background. Furthermore, because we delegate all matrix multiplications to the physical GPU via <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">@tensorflow/tfjs-backend-webgpu</code>, the main JavaScript execution thread is completely untouched.
+                      FlockML strictly guarantees <strong>Zero UI Freezes</strong>. The moment you initialize <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code>, it immediately spawns a dedicated Web Worker that runs entirely in the background. Furthermore, because we delegate all matrix calculus directly to our pure Rust WebAssembly backend, the V8 JavaScript execution thread is completely unblocked.
                     </p>
                     <p className="text-[#CCCCCC] leading-relaxed">
                       Your website animations, Framer Motion transitions, and interactive elements will maintain a perfectly locked 60fps while models train silently in the background.
@@ -282,7 +282,7 @@ export default function FlockDocsPage() {
                 {!isFreshman ? (
                   <>
                     <p className="text-[#A1A1A1] leading-relaxed text-lg">
-                      The <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code> is designed to run in the browser. It automatically spawns Web Workers to ensure your UI never drops frames while executing massive matrix operations.
+                      The <code className="bg-white/10 px-1.5 py-0.5 rounded text-white text-sm">FlockNode</code> is designed to run natively in the browser. It boots a high-performance Wasm environment to ensure your UI never drops frames while executing massive matrix operations.
                     </p>
                     <p className="text-[#888] leading-relaxed">
                       Mount the node at the absolute root of your React application (e.g. `layout.tsx`) so it runs persistently across page navigations.
@@ -295,15 +295,21 @@ export default function FlockDocsPage() {
                         <br />
                         <p><span className="text-purple-400">export default function</span> <span className="text-blue-400">RootLayout</span>({"{ children }"}: {"{ children: React.ReactNode }"}) {"{"}</p>
                         <p className="pl-4"><span className="text-blue-400">useEffect</span>(() {"=>"} {"{"}</p>
-                        <p className="pl-8 text-[#888]">{"// 1. Hook into your WebSocket server"}</p>
-                        <p className="pl-8">FlockNode.<span className="text-yellow-200">connect</span>(<span className="text-green-400">&apos;wss://api.yourdomain.com/flock&apos;</span>);</p>
+                        <p className="pl-8"><span className="text-purple-400">const</span> init = <span className="text-purple-400">async</span> () {"=>"} {"{"}</p>
+                        <p className="pl-12 text-[#888]">{"// 1. Initialize the Wasm matrix engine natively"}</p>
+                        <p className="pl-12"><span className="text-purple-400">const</span> node = <span className="text-purple-400">new</span> <span className="text-yellow-200">FlockNode</span>(2, 4, 1);</p>
+                        <p className="pl-12"><span className="text-purple-400">await</span> node.<span className="text-yellow-200">initEngine</span>();</p>
                         <br />
-                        <p className="pl-8 text-[#888]">{"// 2. Configure Cryptographic Privacy & Hyperparameters"}</p>
-                        <p className="pl-8">FlockNode.<span className="text-teal-400">privacyEpsilon</span> = <span className="text-orange-400">1.5</span>;</p>
-                        <p className="pl-8">FlockNode.<span className="text-teal-400">batchSize</span> = <span className="text-orange-400">32</span>;</p>
+                        <p className="pl-12 text-[#888]">{"// 2. Hook into your WebSocket server"}</p>
+                        <p className="pl-12">node.<span className="text-yellow-200">connect</span>(<span className="text-green-400">&apos;wss://api.yourdomain.com/flock&apos;</span>);</p>
                         <br />
-                        <p className="pl-8 text-[#888]">{"// 3. Spawns Web Worker and begins background WebGPU compute"}</p>
-                        <p className="pl-8">FlockNode.<span className="text-yellow-200">startTraining</span>();</p>
+                        <p className="pl-12 text-[#888]">{"// 3. Set DPDP-compliant privacy (Laplacian Noise)"}</p>
+                        <p className="pl-12">node.<span className="text-teal-400">privacyEpsilon</span> = <span className="text-orange-400">1.5</span>;</p>
+                        <br />
+                        <p className="pl-12 text-[#888]">{"// 4. Train asynchronously off the main thread"}</p>
+                        <p className="pl-12">node.<span className="text-yellow-200">trainLocalBatchAsync</span>(inputs, targets);</p>
+                        <p className="pl-8">{"};"}</p>
+                        <p className="pl-8">init();</p>
                         <p className="pl-4">{"}, []);"}</p>
                         <br />
                         <p className="pl-4"><span className="text-purple-400">return</span> {"<html><body>{children}</body></html>"};</p>
@@ -314,7 +320,7 @@ export default function FlockDocsPage() {
                 ) : (
                   <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-4 max-w-2xl">
                     <p className="text-[#CCCCCC] text-lg leading-relaxed">
-                      You just paste 3 lines of code into your React app. It automatically connects to your server, downloads the latest AI brain, trains it a little bit using the user&apos;s graphics card, and sends the newly trained brain back to the server. You don&apos;t have to write any heavy math yourself!
+                      You just initialize the Rust engine natively in your React app. It automatically connects to your server, downloads the latest AI brain, trains it a little bit using the user&apos;s processor, and sends the newly trained brain back to the server. You don&apos;t have to write any heavy math yourself!
                     </p>
                   </div>
                 )}
@@ -380,7 +386,7 @@ export default function FlockDocsPage() {
                       <p className="text-[#CCCCCC] text-sm leading-relaxed">Controls the amount of data processed locally before generating a gradient update.</p>
                       <ul className="text-sm text-[#A1A1A1] space-y-2 list-disc pl-4">
                         <li><strong>Small (8):</strong> High network chatter, low memory footprint.</li>
-                        <li><strong>Large (128):</strong> Minimal chatter, prolonged WebGPU compute.</li>
+                        <li><strong>Large (128):</strong> Minimal chatter, prolonged WebAssembly compute.</li>
                       </ul>
                     </div>
                     <div className="bg-[#111] p-6 rounded-xl border border-white/5 space-y-3">

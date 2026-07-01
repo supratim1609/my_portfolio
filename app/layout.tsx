@@ -5,6 +5,9 @@ import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
+import { Navbar } from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import Preloader from '@/components/Preloader';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-sans",
@@ -85,7 +88,9 @@ export default function RootLayout({
       >
         <CustomCursor />
         <SmoothScroll />
+        <Navbar />
         {children}
+        <Footer />
         <GoogleAnalytics gaId="G-VCR0CSHJD6" />
         <Analytics />
         <script
