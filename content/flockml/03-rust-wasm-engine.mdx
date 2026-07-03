@@ -1,0 +1,40 @@
+---
+title: The Rust Wasm Engine
+order: 3
+---
+
+# The Rust WebAssembly Engine
+
+<EngineerBlock>
+A common developer concern is whether executing heavy neural network mathematics in the browser will freeze React or cause UI stutters.
+
+FlockML strictly guarantees **Zero UI Freezes**. 
+
+The moment you initialize `FlockNode`, it immediately spawns a dedicated Web Worker that runs entirely in the background. Furthermore, because we delegate all matrix calculus directly to our pure **Rust WebAssembly backend**, the V8 JavaScript execution thread is completely unblocked. Your website animations, Framer Motion transitions, and interactive elements will maintain a perfectly locked 60fps while models train silently in the background.
+</EngineerBlock>
+
+<JuniorBlock>
+You know how playing a heavy video game while trying to download a huge file makes your computer lag? That's what happens if you try to run heavy math on the main thread of your website.
+
+FlockML prevents this completely. It opens a secret, invisible background process (called a Web Worker). The heavy AI math runs over there, leaving your main webpage totally untouched so scrolling and animations stay buttery smooth at 60 frames per second.
+</JuniorBlock>
+
+## The 8-Bit Speed Paradox
+
+<EngineerBlock>
+Compressing a 32-bit floating-point network down to an 8-bit integer array reduces network payloads by exactly 75%. However, this loss of mathematical precision traditionally forces models to take exponentially more epochs to converge. 
+
+FlockML solves this using **Error Feedback Memory**.
+
+When FlockML compresses Float32 gradients to Int8 using the affine quantization mapping `Q(x) = round(x / S) + Z` (where S is the scale and Z is the zero-point), it does not discard the lost decimal data. Instead, it caches the "quantization error" locally in the browser's IndexedDB.
+
+On the next training loop, the Web Worker retrieves that exact error and mathematically injects it back into the new gradient computation. This perfectly offsets the precision loss, ensuring convergence in the exact same number of epochs as a pure Float32 network.
+
+The resulting Int8 arrays are encoded directly into raw binary Protocol Buffers (not JSON), yielding payloads as small as 91 bytes.
+</EngineerBlock>
+
+<JuniorBlock>
+Imagine trying to send a massive 4K Ultra HD video over a slow 3G network—it would take forever. 
+
+FlockML automatically compresses the AI model down to a tiny 144p video (8-bit) so it uploads instantly! To make sure the AI doesn't become blurry forever, the browser remembers exactly which pixels were compressed away, and magically adds them back during the next round. It's like zipping a file, sending it super fast, and unzipping it perfectly on the other side.
+</JuniorBlock>

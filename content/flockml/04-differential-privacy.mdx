@@ -1,0 +1,43 @@
+---
+title: Differential Privacy
+order: 4
+---
+
+# Differential Privacy
+
+FlockML guarantees mathematically provable privacy. Because raw gradients can theoretically be reverse-engineered to expose training data, the Server Coordinator never sees raw gradients.
+
+## Cryptographic Validation & L2 Clipping
+
+<EngineerBlock>
+Because FlockML runs on the client-side, developers often worry about a malicious actor tampering with the browser state, sending artificially inflated gradients, or attempting to poison the global model (Sybil attacks). We enforce a strict security perimeter:
+
+- **L2 Norm Gradient Clipping:** The server acts as a mathematical firewall. If a hacker uses DevTools to artificially inflate a gradient weight to blow up the model, the server instantly detects the L2 Norm anomaly and hard-rejects the payload.
+- **Byzantine Outlier Ejection:** Instead of blindly averaging all data, the Coordinator uses robust aggregation algorithms to mathematically score incoming vectors and completely disqualify statistical outliers.
+- **Cryptographic Sessions:** Every payload is tied to an ephemeral, cryptographically signed session token, preventing replay attacks.
+</EngineerBlock>
+
+<JuniorBlock>
+What if a troll purposefully sends fake, corrupted data from their browser to try and ruin your AI model? We don't just blindly trust the crowd—we use strict mathematical firewalls.
+
+- **The Bouncer (L2 Clipping):** If a troll opens their browser console and tries to send an artificially massive number to blow up the AI, the server's firewall instantly detects the mathematical anomaly and throws the data in the trash before it even touches the AI.
+- **Smart Voting:** Instead of just averaging everyone's answers together, the server uses a smart algorithm. If 99% of people say the answer is 5, and the troll says the answer is 1,000,000, the server doesn't average them—it completely disqualifies the troll's vote for being mathematically impossible.
+- **Digital Signatures:** Every single piece of data is cryptographically signed, meaning hackers can't use invisible bots to spam fake data.
+</JuniorBlock>
+
+## The Epsilon Parameter (ε)
+
+<EngineerBlock>
+Before quantization, the browser injects cryptographic noise sampled from a Laplace distribution: `M(x) = f(x) + Lap(Δf / ε)`. The variance of this noise is controlled by the Epsilon parameter (ε).
+
+### `FlockNode.privacyEpsilon`
+
+- **High Epsilon (e.g., ε = 5.0):** Minimal noise injection. Fast convergence, but mathematically weaker privacy bounds.
+- **Low Epsilon (e.g., ε = 0.1):** Heavy noise injection. Extreme privacy, but requires massive scale (1000+ `minClients`) to allow the FedAvg algorithm to mathematically average out the noise on the server side.
+</EngineerBlock>
+
+<JuniorBlock>
+If you send your raw data to the server, the server knows exactly what you did. To protect your privacy, FlockML intentionally blurs your data with "static noise" before uploading it.
+
+When the server merges your blurry data with 10,000 other people's blurry data, the static noise perfectly cancels out, revealing the true picture, but nobody can ever trace your specific data back to you.
+</JuniorBlock>

@@ -1,0 +1,34 @@
+---
+title: API Reference
+order: 5
+---
+
+# API Reference
+
+<EngineerBlock>
+## Client Node API
+
+### `FlockNode.batchSize`
+Controls the amount of data processed locally before generating a gradient update.
+- **Small (8):** High network chatter, low memory footprint.
+- **Large (128):** Minimal chatter, prolonged WebAssembly compute.
+
+### `FlockNode.learningRate`
+The step size for local SGD. Because gradients are globally aggregated, keep this strictly lower than centralized ML to prevent global gradient explosion.
+
+## Server API
+
+### `Coordinator.minClients`
+The absolute minimum payloads required before `.aggregate()` executes. Essential to mathematically guarantee Laplacian noise cancellation.
+</EngineerBlock>
+
+<JuniorBlock>
+### Batch Size
+How much homework a user does on their own laptop before finally submitting it to the server.
+
+### Learning Rate
+How much we trust each user's homework. If we trust it too much (high learning rate), one wrong answer ruins the whole project.
+
+### minClients
+The server refuses to calculate the final class average until at least 100 students have handed in their homework.
+</JuniorBlock>

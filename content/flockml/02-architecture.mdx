@@ -1,0 +1,43 @@
+---
+title: Architecture Overview
+order: 2
+---
+
+# Architecture Overview
+
+<EngineerBlock>
+FlockML completely eliminates the need for centralized AWS/GCP GPU clusters. By distributing the training workload across your website visitors' browsers via WebAssembly, it enables zero-cost, privacy-preserving machine learning.
+
+The core engine executes five distinct steps per training iteration:
+
+1. **Model Distribution**
+   The Node.js Coordinator broadcasts the global Float32 weights to connected browser clients via WebSockets.
+
+2. **Local SGD Compute**
+   The browser's WebWorker computes gradients against local private data using our pure Rust WebAssembly engine.
+
+3. **Privacy Injection**
+   Laplacian noise is cryptographically injected into the raw gradients before leaving the device.
+
+4. **Quantization**
+   Noisy Float32 gradients are mathematically compressed into 8-Bit Integers and serialized to Protocol Buffers.
+
+5. **Global Aggregation**
+   The server receives the Protobufs, waits for a batch, and executes Federated Averaging (FedAvg).
+</EngineerBlock>
+
+<JuniorBlock>
+### The Old Way (Centralized AI)
+Imagine a college professor grading 10,000 exams alone. It takes weeks of exhausting work, and the professor demands a huge salary (renting a massive $5,000/month AWS server).
+
+### The FlockML Way (Distributed)
+Instead of grading them alone, the professor hands 1 exam to each of the 10,000 students to grade themselves. The students finish in 5 minutes, hand the grades back, and the professor just calculates the class average. It costs $0 and finishes instantly!
+</JuniorBlock>
+
+## FlockML vs Cloud AI
+
+| Metric | FlockML (Decentralized) | Traditional Cloud AI (AWS) |
+| :--- | :--- | :--- |
+| **Cost** | $0 (Free Compute) | $5,000 / month |
+| **Privacy** | 100% Private (Differential) | Vulnerable Centralized Data |
+| **Scalability** | Infinite (Scales with Traffic) | Bottlenecked by server limits |

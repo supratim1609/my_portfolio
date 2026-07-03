@@ -36,7 +36,7 @@ export default function FlockHomePage() {
             className="flex items-center space-x-2 border border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm font-mono text-emerald-400 backdrop-blur-md cursor-pointer group text-center"
           >
             <GitBranch size={16} />
-            <span>FlockML v1.0.0 is officially live on GitHub</span>
+            <span>FlockML v1.2.0 is officially live on NPM</span>
             <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
           </motion.a>
           
@@ -51,7 +51,7 @@ export default function FlockHomePage() {
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
             className="text-xl sm:text-2xl text-[#A1A1A1] max-w-3xl font-light leading-relaxed"
           >
-            Train machine learning models for exactly $0 by crowdsourcing compute from your website visitors using WebGPU, 8-Bit Quantization, and Differential Privacy.
+            Train machine learning models for exactly $0 by crowdsourcing compute from your website visitors using a native Rust WebAssembly Engine, 8-Bit Quantization, and Differential Privacy.
           </motion.p>
 
           <motion.div 
@@ -118,9 +118,9 @@ export default function FlockHomePage() {
               <div className="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center border border-purple-500/20 group-hover:scale-110 transition-transform duration-500">
                 <Shield className="text-purple-500" size={24} />
               </div>
-              <h3 className="text-xl font-bold text-white tracking-tight">WebGPU Acceleration</h3>
+              <h3 className="text-xl font-bold text-white tracking-tight">Rust WebAssembly Engine</h3>
               <p className="text-[#888] leading-relaxed text-base">
-                Powered by @tensorflow/tfjs. It delegates massive matrix multiplications directly to the physical GPU, handling models with 100,000,000+ parameters natively in the browser.
+                Compiled directly from native Rust, our Wasm bridge allocates massive matrix arrays in raw browser memory, achieving 97% of native C++ speed for local SGD compute.
               </p>
             </div>
           </motion.div>

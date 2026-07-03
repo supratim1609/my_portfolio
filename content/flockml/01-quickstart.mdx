@@ -1,0 +1,90 @@
+---
+title: Quickstart
+order: 1
+---
+
+# Getting Started with FlockML
+
+<EngineerBlock>
+FlockML is available as a single NPM package. It contains both the browser-side WebAssembly client (`FlockNode`) and the Node.js server-side aggregator (`Coordinator`).
+</EngineerBlock>
+
+<JuniorBlock>
+FlockML is available as a single NPM package. All you do is run that single command and sip your coffee. For your users? Zero setup. No messy Python environments. They just visit your website, and their browser secretly starts doing all your heavy AI math for free while they scroll!
+</JuniorBlock>
+
+## Installation
+
+```bash
+npm install flockml
+```
+
+## Basic Setup
+
+### 1. The Client (React / Next.js)
+
+<EngineerBlock>
+The client node initializes the Rust Wasm engine, processes the math without blocking the UI thread, and sends the quantized gradients back to your server.
+</EngineerBlock>
+
+<JuniorBlock>
+You just initialize the Rust engine natively in your React app. It automatically connects to your server, downloads the latest AI brain, trains it a little bit using the user's processor, and sends the newly trained brain back to the server. You don't have to write any heavy math yourself!
+</JuniorBlock>
+
+```typescript
+import { useEffect } from 'react';
+import { FlockNode } from 'flockml';
+
+export default function RootLayout({ children }) {
+  useEffect(() => {
+    const init = async () => {
+      // 1. Initialize the Wasm matrix engine natively
+      const node = new FlockNode(2, 4, 1);
+      await node.initEngine();
+
+      // 2. Hook into your WebSocket server
+      node.connect('wss://api.yourdomain.com/flock');
+
+      // 3. Set DPDP-compliant privacy (Laplacian Noise)
+      node.privacyEpsilon = 1.5;
+
+      // 4. Train asynchronously off the main thread
+      node.trainLocalBatchAsync(inputs, targets);
+    };
+    init();
+  }, []);
+
+  return <html><body>{children}</body></html>;
+}
+```
+
+### 2. The Server (Node.js)
+
+<EngineerBlock>
+The Coordinator is the central Node.js authority. As 8-Bit quantized Protobuf payloads stream in from thousands of clients, it queues them up and executes the mathematical FedAvg algorithm.
+</EngineerBlock>
+
+<JuniorBlock>
+The backend server is literally just a giant Dropbox folder. It doesn't do any AI training itself. It just sits there, collects all the tiny AI brains from the users, merges them into one giant super-smart AI brain, and sends it back out to everyone.
+</JuniorBlock>
+
+```typescript
+import { Coordinator } from 'flockml';
+import { WebSocketServer } from 'ws';
+
+// 1. Initialize Network Architecture
+const coordinator = new Coordinator(128, 64, 10);
+const wss = new WebSocketServer({ port: 8080 });
+
+wss.on('connection', (ws) => {
+  // 2. Listen for incoming Protobuf binary payloads
+  ws.on('message', (payload: Buffer) => {
+    coordinator.receiveUpdate(payload);
+  });
+});
+
+// 3. Execute Federated Averaging every 10 minutes
+setInterval(() => {
+  coordinator.aggregate();
+}, 600000);
+```
