@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Copy, Check, GitBranch, BookOpen, ArrowRight, Shield, Cpu, Network } from 'lucide-react';
 import Link from 'next/link';
-import WebGPUDemo from '@/components/WebGPUDemo';
 
 export default function FlockHomePage() {
   const [copied, setCopied] = useState(false);
@@ -168,11 +167,6 @@ export default function FlockHomePage() {
               </div>
             </div>
 
-          </div>
-
-          {/* Live WebGPU Zero-Copy Playground */}
-          <div className="border-t border-white/5 pt-12">
-            <WebGPUDemo />
           </div>
 
           {/* Interactive Code Playground / Flow */}
