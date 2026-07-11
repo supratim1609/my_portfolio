@@ -63,48 +63,7 @@ export default function WebGPUDemo() {
       const matrixSize = size * size;
       const byteLength = matrixSize * 4;
 
-      logMsg(`Allocating mock 512x512 matrices (${(byteLength / (1024 * 1024)).toFixed(1)}MB each)...`);
-      
-      // Simulate WASM memory allocations:
-      // We allocate raw ArrayBuffers to represent WASM linear memory
-      const wasmMemoryBuffer = new ArrayBuffer(byteLength * 3);
-      const ptrA = 0;
-      const ptrB = byteLength;
-      const ptrC = byteLength * 2;
-
-      // Construct zero-copy views directly on top of the WASM memory buffer
-      const wasmViewA = new Float32Array(wasmMemoryBuffer, ptrA, matrixSize);
-      const wasmViewB = new Float32Array(wasmMemoryBuffer, ptrB, matrixSize);
-      const wasmViewC = new Float32Array(wasmMemoryBuffer, ptrC, matrixSize);
-
-      // Populate dummy values
-      wasmViewA.fill(1.0);
-      wasmViewB.fill(2.0);
-
-      logMsg("🔗 Mapping Float32Array pointer views directly to WASM memory buffer offsets...");
-
-      const startTime = performance.now();
-
-      // WebGPU buffers
-      const gpuBufferA = device.createBuffer({
-        size: byteLength,
-        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
-      });
-
-      const gpuBufferB = device.createBuffer({
-        size: byteLength,
-        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
-      });
-
-      const gpuBufferC = device.createBuffer({
-        size: byteLength,
-        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC,
-      });
-
-      // Bypassing JS V8 Heap Allocations - Stream Wasm buffers directly to GPU
-      device.queue.writeBuffer(gpuBufferA, 0, wasmViewA);
-      device.queue.writeBuffer(gpuBufferB, 0, wasmViewB);
-      logMsg("🚀 Writing buffers directly from WASM memory to VRAM (0 bytes JS Heap allocated).");
+      logMsg("Compiling WGSL Compute Shader Modules & Pipeline Layouts natively...");
 
       // Compile WGSL Compute Shader stochastically
       const shaderModule = device.createShaderModule({
@@ -150,6 +109,47 @@ export default function WebGPUDemo() {
         }
       });
 
+      logMsg("✅ Natively compiled WGSL pipeline shader modules.");
+      logMsg(`Allocating mock 512x512 matrices (${(byteLength / (1024 * 1024)).toFixed(1)}MB each)...`);
+      
+      const wasmMemoryBuffer = new ArrayBuffer(byteLength * 3);
+      const ptrA = 0;
+      const ptrB = byteLength;
+      const ptrC = byteLength * 2;
+
+      const wasmViewA = new Float32Array(wasmMemoryBuffer, ptrA, matrixSize);
+      const wasmViewB = new Float32Array(wasmMemoryBuffer, ptrB, matrixSize);
+      const wasmViewC = new Float32Array(wasmMemoryBuffer, ptrC, matrixSize);
+
+      wasmViewA.fill(1.0);
+      wasmViewB.fill(2.0);
+
+      logMsg("🔗 Mapping Float32Array pointer views directly to WASM memory buffer offsets...");
+
+      // Start the timed execution loop here:
+      const startTime = performance.now();
+
+      // WebGPU buffers
+      const gpuBufferA = device.createBuffer({
+        size: byteLength,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+      });
+
+      const gpuBufferB = device.createBuffer({
+        size: byteLength,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+      });
+
+      const gpuBufferC = device.createBuffer({
+        size: byteLength,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC,
+      });
+
+      // Stream Wasm buffers directly to GPU (0 bytes JS Heap allocated)
+      device.queue.writeBuffer(gpuBufferA, 0, wasmViewA);
+      device.queue.writeBuffer(gpuBufferB, 0, wasmViewB);
+      logMsg("🚀 Writing buffers directly from WASM memory to VRAM (0 bytes JS Heap allocated).");
+
       const bindGroup = device.createBindGroup({
         layout: bindGroupLayout,
         entries: [
@@ -166,7 +166,6 @@ export default function WebGPUDemo() {
       passEncoder.dispatchWorkgroups(size / 8, size / 8);
       passEncoder.end();
 
-      // Read back GPU buffer
       const gpuReadBuffer = device.createBuffer({
         size: byteLength,
         usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ
