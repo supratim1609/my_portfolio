@@ -24,6 +24,30 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${post.metadata.title} | Notes`,
     description: post.metadata.description,
+    keywords: post.metadata.tags || [],
+    openGraph: {
+      title: post.metadata.title,
+      description: post.metadata.description,
+      url: `https://supratimdev.qzz.io/blog/${slug}`,
+      type: "article",
+      publishedTime: new Date(post.metadata.date).toISOString(),
+      authors: ["Supratim Dhara"],
+      tags: post.metadata.tags || [],
+      images: [
+        {
+          url: "https://supratimdev.qzz.io/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: post.metadata.title,
+        }
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.metadata.title,
+      description: post.metadata.description,
+      images: ["https://supratimdev.qzz.io/og-image.png"],
+    }
   };
 }
 
