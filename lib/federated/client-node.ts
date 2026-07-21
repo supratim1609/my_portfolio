@@ -39,6 +39,17 @@ export class FlockNode {
     qBiasH: QuantizedPayload,
     qBiasO: QuantizedPayload
   ): void {
+    // SECURITY PATCH: Validate incoming matrix dimensions to prevent OOB memory crashes
+    // If a malicious coordinator sends oversized payloads, it will crash the linear memory bounds.
+    if (
+      qWeightsIH.rows !== this.network.hiddenNodes || qWeightsIH.cols !== this.network.inputNodes ||
+      qWeightsHO.rows !== this.network.outputNodes || qWeightsHO.cols !== this.network.hiddenNodes ||
+      qBiasH.rows !== this.network.hiddenNodes || qBiasH.cols !== 1 ||
+      qBiasO.rows !== this.network.outputNodes || qBiasO.cols !== 1
+    ) {
+      throw new Error("FlockML Security Error: Incoming global weights do not match initialized matrix dimensions. Rejecting payload.");
+    }
+
     this.network.weights_ih = Quantizer.dequantize(qWeightsIH);
     this.network.weights_ho = Quantizer.dequantize(qWeightsHO);
     this.network.bias_h = Quantizer.dequantize(qBiasH);
