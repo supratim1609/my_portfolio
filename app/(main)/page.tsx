@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Footer from "@/components/Footer";
 import Projects from "@/components/Projects";
 import Manifesto from "@/components/Manifesto";
 import Experience from "@/components/Experience";
@@ -21,7 +20,6 @@ export default function Home() {
       <Projects />
       <Experience />
       <TechPresence />
-      <Footer />
     </motion.main>
   );
 }
