@@ -7,7 +7,6 @@ import Manifesto from "@/components/Manifesto";
 import Experience from "@/components/Experience";
 import TechPresence from "@/components/TechPresence";
 import Hero from "@/components/Hero";
-import FlockMLPromo from "@/components/FlockMLPromo";
 
 export default function Home() {
   return (
@@ -18,7 +17,6 @@ export default function Home() {
       className="bg-[#050505] min-h-screen w-full max-w-[100vw] overflow-x-hidden selection:bg-white selection:text-black"
     >
       <Hero />
-      <FlockMLPromo />
       <Manifesto />
       <Projects />
       <Experience />
