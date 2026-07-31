@@ -5,12 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, RotateCcw, Cpu, Shield, Globe, Server, Check, X, Users, Laptop, Tablet, Smartphone } from 'lucide-react';
 import { FlockNode } from '@/lib/federated/client-node';
 
-// Threat model dataset
+// Sovereign Emergency Triage dataset
+// Scenario Inputs: [Request Length, Keywords Urgency Weight]
+// Target: 1 (HIGH PRIORITY - Immediate dispatch), 0 (STANDARD QUERY - Route to queue)
 const SECURITY_SCENARIOS = [
-  { name: "Normal Citizen Login", inputs: [0.1, 0.2], expected: 1, desc: "Low frequency, standard payload size" },
-  { name: "Brute-Force Login Bot", inputs: [0.9, 0.1], expected: 0, desc: "High frequency, minimal payload size" },
-  { name: "Standard Document Upload", inputs: [0.2, 0.8], expected: 1, desc: "Low frequency, large payload size" },
-  { name: "DDoS Buffer Overflow Bot", inputs: [0.95, 0.95], expected: 0, desc: "Massive rate, maximum payload size" }
+  { name: "Severe Medical Crisis Report", inputs: [0.95, 0.95], expected: 1, desc: "Immediate ambulance dispatch requested (Contaminated water supply)" },
+  { name: "Routine Portal Status Query", inputs: [0.1, 0.2], expected: 0, desc: "Standard check on general application form processing" },
+  { name: "Urgent Village Rescue SOS", inputs: [0.85, 0.9], expected: 1, desc: "Flash flooding warning in Sector 3, citizen trapped" },
+  { name: "Infrastructure Inquiry Block", inputs: [0.2, 0.1], expected: 0, desc: "Request for status on general village road repair budget" }
 ];
 
 interface RealPeerNode {
@@ -287,10 +289,10 @@ export default function MeityDemoPage() {
             </span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-            Decentralized Cyber Shield <span className="text-zinc-500">Prototype</span>
+            Bharat Compute Grid <span className="text-zinc-500">Triage</span>
           </h1>
           <p className="text-zinc-400 text-sm sm:text-base max-w-2xl leading-relaxed mt-1">
-            Training a cybersecurity classification model collectively across multiple devices. The target task is to recognize and block anomalous traffic bots from compromising public portals.
+            Training a resilient emergency classification model collectively. During crisis scenarios when cloud access is down, FlockML runs local mesh training to prioritize dispatch routing.
           </p>
         </div>
 
@@ -331,7 +333,7 @@ export default function MeityDemoPage() {
               <div>
                 <div className="flex items-center justify-between">
                   <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Shield size={16} className="text-emerald-400 animate-pulse" /> Live Threat Classification Matrix
+                    <Shield size={16} className="text-emerald-400 animate-pulse" /> Emergency Triage Classification Matrix
                   </h2>
                   <div className="flex gap-2">
                     {!isTraining ? (
@@ -358,7 +360,7 @@ export default function MeityDemoPage() {
                   </div>
                 </div>
                 <p className="text-zinc-500 text-xs mt-1">
-                  Inputs represent: [Access Frequency, Payload Size]. The model learns to correctly identify safe citizen logins (Target: 1) from bot attacks (Target: 0).
+                  Inputs represent: [Message Length, Urgency Keywords]. The model learns to prioritize urgent rescue requests (Target: 1) from general administrative queries (Target: 0).
                 </p>
               </div>
 
@@ -390,8 +392,8 @@ export default function MeityDemoPage() {
                             [{s.inputs.join(', ')}]
                           </td>
                           <td className="py-4 text-center">
-                            <span className={`px-2 py-0.5 text-[10px] font-bold ${s.expected === 1 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
-                              {s.expected === 1 ? "1 (CITIZEN)" : "0 (BLOCKED)"}
+                            <span className={`px-2 py-0.5 text-[10px] font-bold ${s.expected === 1 ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 'bg-zinc-800 text-zinc-400'}`}>
+                              {s.expected === 1 ? "1 (URGENT SOS)" : "0 (ROUTINE)"}
                             </span>
                           </td>
                           <td className="py-4 text-right font-bold text-zinc-300">
@@ -400,7 +402,7 @@ export default function MeityDemoPage() {
                           <td className="py-4 text-right">
                             <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[10px] font-bold ${isCorrect ? 'bg-emerald-400/10 text-emerald-400' : 'bg-amber-400/10 text-amber-400'}`}>
                               {isCorrect ? <Check size={10} /> : <X size={10} />}
-                              {isCorrect ? "VERIFIED SAFE" : "UNCERTAIN"}
+                              {isCorrect ? "TRIAGED CORRECTLY" : "UNCERTAIN"}
                             </span>
                           </td>
                         </tr>
