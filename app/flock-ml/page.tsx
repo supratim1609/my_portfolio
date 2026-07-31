@@ -1,12 +1,93 @@
 "use client";
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Copy, Check, GitBranch, BookOpen, ArrowRight, Shield, Cpu, Network } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { Copy, Check, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
+/* ─────────────────────────────────────────── */
+/*  Grain overlay rendered on a canvas        */
+/* ─────────────────────────────────────────── */
+function GrainOverlay() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const canvas = canvasRef.current!;
+    const ctx = canvas.getContext('2d')!;
+    let af: number;
+    const draw = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const imageData = ctx.createImageData(canvas.width, canvas.height);
+      for (let i = 0; i < imageData.data.length; i += 4) {
+        const v = (Math.random() * 255) | 0;
+        imageData.data[i] = imageData.data[i + 1] = imageData.data[i + 2] = v;
+        imageData.data[i + 3] = 18;
+      }
+      ctx.putImageData(imageData, 0, 0);
+      af = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => cancelAnimationFrame(af);
+  }, []);
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 z-50 pointer-events-none"
+      style={{ mixBlendMode: 'overlay' }}
+    />
+  );
+}
+
+/* ─────────────────────────────────────────── */
+/*  Scrolling marquee                         */
+/* ─────────────────────────────────────────── */
+function Marquee({ items }: { items: string[] }) {
+  return (
+    <div className="overflow-hidden whitespace-nowrap border-y border-white/[0.06] py-3">
+      <motion.div
+        className="inline-flex gap-10 sm:gap-16"
+        animate={{ x: ['0%', '-50%'] }}
+        transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
+      >
+        {[...items, ...items].map((item, i) => (
+          <span key={i} className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] sm:tracking-[0.25em] uppercase text-zinc-500">
+            {item}
+            <span className="mx-5 sm:mx-8 text-zinc-700">✦</span>
+          </span>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────── */
+/*  Animated counter                          */
+/* ─────────────────────────────────────────── */
+function Counter({ target, suffix = '' }: { target: number; suffix?: string }) {
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    let start = 0;
+    const step = target / 60;
+    const t = setInterval(() => {
+      start = Math.min(start + step, target);
+      setVal(Math.floor(start));
+      if (start >= target) clearInterval(t);
+    }, 16);
+    return () => clearInterval(t);
+  }, [target]);
+  return <>{val.toLocaleString()}{suffix}</>;
+}
+
+/* ─────────────────────────────────────────── */
+/*  Main page                                 */
+/* ─────────────────────────────────────────── */
 export default function FlockHomePage() {
   const [copied, setCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState<'react' | 'ts' | 'next'>('react');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: containerRef });
+  const heroY = useTransform(scrollYProgress, [0, 0.3], ['0%', '-12%']);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -14,255 +95,341 @@ export default function FlockHomePage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const snippets = {
+    react: `import { FlockProvider, useFlock } from 'flockml';
+
+export default function App() {
+  const { node } = useFlock();
   return (
-    <div className="min-h-screen bg-[#050505] text-[#E5E5E5] font-sans selection:bg-emerald-500/30 selection:text-white overflow-hidden relative pt-10">
-      
-      {/* Dynamic Grid Background */}
-      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none" 
-           style={{ backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '32px 32px' }}>
-      </div>
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505] pointer-events-none"></div>
+    <FlockProvider>
+      <button onClick={() => node.generate("Hello")}>
+        Run Locally — $0
+      </button>
+    </FlockProvider>
+  );
+}`,
+    ts: `import { Flock } from 'flockml';
 
-      {/* Hero Glow */}
-      <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-emerald-500/10 blur-[150px] rounded-full pointer-events-none z-0"></div>
-      
-      {/* Framework Hero */}
-      <section className="relative z-10 pt-32 lg:pt-40 pb-24 flex flex-col items-center justify-center min-h-[75vh]">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col items-center text-center space-y-12 w-full">
-          
-          <motion.a 
-            href="https://github.com/supratim1609/flock-ml" target="_blank" rel="noopener noreferrer"
-            initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: "easeOut" }}
-            className="flex items-center space-x-2 border border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm font-mono text-emerald-400 backdrop-blur-md cursor-pointer group text-center"
+const node = new Flock.Node({ mode: 'inference' });
+await node.start(); // WebGPU → WASM auto-fallback
+
+await node.loadFromHuggingFace('microsoft/bitnet-b1.58-3B');
+const res = await node.generate("Hello world");
+console.log(res); // 100% client. $0.`,
+    next: `// app/api/flock/route.ts
+import { Flock } from 'flockml';
+
+export async function POST(req: Request) {
+  const { prompt } = await req.json();
+  const node = new Flock.Node({ mode: 'inference' });
+  await node.start();
+  return Response.json({
+    output: await node.generate(prompt)
+  });
+}`,
+  };
+
+  const marqueeItems = [
+    'BitNet 1.58-bit WGSL Shaders',
+    'WebGPU Inference',
+    'OPFS Model Streaming',
+    'WebRTC Peer Swarm',
+    'React + Next.js Native',
+    'Zero Python',
+    'Zero CUDA',
+    'Zero Server Bills',
+    '$0.00 Per Query',
+    'Federated Learning',
+  ];
+
+  const features = [
+    {
+      index: '01',
+      title: 'BitNet 1.58-bit',
+      sub: 'WGSL Shader Engine',
+      desc: 'Replaces GPU float multiplications with ternary additions {-1, 0, 1}. 80% VRAM reduction. Runs on a MacBook Air.',
+      stat: '80%',
+      statLabel: 'VRAM saved',
+    },
+    {
+      index: '02',
+      title: 'OPFS Streaming',
+      sub: 'Origin Private File System',
+      desc: "Models cached directly to your local SSD via the browser's private filesystem. Zero-second reloads after first download.",
+      stat: '0s',
+      statLabel: 'reload time',
+    },
+    {
+      index: '03',
+      title: 'WebRTC Swarm',
+      sub: 'Peer-to-Peer Mesh',
+      desc: 'Multiple browser tabs pool their VRAM over WebRTC DataChannels to run 100B parameter models that no single device could hold.',
+      stat: '100B',
+      statLabel: 'param models',
+    },
+    {
+      index: '04',
+      title: 'React Hooks',
+      sub: 'useFlock() + FlockProvider',
+      desc: 'Drop-in React context that manages model lifecycle, OPFS caching, and streaming output. One import, full local AI.',
+      stat: '1',
+      statLabel: 'line of code',
+    },
+  ];
+
+  return (
+    <div ref={containerRef} className="bg-[#080808] text-white selection:bg-white selection:text-black overflow-x-hidden">
+      <GrainOverlay />
+
+      {/* ── BACKGROUND LAYERS ────────────────── */}
+      {/* Dot grid */}
+      <div
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }}
+      />
+      {/* Top-right warm glow */}
+      <div className="fixed top-0 right-0 w-[600px] h-[600px] pointer-events-none z-0"
+        style={{ background: 'radial-gradient(ellipse at top right, rgba(255,255,255,0.04) 0%, transparent 65%)' }}
+      />
+      {/* Bottom-left cool tint */}
+      <div className="fixed bottom-0 left-0 w-[500px] h-[500px] pointer-events-none z-0"
+        style={{ background: 'radial-gradient(ellipse at bottom left, rgba(16,185,129,0.04) 0%, transparent 65%)' }}
+      />
+
+      {/* ── HERO ────────────────────────────── */}
+      <section className="relative min-h-screen flex flex-col justify-end pb-12 sm:pb-16 px-5 sm:px-8 overflow-hidden">
+
+        {/* Giant background text */}
+        <motion.div
+          style={{ y: heroY, opacity: heroOpacity }}
+          className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
+        >
+          <div
+            className="text-[28vw] sm:text-[22vw] font-black tracking-tighter leading-none text-transparent"
+            style={{ WebkitTextStroke: '1px rgba(255,255,255,0.04)' }}
           >
-            <GitBranch size={16} />
-            <span>FlockML v1.2.0 is officially live on NPM</span>
-            <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
-          </motion.a>
-          
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-            className="text-5xl sm:text-7xl lg:text-9xl font-black tracking-tighter leading-[1.05] max-w-6xl text-transparent bg-clip-text bg-gradient-to-b from-white to-[#777]"
+            FLOCK
+          </div>
+        </motion.div>
+
+        {/* Version label */}
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.2 }}
+          className="font-mono text-[10px] sm:text-[11px] tracking-[0.25em] sm:tracking-[0.3em] uppercase text-zinc-500 mb-5 sm:mb-6 flex items-center gap-2 flex-wrap"
+        >
+          v2.0.0 — BitNet 1.58-bit WGSL Engine
+          <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+        </motion.div>
+
+        {/* Main heading */}
+        <div className="relative z-10 w-full max-w-5xl">
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            className="text-[15vw] sm:text-[11vw] lg:text-[8vw] font-black tracking-tighter leading-[0.88] text-white"
           >
-            Decentralize your <br className="hidden md:block"/> AI infrastructure.
+            Your users<br />
+            <span className="text-zinc-500">are the GPU cluster.</span>
           </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-            className="text-xl sm:text-2xl text-[#A1A1A1] max-w-3xl font-light leading-relaxed"
-          >
-            Train machine learning models for exactly $0 by crowdsourcing compute from your website visitors using a native Rust WebAssembly Engine, 8-Bit Quantization, and Differential Privacy.
-          </motion.p>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
-            className="flex flex-col sm:flex-row items-center gap-6 pt-8 w-full sm:w-auto"
+          <motion.div
+            initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+            className="flex flex-col sm:flex-row sm:items-end justify-between mt-6 gap-5 sm:gap-6"
           >
-            <Link href="/flock-ml/docs" className="bg-white text-black px-8 py-4 rounded-xl font-bold hover:scale-105 hover:bg-gray-100 transition-all shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] w-full sm:w-auto text-center flex items-center justify-center space-x-2 text-lg">
-              <BookOpen size={20} />
-              <span>Read the Docs</span>
-            </Link>
-            
-            {/* Glassmorphic Terminal */}
-            <div className="relative group w-full sm:w-96 cursor-pointer" onClick={() => handleCopy('npm install flock-ml')}>
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
-              <div className="relative flex flex-col w-full bg-[#0A0A0A]/80 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden shadow-2xl">
-                {/* Mac Window Controls */}
-                <div className="bg-[#111]/80 px-4 py-2 border-b border-white/5 flex items-center space-x-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
-                  <span className="text-xs text-[#555] font-mono ml-4 flex-1 text-left">bash</span>
-                </div>
-                <div className="flex items-center justify-between p-4">
-                  <div className="flex items-center space-x-3 text-base font-mono text-[#A1A1A1]">
-                    <span className="text-emerald-500 font-bold">$</span>
-                    <span className="text-white">npm i flockml</span>
-                  </div>
-                  <button className="text-[#555] group-hover:text-white transition-colors">
-                    {copied ? <Check size={18} className="text-emerald-500" /> : <Copy size={18} />}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Interactive Benchmarks & Zero-Copy Memory Maps */}
-      <section className="relative z-10 max-w-7xl mx-auto px-6 pb-40">
-        <div className="border border-white/5 bg-[#0A0A0A]/40 backdrop-blur-md rounded-3xl p-8 md:p-12 space-y-12">
-          
-          <div className="max-w-3xl space-y-4">
-            <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white">Benchmarks & V8 Optimization</h2>
-            <p className="text-[#888] leading-relaxed text-lg">
-              Chrome's V8 JIT compiler struggles with garbage-collecting high-frequency tensor arrays. FlockML bypasses this limit by managing allocations natively in WebAssembly linear memory.
+            <p className="text-zinc-400 text-sm sm:text-base lg:text-lg max-w-sm leading-relaxed">
+              FlockML crowdsources model training across your users' browsers — then runs inference locally with BitNet 1.58-bit WGSL shaders. No servers. No API keys. OpenAI never gets a cent.
             </p>
+            <Link
+              href="/flock-ml/docs"
+              className="group inline-flex items-center justify-center gap-3 border border-white/20 hover:border-white transition-all px-5 sm:px-6 py-3 sm:py-3.5 text-xs sm:text-sm font-mono tracking-wider uppercase text-white shrink-0 w-full sm:w-auto"
+            >
+              Get Started
+              <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* Scroll hint — hidden on small screens */}
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }}
+          className="hidden sm:flex absolute right-8 bottom-8 font-mono text-[10px] tracking-[0.3em] uppercase text-zinc-600 flex-col items-center gap-3"
+        >
+          <div className="w-px h-16 bg-gradient-to-b from-transparent to-zinc-600" />
+          Scroll
+        </motion.div>
+      </section>
+
+      {/* ── MARQUEE ─────────────────────────── */}
+      <Marquee items={marqueeItems} />
+
+      {/* ── MANIFESTO ───────────────────────── */}
+      <section className="px-5 sm:px-8 py-16 sm:py-24 lg:py-28 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-16 border-b border-white/[0.06]">
+        <div>
+          <p className="font-mono text-[10px] sm:text-[11px] tracking-[0.3em] uppercase text-zinc-500 mb-6 sm:mb-8">Manifesto</p>
+          <p className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-tight text-white">
+            Intelligence shouldn't be<br />rented from a data center<br />
+            <span className="text-zinc-500">3,000 miles away.</span>
+          </p>
+        </div>
+        <div className="flex flex-col justify-center gap-5 sm:gap-6 text-zinc-400 text-sm leading-relaxed">
+          <p>
+            FlockML is the first JavaScript runtime that executes quantized large language models entirely in the browser—using BitNet 1.58-bit WGSL compute shaders that replace every floating-point GPU multiplication with a ternary integer addition.
+          </p>
+          <p>
+            Your users' devices become the inference cluster. Your OpenAI bill becomes zero. Your model runs faster, locally, with no latency, no privacy risk, and no monthly invoice.
+          </p>
+          <div className="flex items-center gap-2 text-emerald-400 font-mono text-[11px] tracking-widest uppercase pt-2">
+            <span className="w-6 sm:w-8 h-px bg-emerald-400" />
+            Zero cost. Infinite scale.
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            
-            {/* Visual speed comparison */}
-            <div className="space-y-6 bg-black/40 border border-white/5 p-8 rounded-2xl">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-mono text-emerald-400 font-bold">INT8 QUANTIZATION THROUGHPUT</span>
-                <span className="text-xs bg-emerald-500/10 text-emerald-400 rounded-full px-3 py-1 font-mono">400,000 parameters</span>
-              </div>
-
-              <div className="space-y-4">
-                {/* Wasm */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm font-mono">
-                    <span className="text-white font-bold">Wasm-Native Zero-Copy Mapping</span>
-                    <span className="text-emerald-400 font-bold">&lt; 1.0 ms / op</span>
-                  </div>
-                  <div className="h-3 w-full bg-[#111] rounded-full overflow-hidden">
-                    <div className="h-full bg-emerald-500 rounded-full w-[2.7%] transition-all duration-1000"></div>
-                  </div>
-                </div>
-
-                {/* JS */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm font-mono">
-                    <span className="text-[#888]">JS-Legacy Array Iteration</span>
-                    <span className="text-red-400 font-bold">36.0 ms / op</span>
-                  </div>
-                  <div className="h-3 w-full bg-[#111] rounded-full overflow-hidden">
-                    <div className="h-full bg-red-500 rounded-full w-full transition-all duration-1000"></div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="text-sm text-[#666] font-mono leading-relaxed pt-2 border-t border-white/5">
-                Note: Standard JIT array mapping incurs high garbage collection cycles. Mapping Wasm memory directly via a typed view (Int8Array) achieves a <span className="text-emerald-400 font-bold">36x raw speedup</span>.
-              </div>
-            </div>
-
-            {/* Visual Footprint comparison */}
-            <div className="space-y-6 bg-black/40 border border-white/5 p-8 rounded-2xl">
-              <span className="text-sm font-mono text-[#888] font-bold">STARTUP / NETWORK PAYLOAD SIZE</span>
-              
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div className="border border-emerald-500/20 bg-emerald-500/5 p-4 rounded-xl space-y-1">
-                  <div className="text-xs text-[#888] font-mono">FlockML Core</div>
-                  <div className="text-2xl font-black text-white font-mono">38KB</div>
-                  <div className="text-[10px] text-emerald-400">Wasm Crate</div>
-                </div>
-
-                <div className="border border-white/5 bg-white/5 p-4 rounded-xl space-y-1 opacity-60">
-                  <div className="text-xs text-[#888] font-mono">ONNX Web</div>
-                  <div className="text-2xl font-black text-white font-mono">~5MB</div>
-                  <div className="text-[10px] text-[#555]">C++ Runtime</div>
-                </div>
-
-                <div className="border border-white/5 bg-white/5 p-4 rounded-xl space-y-1 opacity-60">
-                  <div className="text-xs text-[#888] font-mono">TensorFlow.js</div>
-                  <div className="text-2xl font-black text-white font-mono">~30MB</div>
-                  <div className="text-[10px] text-[#555]">JS Heap</div>
-                </div>
-              </div>
-
-              <div className="text-sm text-[#666] font-mono leading-relaxed pt-2 border-t border-white/5">
-                FlockML compiles to bare-metal WebAssembly targets. We bypass large inference packages, keeping client-side dependencies ultra-lightweight.
-              </div>
-            </div>
-
-          </div>
-
-          {/* Interactive Code Playground / Flow */}
-          <div className="border-t border-white/5 pt-12">
-            <h3 className="text-xl font-bold text-white mb-6">Zero-Copy Memory Handshake Flow</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-xs text-[#888]">
-              
-              <div className="border border-white/5 bg-black/20 p-6 rounded-2xl space-y-2">
-                <div className="text-white font-bold">1. Wasm Linear Memory</div>
-                <p>Rust compiles backpropagation weights natively to continuous 1D buffers within the linear Wasm memory block.</p>
-              </div>
-
-              <div className="border border-white/5 bg-black/20 p-6 rounded-2xl space-y-2">
-                <div className="text-white font-bold">2. Typed Array Pointer</div>
-                <p>JS calls the memory pointer using offset and length limits without allocating new heap memory arrays.</p>
-              </div>
-
-              <div className="border border-white/5 bg-black/20 p-6 rounded-2xl space-y-2">
-                <div className="text-white font-bold">3. Network Transmission</div>
-                <p>The mapped Int8Array buffer is passed directly to the WebSocket tunnel, achieving instantaneous execution.</p>
-              </div>
-
-            </div>
-          </div>
-
         </div>
       </section>
 
-      {/* Feature Cards */}
-      <section className="relative z-10 max-w-7xl mx-auto px-6 pb-40">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }}
-            className="group relative"
-          >
-            <div className="absolute -inset-px bg-gradient-to-b from-yellow-500/20 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="relative h-full bg-[#0A0A0A]/50 backdrop-blur-sm border border-white/5 p-8 rounded-3xl group-hover:-translate-y-2 transition-transform duration-500 shadow-2xl hover:shadow-yellow-500/10 space-y-6">
-              <div className="w-12 h-12 bg-yellow-500/10 rounded-2xl flex items-center justify-center border border-yellow-500/20 group-hover:scale-110 transition-transform duration-500">
-                <Cpu className="text-yellow-500" size={24} />
+      {/* ── STATS ROW ───────────────────────── */}
+      <section className="px-5 sm:px-8 py-12 sm:py-16 border-b border-white/[0.06]">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-white/[0.06]">
+          {[
+            { val: 0, suffix: '.00', pre: '$', label: 'Per million tokens' },
+            { val: 80, suffix: '%', pre: '', label: 'Less VRAM via BitNet' },
+            { val: 0, suffix: 's', pre: '', label: 'Model reload (OPFS)' },
+            { val: 100, suffix: 'B', pre: '', label: 'Param models via swarm' },
+          ].map((s, i) => (
+            <div key={i} className="px-4 sm:px-8 py-8 sm:py-10 first:pl-0 last:pr-0">
+              <div className="font-mono text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tighter">
+                {s.pre}<Counter target={s.val} suffix={s.suffix} />
               </div>
-              <h3 className="text-xl font-bold text-white tracking-tight">Zero-Latency Protobufs</h3>
-              <p className="text-[#888] leading-relaxed text-base">
-                Float32 networks are quantized to 8-bit integers and strictly encoded into raw binary Protocol Buffers, reducing payloads by 90% for instant WebSocket transmission.
-              </p>
+              <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-zinc-500 mt-2 leading-snug">{s.label}</div>
             </div>
-          </motion.div>
+          ))}
+        </div>
+      </section>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }}
-            className="group relative"
-          >
-            <div className="absolute -inset-px bg-gradient-to-b from-purple-500/20 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="relative h-full bg-[#0A0A0A]/50 backdrop-blur-sm border border-white/5 p-8 rounded-3xl group-hover:-translate-y-2 transition-transform duration-500 shadow-2xl hover:shadow-purple-500/10 space-y-6">
-              <div className="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center border border-purple-500/20 group-hover:scale-110 transition-transform duration-500">
-                <Shield className="text-purple-500" size={24} />
+      {/* ── FEATURES ────────────────────────── */}
+      <section className="px-5 sm:px-8 py-16 sm:py-24 lg:py-28 max-w-6xl mx-auto border-b border-white/[0.06]">
+        <p className="font-mono text-[10px] sm:text-[11px] tracking-[0.3em] uppercase text-zinc-500 mb-10 sm:mb-16">Architecture</p>
+        <div className="space-y-0">
+          {features.map((f, i) => (
+            <div
+              key={i}
+              className="border-t border-white/[0.06] last:border-b py-7 sm:py-10"
+            >
+              {/* Mobile: stacked layout */}
+              <div className="flex items-start gap-4 sm:hidden">
+                <span className="font-mono text-[11px] text-zinc-600 pt-0.5 shrink-0">{f.index}</span>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-lg font-black tracking-tight text-white">{f.title}</h3>
+                  <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-zinc-500 mt-0.5 mb-3">{f.sub}</div>
+                  <p className="text-sm text-zinc-400 leading-relaxed mb-4">{f.desc}</p>
+                  <div>
+                    <div className="font-mono text-xl font-black text-white">{f.stat}</div>
+                    <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-zinc-600">{f.statLabel}</div>
+                  </div>
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-white tracking-tight">Rust WebAssembly Engine</h3>
-              <p className="text-[#888] leading-relaxed text-base">
-                Compiled directly from native Rust, our Wasm bridge allocates massive matrix arrays in raw browser memory, achieving 97% of native C++ speed for local SGD compute.
-              </p>
-            </div>
-          </motion.div>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.3 }}
-            className="group relative"
-          >
-            <div className="absolute -inset-px bg-gradient-to-b from-blue-500/20 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="relative h-full bg-[#0A0A0A]/50 backdrop-blur-sm border border-white/5 p-8 rounded-3xl group-hover:-translate-y-2 transition-transform duration-500 shadow-2xl hover:shadow-blue-500/10 space-y-6">
-              <div className="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center border border-blue-500/20 group-hover:scale-110 transition-transform duration-500">
-                <Network className="text-blue-500" size={24} />
+              {/* Desktop: grid layout */}
+              <div className="hidden sm:grid grid-cols-12 gap-8">
+                <div className="col-span-1 font-mono text-[11px] text-zinc-600 pt-1">{f.index}</div>
+                <div className="col-span-4">
+                  <h3 className="text-xl font-black tracking-tight text-white">{f.title}</h3>
+                  <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-zinc-500 mt-1">{f.sub}</div>
+                </div>
+                <div className="col-span-5 text-sm text-zinc-400 leading-relaxed flex items-center">
+                  {f.desc}
+                </div>
+                <div className="col-span-2 flex flex-col items-end justify-center">
+                  <div className="font-mono text-2xl font-black text-white">{f.stat}</div>
+                  <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-zinc-600">{f.statLabel}</div>
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-white tracking-tight">Differential Privacy</h3>
-              <p className="text-[#888] leading-relaxed text-base">
-                Cryptographic Laplacian noise is injected directly into browser gradients, making it mathematically impossible to reverse-engineer user training data.
-              </p>
             </div>
-          </motion.div>
+          ))}
+        </div>
+      </section>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.4 }}
-            className="group relative"
-          >
-            <div className="absolute -inset-px bg-gradient-to-b from-emerald-500/20 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="relative h-full bg-[#0A0A0A]/50 backdrop-blur-sm border border-white/5 p-8 rounded-3xl group-hover:-translate-y-2 transition-transform duration-500 shadow-2xl hover:shadow-emerald-500/10 space-y-6">
-              <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center border border-emerald-500/20 group-hover:scale-110 transition-transform duration-500">
-                <Check className="text-emerald-500" size={24} />
+      {/* ── CODE BLOCK ──────────────────────── */}
+      <section className="px-5 sm:px-8 py-16 sm:py-24 lg:py-28 max-w-6xl mx-auto border-b border-white/[0.06]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-16 items-start">
+          <div>
+            <p className="font-mono text-[10px] sm:text-[11px] tracking-[0.3em] uppercase text-zinc-500 mb-5 sm:mb-6">Integration</p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter leading-tight text-white mb-5 sm:mb-6">
+              One import.<br />Full local AI.
+            </h2>
+            <p className="text-zinc-400 text-sm leading-relaxed mb-8 sm:mb-10">
+              FlockML works in React, Next.js, vanilla TypeScript, or any JavaScript environment. WebGPU detected automatically, falls back to WASM.
+            </p>
+            <div className="flex flex-wrap gap-1 font-mono text-[11px] tracking-wider uppercase">
+              {(['react', 'ts', 'next'] as const).map(t => (
+                <button
+                  key={t}
+                  onClick={() => setActiveTab(t)}
+                  className={`px-3 sm:px-4 py-2 border transition-all ${activeTab === t ? 'bg-white text-black border-white font-bold' : 'border-white/10 text-zinc-500 hover:text-white hover:border-white/30'}`}
+                >
+                  {t === 'react' ? 'React' : t === 'ts' ? 'TypeScript' : 'API Route'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative w-full overflow-hidden">
+            <div className="absolute -inset-px bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+            <div className="bg-[#0d0d0d] border border-white/10 p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/[0.06]">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
+                </div>
+                <button
+                  onClick={() => handleCopy(snippets[activeTab])}
+                  className="text-zinc-600 hover:text-white transition-colors"
+                >
+                  {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                </button>
               </div>
-              <h3 className="text-xl font-bold text-white tracking-tight">Dynamic Profiling</h3>
-              <p className="text-[#888] leading-relaxed text-base">
-                The web worker silently profiles the visitor's hardware FLOPS, dynamically scaling batch sizes to maximize utilization without disrupting the user experience.
-              </p>
+              <AnimatePresence mode="wait">
+                <motion.pre
+                  key={activeTab}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.2 }}
+                  className="font-mono text-[11px] sm:text-[12px] leading-relaxed text-zinc-300 overflow-x-auto"
+                >
+                  {snippets[activeTab]}
+                </motion.pre>
+              </AnimatePresence>
             </div>
-          </motion.div>
+          </div>
+        </div>
+      </section>
 
+      {/* ── FOOTER CTA ──────────────────────── */}
+      <section className="px-5 sm:px-8 py-20 sm:py-32 max-w-6xl mx-auto flex flex-col items-center text-center gap-6 sm:gap-8">
+        <p className="font-mono text-[10px] sm:text-[11px] tracking-[0.3em] uppercase text-zinc-500">Open Source · MIT License</p>
+        <h2 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter text-white max-w-3xl leading-tight">
+          Your browser is already<br />
+          <span className="text-zinc-500">a supercomputer.</span>
+        </h2>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mt-2 sm:mt-4 w-full sm:w-auto">
+          <div
+            onClick={() => handleCopy('npm i flockml@latest')}
+            className="flex items-center justify-center gap-3 bg-white text-black px-6 sm:px-8 py-4 font-mono text-xs sm:text-sm tracking-wider uppercase cursor-pointer hover:bg-zinc-200 transition-colors font-bold w-full sm:w-auto"
+          >
+            {copied ? <Check size={16} className="text-emerald-500" /> : null}
+            npm i flockml@latest
+          </div>
+          <Link
+            href="/flock-ml/docs"
+            className="flex items-center justify-center gap-2 border border-white/20 hover:border-white transition-all px-6 sm:px-8 py-4 font-mono text-xs sm:text-sm tracking-wider uppercase text-white group w-full sm:w-auto"
+          >
+            Read Docs
+            <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          </Link>
         </div>
       </section>
 

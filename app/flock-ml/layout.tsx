@@ -1,24 +1,23 @@
-import FlockNavbar from "@/components/FlockNavbar";
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "FlockML | Decentralized Edge AI & Wasm Federated Learning",
-  description: "Train machine learning models for free by crowdsourcing CPU/GPU compute from website visitors. Written in Rust WebAssembly, featuring Wasm-native Int8 quantization, Local Differential Privacy, and decentralized AD-SGD.",
+  title: "FlockML | Run AI In Your Browser. $0.",
+  description: "FlockML turns every browser into a sovereign GPU node using BitNet 1.58-bit WGSL shaders. Run frontier AI models natively in React with zero Python, zero CUDA, zero server bills.",
   keywords: [
     "Decentralized AI",
     "Edge Machine Learning",
     "Browser Federated Learning",
     "WebAssembly Neural Network",
-    "Wasm AI Training",
+    "BitNet WGSL",
     "Local Differential Privacy",
     "Int8 Quantization",
     "Collaborative Machine Learning",
-    "Serverless AI training",
+    "Serverless AI",
     "Open-source AI infrastructure"
   ],
   openGraph: {
-    title: "FlockML | Decentralized Edge AI & Wasm Federated Learning",
-    description: "Crowdsource model training directly in the browser sandbox. Zero-latency Int8 quantization, Wasm performance, and Differential Privacy.",
+    title: "FlockML | Run AI In Your Browser. $0.",
+    description: "FlockML turns every browser into a sovereign GPU node. Run frontier AI models natively in React with zero server bills.",
     url: "https://supratimdev.qzz.io/flock-ml",
     type: "website",
     images: [
@@ -32,8 +31,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "FlockML | Decentralized Edge AI",
-    description: "Train machine learning models natively in browser Web Workers. 100% data privacy, 97% native C++ speeds.",
+    title: "FlockML | Run AI In Your Browser. $0.",
+    description: "FlockML turns every browser into a sovereign GPU node. $0 per query. BitNet 1.58-bit WGSL shaders.",
     images: ["https://supratimdev.qzz.io/flockml_v1_2_tombstone_1783062600907.png"]
   }
 };
@@ -49,23 +48,22 @@ export default function FlockLayout({
     "name": "FlockML",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "All",
-    "description": "An open-source, web-native federated learning framework compiled in Rust WebAssembly. Train models for free by crowdsourcing CPU/GPU compute from website visitors using symmetric Int8 quantization and Local Differential Privacy.",
+    "description": "An open-source JavaScript runtime that executes quantized large language models in the browser using BitNet 1.58-bit WGSL compute shaders.",
     "offers": {
       "@type": "Offer",
       "price": "0.00",
       "priceCurrency": "USD"
     },
-    "softwareVersion": "1.2.1",
-    "programmingLanguage": "Rust, TypeScript"
+    "softwareVersion": "2.0.0",
+    "programmingLanguage": "TypeScript, WGSL"
   };
 
   return (
-    <div className="bg-[#050505] min-h-screen text-[#E5E5E5] font-sans selection:bg-[#FF3B30] selection:text-white">
+    <div className="bg-[#080808] min-h-screen text-white selection:bg-white selection:text-black">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <FlockNavbar />
       {children}
     </div>
   );

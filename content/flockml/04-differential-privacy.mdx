@@ -1,43 +1,99 @@
 ---
-title: Differential Privacy
+title: OPFS & Model Streaming
 order: 4
 ---
 
-# Differential Privacy
+# OPFS & Model Streaming
 
-FlockML guarantees mathematically provable privacy. Because raw gradients can theoretically be reverse-engineered to expose training data, the Server Coordinator never sees raw gradients.
+FlockML uses the browser's **Origin Private File System (OPFS)** to cache model weights directly to the user's local SSD — so after the first download, models load in under a second, forever.
 
-## Cryptographic Validation & L2 Clipping
+---
+
+## The Problem with Reloading Models
 
 <EngineerBlock>
-Because FlockML runs on the client-side, developers often worry about a malicious actor tampering with the browser state, sending artificially inflated gradients, or attempting to poison the global model (Sybil attacks). We enforce a strict security perimeter:
-
-- **L2 Norm Gradient Clipping:** The server acts as a mathematical firewall. If a hacker uses DevTools to artificially inflate a gradient weight to blow up the model, the server instantly detects the L2 Norm anomaly and hard-rejects the payload.
-- **Byzantine Outlier Ejection:** Instead of blindly averaging all data, the Coordinator uses robust aggregation algorithms to mathematically score incoming vectors and completely disqualify statistical outliers.
-- **Cryptographic Sessions:** Every payload is tied to an ephemeral, cryptographically signed session token, preventing replay attacks.
+Every time a user refreshes the page, the model would need to be re-downloaded over the network. For a quantized BitNet model, that's still 400MB–1.2GB of weight data. Without caching, that's a 10–30 second wait on every single page load — completely unacceptable for production use.
 </EngineerBlock>
 
 <JuniorBlock>
-What if a troll purposefully sends fake, corrupted data from their browser to try and ruin your AI model? We don't just blindly trust the crowd—we use strict mathematical firewalls.
-
-- **The Bouncer (L2 Clipping):** If a troll opens their browser console and tries to send an artificially massive number to blow up the AI, the server's firewall instantly detects the mathematical anomaly and throws the data in the trash before it even touches the AI.
-- **Smart Voting:** Instead of just averaging everyone's answers together, the server uses a smart algorithm. If 99% of people say the answer is 5, and the troll says the answer is 1,000,000, the server doesn't average them—it completely disqualifies the troll's vote for being mathematically impossible.
-- **Digital Signatures:** Every single piece of data is cryptographically signed, meaning hackers can't use invisible bots to spam fake data.
+Imagine if Spotify made you re-download every song every single time you hit play. That's what happens without OPFS — your AI model gets re-downloaded from scratch on every page refresh. OPFS is like a local music library saved to your device so it plays instantly.
 </JuniorBlock>
 
-## The Epsilon Parameter (ε)
+---
+
+## How OPFS Works in FlockML
 
 <EngineerBlock>
-Before quantization, the browser injects cryptographic noise sampled from a Laplace distribution: `M(x) = f(x) + Lap(Δf / ε)`. The variance of this noise is controlled by the Epsilon parameter (ε).
-
-### `FlockNode.privacyEpsilon`
-
-- **High Epsilon (e.g., ε = 5.0):** Minimal noise injection. Fast convergence, but mathematically weaker privacy bounds.
-- **Low Epsilon (e.g., ε = 0.1):** Heavy noise injection. Extreme privacy, but requires massive scale (1000+ `minClients`) to allow the FedAvg algorithm to mathematically average out the noise on the server side.
+The browser's OPFS API (`navigator.storage.getDirectory()`) gives each origin a private, sandboxed filesystem partition on the user's SSD. FlockML streams Safetensors shards directly into this partition via `FileSystemWritableFileStream`. On subsequent loads, weights are read back from OPFS at native SSD speeds — completely bypassing the network.
 </EngineerBlock>
 
 <JuniorBlock>
-If you send your raw data to the server, the server knows exactly what you did. To protect your privacy, FlockML intentionally blurs your data with "static noise" before uploading it.
-
-When the server merges your blurry data with 10,000 other people's blurry data, the static noise perfectly cancels out, revealing the true picture, but nobody can ever trace your specific data back to you.
+Every website gets its own secret folder on your computer that only that site can access — that's OPFS. FlockML stores the AI model files in that secret folder on your first visit. From then on, it loads the AI instantly from your own computer instead of downloading it again.
 </JuniorBlock>
+
+```typescript
+import { Flock } from 'flockml';
+
+const node = new Flock.Node({ mode: 'inference' });
+await node.start();
+
+// First visit: downloads & caches to OPFS
+// Every visit after: instant load from local SSD
+await node.loadFromHuggingFace('microsoft/bitnet-b1.58-3B');
+```
+
+---
+
+## Streaming Safetensors Shards
+
+<EngineerBlock>
+Rather than downloading the entire model file before initialization, FlockML streams Safetensors shards progressively. Each shard is written to OPFS and immediately compiled into a WGSL compute pipeline — allowing inference to begin before the full model is on disk. This is similar to progressive JPEG decoding, but for neural network weights.
+</EngineerBlock>
+
+<JuniorBlock>
+Instead of waiting for the whole model to download before starting, FlockML works like a streaming video — it starts playing (running AI) as soon as the first chunk arrives, while the rest continues downloading in the background.
+</JuniorBlock>
+
+```typescript
+// Progress events during streaming
+node.on('progress', ({ loaded, total, shard }) => {
+  const pct = Math.round((loaded / total) * 100);
+  console.log(`Shard ${shard}: ${pct}% cached to OPFS`);
+});
+
+await node.loadFromHuggingFace('microsoft/bitnet-b1.58-3B');
+// Inference already started at ~15% loaded
+```
+
+---
+
+## Cache Invalidation
+
+<EngineerBlock>
+FlockML stores a SHA-256 hash of each model version alongside the cached weights in OPFS. On load, it fetches only the remote model's manifest (a few KB) and compares hashes. If the model version changed, the stale shards are evicted and re-downloaded. If the hashes match, the full OPFS cache is used — zero network bytes transferred.
+</EngineerBlock>
+
+<JuniorBlock>
+FlockML keeps a tiny "fingerprint" of the model saved next to it. On every page load, it quickly checks if the fingerprint on the server still matches the one saved locally. If yes — instant load from your computer. If the AI model was updated — it downloads just what changed, like a software update.
+</JuniorBlock>
+
+| State | Network cost | Load time |
+|---|---|---|
+| First visit | Full model download | 10–30s |
+| Returning (no update) | ~2 KB manifest only | < 1s |
+| Returning (model updated) | Changed shards only | 3–8s |
+
+---
+
+## Storage Quota & Cleanup
+
+```typescript
+// Check how much OPFS space is being used
+const { usage, quota } = await navigator.storage.estimate();
+console.log(`Using ${(usage / 1e9).toFixed(2)} GB of ${(quota / 1e9).toFixed(2)} GB`);
+
+// Manually evict all cached models
+await node.clearOPFSCache();
+```
+
+Most browsers grant **5–10 GB** of OPFS storage per origin on desktop. FlockML will warn users before evicting old cached models to make room.
