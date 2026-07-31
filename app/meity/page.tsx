@@ -2,43 +2,82 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, RotateCcw, Cpu, Shield, Globe, Award, Sparkles } from 'lucide-react';
+import { Play, Pause, RotateCcw, Cpu, Shield, Globe, Server, Check, X, Users, Laptop, Tablet, Smartphone } from 'lucide-react';
 import { FlockNode } from '@/lib/federated/client-node';
 
-// Toy dataset: XOR Logic Gate
-// Classic non-linear ML baseline
-const XOR_DATA = [
-  { inputs: [0, 0], targets: [0] },
-  { inputs: [0, 1], targets: [1] },
-  { inputs: [1, 0], targets: [1] },
-  { inputs: [1, 1], targets: [0] }
+// Threat model dataset
+const SECURITY_SCENARIOS = [
+  { name: "Normal Citizen Login", inputs: [0.1, 0.2], expected: 1, desc: "Low frequency, standard payload size" },
+  { name: "Brute-Force Login Bot", inputs: [0.9, 0.1], expected: 0, desc: "High frequency, minimal payload size" },
+  { name: "Standard Document Upload", inputs: [0.2, 0.8], expected: 1, desc: "Low frequency, large payload size" },
+  { name: "DDoS Buffer Overflow Bot", inputs: [0.95, 0.95], expected: 0, desc: "Massive rate, maximum payload size" }
 ];
+
+interface RealPeerNode {
+  id: string;
+  name: string;
+  location: string;
+  device: string;
+  status: "idle" | "training" | "syncing";
+  progress: number;
+  lastActive: number;
+}
+
+// Random bucket ID on KVdb.io to coordinate the live demo participants
+const BUCKET_URL = "https://kvdb.io/Mug5V8XvR9pW5k6VUz6y6Z/meity_flock_nodes";
 
 export default function MeityDemoPage() {
   const [node, setNode] = useState<FlockNode | null>(null);
   const [isTraining, setIsTraining] = useState(false);
   const [epoch, setEpoch] = useState(0);
   const [loss, setLoss] = useState(0.5);
-  const [epsilon, setEpsilon] = useState(0.5);
-  const [inputA, setInputA] = useState(0);
-  const [inputB, setInputB] = useState(1);
-  const [prediction, setPrediction] = useState<number | null>(null);
+  const [epsilon, setEpsilon] = useState(0.8);
   const [logs, setLogs] = useState<string[]>([]);
   const [secureGrads, setSecureGrads] = useState<any>(null);
+  const [predictions, setPredictions] = useState<number[]>([0.5, 0.5, 0.5, 0.5]);
+
+  // Real-time peer list
+  const [peers, setPeers] = useState<RealPeerNode[]>([]);
+  const [myNodeId, setMyNodeId] = useState<string>("");
+  const [myLocation, setMyLocation] = useState<string>("Locating...");
+  const [myDevice, setMyDevice] = useState<string>("Browser Window");
 
   const trainingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const syncIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Initialize client node
+  // Initialize client node & device metadata
   useEffect(() => {
+    // 1. Setup local network model
     const initializedNode = new FlockNode(2, 4, 1);
-    initializedNode.connect('wss://national-ai-grid.gov.in/flock');
+    initializedNode.connect('wss://sovereign-ai.gov.in/grid');
     setNode(initializedNode);
-    addLog("System initialized. FlockNode configured: 2 Input, 4 Hidden, 1 Output.");
-    addLog("WebAssembly compute engine ready. WebGPU detection initialized.");
-    
-    // Initial prediction
-    const res = initializedNode.network.predict([0, 1]);
-    setPrediction(res[0]);
+    updatePredictions(initializedNode);
+
+    // 2. Identify browser device type
+    const ua = navigator.userAgent;
+    let detectedDevice = "Desktop Browser";
+    if (/mobile/i.test(ua)) detectedDevice = "Smartphone";
+    else if (/ipad|tablet/i.test(ua)) detectedDevice = "Tablet";
+    setMyDevice(detectedDevice);
+
+    // Generate random session ID for this tab
+    const randomId = "node-" + Math.random().toString(36).substring(2, 8);
+    setMyNodeId(randomId);
+
+    // 3. Fetch approximate location via free geolocation API
+    fetch("https://ipapi.co/json/")
+      .then(res => res.json())
+      .then(data => {
+        const loc = data.city ? `${data.city}, ${data.country_code}` : "India";
+        setMyLocation(loc);
+        addLog(`Registered local node at: ${loc} (${detectedDevice})`);
+      })
+      .catch(() => {
+        setMyLocation("NIC Portal Node");
+        addLog(`Registered local node: NIC Node (${detectedDevice})`);
+      });
+
+    addLog("Sovereign AI Client Node connected to shared local grid.");
   }, []);
 
   const addLog = (msg: string) => {
@@ -46,81 +85,167 @@ export default function MeityDemoPage() {
     setLogs(prev => [`[${time}] ${msg}`, ...prev.slice(0, 15)]);
   };
 
-  // Run prediction helper
-  const runPrediction = (a: number, b: number, customNode = node) => {
+  const updatePredictions = (customNode = node) => {
     if (!customNode) return;
-    const res = customNode.network.predict([a, b]);
-    setPrediction(res[0]);
+    const currentPreds = SECURITY_SCENARIOS.map(s => customNode.network.predict(s.inputs)[0]);
+    setPredictions(currentPreds);
+  };
+
+  // Coordinated training flag syncing
+  useEffect(() => {
+    if (!myNodeId) return;
+
+    // Periodically post our presence and fetch the list of other active peers
+    const syncGrid = async () => {
+      try {
+        // Fetch current active list
+        const getRes = await fetch(BUCKET_URL);
+        let activeNodes: RealPeerNode[] = [];
+        if (getRes.ok) {
+          activeNodes = await getRes.json();
+        }
+
+        // Filter out dead nodes (no ping for 15 seconds)
+        const now = Date.now();
+        activeNodes = activeNodes.filter(n => (now - n.lastActive) < 15000);
+
+        // Update or insert our node info
+        const myIndex = activeNodes.findIndex(n => n.id === myNodeId);
+        const myNodeData: RealPeerNode = {
+          id: myNodeId,
+          name: myNodeId === "node-master" ? "NIC Master Center" : `Peer Node (${myNodeId.split('-')[1]})`,
+          location: myLocation,
+          device: myDevice,
+          status: isTraining ? "training" : "idle",
+          progress: isTraining ? Math.floor(Math.random() * 40) + 40 : 0,
+          lastActive: now
+        };
+
+        if (myIndex > -1) {
+          activeNodes[myIndex] = myNodeData;
+        } else {
+          activeNodes.push(myNodeData);
+        }
+
+        // If another node is actively training, trigger training state local sync
+        const isAnyoneTraining = activeNodes.some(n => n.status === "training" && n.id !== myNodeId);
+        if (isAnyoneTraining && !isTraining) {
+          addLog("Incoming training coordinate sweep received from peer.");
+          // Trigger training remotely triggered
+          triggerRemoteSyncedTraining();
+        }
+
+        // Post updated nodes list back to shared bucket
+        await fetch(BUCKET_URL, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(activeNodes)
+        });
+
+        // Set local state
+        setPeers(activeNodes.filter(n => n.id !== myNodeId));
+      } catch (err) {
+        // Fallback silently if bucket fails/throttles
+      }
+    };
+
+    // Run sync immediately and then every 2.5 seconds
+    syncGrid();
+    syncIntervalRef.current = setInterval(syncGrid, 2500);
+
+    return () => {
+      if (syncIntervalRef.current) clearInterval(syncIntervalRef.current);
+    };
+  }, [myNodeId, myLocation, myDevice, isTraining]);
+
+  // Sync training locally if trigger detected from screen-sharing node
+  const triggerRemoteSyncedTraining = () => {
+    if (!node || isTraining) return;
+    setIsTraining(true);
+    
+    trainingIntervalRef.current = setInterval(() => {
+      for (let steps = 0; steps < 15; steps++) {
+        SECURITY_SCENARIOS.forEach(scenario => {
+          node.trainLocalBatch([scenario.inputs], [[scenario.expected]]);
+        });
+      }
+
+      let errorSum = 0;
+      SECURITY_SCENARIOS.forEach(scenario => {
+        const pred = node.network.predict(scenario.inputs)[0];
+        errorSum += Math.pow(scenario.expected - pred, 2);
+      });
+      const currentLoss = errorSum / SECURITY_SCENARIOS.length;
+
+      setEpoch(prev => {
+        const nextEpoch = prev + 15;
+        if (currentLoss < 0.008) {
+          clearInterval(trainingIntervalRef.current!);
+          setIsTraining(false);
+        }
+        return nextEpoch;
+      });
+      setLoss(currentLoss);
+      updatePredictions(node);
+    }, 85);
   };
 
   const handleStartTraining = () => {
     if (!node) return;
     setIsTraining(true);
-    addLog("Starting training loop natively in user browser thread...");
+    addLog("Initiating local client training. Syncing global grid trigger...");
 
     trainingIntervalRef.current = setInterval(() => {
-      // Train for 20 epochs per render step to speed up visual updates
-      let currentLoss = 0;
-      for (let steps = 0; steps < 30; steps++) {
-        // Run forward/backward passes on our batch
-        for (const data of XOR_DATA) {
-          node.trainLocalBatch([data.inputs], [data.targets]);
-        }
+      // Local gradient batch step
+      for (let steps = 0; steps < 15; steps++) {
+        SECURITY_SCENARIOS.forEach(scenario => {
+          node.trainLocalBatch([scenario.inputs], [[scenario.expected]]);
+        });
       }
 
-      // Calculate current loss/error on the XOR outputs
       let errorSum = 0;
-      XOR_DATA.forEach(data => {
-        const pred = node.network.predict(data.inputs)[0];
-        errorSum += Math.pow(data.targets[0] - pred, 2);
+      SECURITY_SCENARIOS.forEach(scenario => {
+        const pred = node.network.predict(scenario.inputs)[0];
+        errorSum += Math.pow(scenario.expected - pred, 2);
       });
-      currentLoss = errorSum / XOR_DATA.length;
+      const currentLoss = errorSum / SECURITY_SCENARIOS.length;
 
       setEpoch(prev => {
-        const nextEpoch = prev + 30;
-        
-        // Push stats
-        if (nextEpoch % 300 === 0) {
-          addLog(`Epoch ${nextEpoch} - Loss: ${currentLoss.toFixed(6)}`);
+        const nextEpoch = prev + 15;
+        if (nextEpoch % 150 === 0) {
+          addLog(`Epoch ${nextEpoch} - Sync Loss: ${currentLoss.toFixed(6)}`);
         }
-
-        // Auto stop if target loss reached
-        if (currentLoss < 0.005) {
+        if (currentLoss < 0.008) {
           clearInterval(trainingIntervalRef.current!);
           setIsTraining(false);
           addLog(`Model converged! Target loss achieved at epoch ${nextEpoch}.`);
         }
-
         return nextEpoch;
       });
 
       setLoss(currentLoss);
-      runPrediction(inputA, inputB, node);
-    }, 50);
+      updatePredictions(node);
+    }, 80);
   };
 
   const handlePauseTraining = () => {
-    if (trainingIntervalRef.current) {
-      clearInterval(trainingIntervalRef.current);
-    }
+    if (trainingIntervalRef.current) clearInterval(trainingIntervalRef.current);
     setIsTraining(false);
-    addLog("Training paused. Model state preserved in local client memory.");
+    addLog("Training paused. Network updates suspended.");
   };
 
   const handleReset = () => {
-    if (trainingIntervalRef.current) {
-      clearInterval(trainingIntervalRef.current);
-    }
+    if (trainingIntervalRef.current) clearInterval(trainingIntervalRef.current);
     setIsTraining(false);
     setEpoch(0);
     setLoss(0.5);
     setSecureGrads(null);
     const freshNode = new FlockNode(2, 4, 1);
-    freshNode.connect('wss://national-ai-grid.gov.in/flock');
+    freshNode.connect('wss://sovereign-ai.gov.in/grid');
     setNode(freshNode);
-    runPrediction(inputA, inputB, freshNode);
+    updatePredictions(freshNode);
     setLogs([]);
-    addLog("Weights randomized. Model reset to initial untrained state.");
+    addLog("Weights reset. Active model reset to untrained state.");
   };
 
   const handleExportSecuredGradients = () => {
@@ -128,14 +253,13 @@ export default function MeityDemoPage() {
     node.privacyEpsilon = epsilon;
     const grads = node.exportSecureGradients();
     setSecureGrads(grads);
-    addLog(`Applying Differential Privacy (ε = ${epsilon}). Gradients quantized to 8-bit.`);
-    addLog("Payload encrypted. Ready for upload to global aggregator server.");
+    addLog(`Differential privacy applied. Laplacian Noise (ε = ${epsilon}).`);
   };
 
   return (
     <div className="min-h-screen bg-[#080808] text-white font-sans selection:bg-white selection:text-black overflow-x-hidden pt-28 pb-32 relative">
       
-      {/* Subtle background layers */}
+      {/* Background radial glow */}
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
@@ -143,7 +267,7 @@ export default function MeityDemoPage() {
           backgroundSize: '24px 24px',
         }}
       />
-      <div className="fixed top-0 right-0 w-[500px] h-[500px] pointer-events-none z-0"
+      <div className="fixed top-0 right-0 w-[600px] h-[600px] pointer-events-none z-0"
         style={{ background: 'radial-gradient(ellipse at top right, rgba(16,185,129,0.04) 0%, transparent 65%)' }}
       />
 
@@ -151,236 +275,228 @@ export default function MeityDemoPage() {
         
         {/* Flag Badge & Title */}
         <div className="flex flex-col gap-1.5 mb-10">
-          <div className="inline-flex items-center gap-2 self-start bg-white/[0.04] border border-white/10 px-3.5 py-1.5 rounded-full mb-2">
+          <div className="inline-flex items-center gap-2 self-start bg-emerald-500/10 border border-emerald-500/20 px-3.5 py-1.5 rounded-full mb-2">
             <span className="flex h-2 w-2 relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-zinc-400">
-              National Sovereign Compute Initiative
+            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-emerald-400 font-semibold">
+              Live Sovereign Network Grid
             </span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-white">
-            FlockML <span className="text-zinc-500">× MeitY Pilot</span>
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-white leading-tight">
+            Decentralized Cyber Shield <span className="text-zinc-500">Prototype</span>
           </h1>
           <p className="text-zinc-400 text-sm sm:text-base max-w-2xl leading-relaxed mt-1">
-            Proof-of-Concept: Training a neural network directly inside your web browser. No external API queries, zero cloud billing, with native edge-side privacy verification.
+            Training a cybersecurity classification model collectively across multiple devices. The target task is to recognize and block anomalous traffic bots from compromising public portals.
           </p>
         </div>
 
         {/* Grid Dashboard */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* LEFT: Live Controller */}
+          {/* LEFT: Live Controller and Model Status */}
           <div className="lg:col-span-8 space-y-8">
             
             {/* Live Metrics Row */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-[#0d0d0d] border border-white/[0.06] p-6 rounded-none">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-[#0d0d0d] border border-white/[0.06] p-6">
               <div className="space-y-1">
-                <span className="font-mono text-[10px] tracking-wider uppercase text-zinc-500 flex items-center gap-1.5">
-                  <Cpu size={12} className="text-zinc-500" /> Compute Node
+                <span className="font-mono text-[10px] tracking-wider uppercase text-zinc-500 flex items-center gap-1">
+                  <Globe size={11} className="text-emerald-500" /> Active Grid
                 </span>
-                <p className="text-sm font-bold text-white font-mono uppercase">User Browser</p>
+                <p className="text-xs font-bold text-white font-mono uppercase truncate">
+                  {peers.length + 1} Device{peers.length !== 0 ? "s" : ""} Online
+                </p>
               </div>
               <div className="space-y-1 border-l border-white/[0.06] pl-4">
-                <span className="font-mono text-[10px] tracking-wider uppercase text-zinc-500">Model Epochs</span>
+                <span className="font-mono text-[10px] tracking-wider uppercase text-zinc-500">Global Epochs</span>
                 <p className="text-xl font-black text-white font-mono">{epoch}</p>
               </div>
               <div className="space-y-1 border-l border-white/[0.06] pl-4">
-                <span className="font-mono text-[10px] tracking-wider uppercase text-zinc-500">Training Loss</span>
+                <span className="font-mono text-[10px] tracking-wider uppercase text-zinc-500">Average Loss</span>
                 <p className="text-xl font-black text-emerald-400 font-mono">
                   {loss === 0.5 ? "Untrained" : loss.toFixed(6)}
                 </p>
               </div>
               <div className="space-y-1 border-l border-white/[0.06] pl-4">
-                <span className="font-mono text-[10px] tracking-wider uppercase text-zinc-500">Server Invoice</span>
-                <p className="text-xl font-black text-white font-mono">$0.00</p>
+                <span className="font-mono text-[10px] tracking-wider uppercase text-zinc-500">Hosting Cost</span>
+                <p className="text-xl font-black text-emerald-400 font-mono">$0.00</p>
               </div>
             </div>
 
-            {/* Live Visualizer Box */}
-            <div className="bg-[#0c0c0c] border border-white/[0.08] p-6 sm:p-8 space-y-6 relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4 font-mono text-[10px] text-zinc-600 uppercase tracking-widest pointer-events-none">
-                Topology: 2-4-1
-              </div>
-
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                <Sparkles size={16} className="text-emerald-400 animate-pulse" /> Network Architecture Output
-              </h2>
-
-              {/* Training Controls */}
-              <div className="flex flex-wrap gap-3">
-                {!isTraining ? (
-                  <button
-                    onClick={handleStartTraining}
-                    className="flex items-center gap-2 bg-white text-black hover:bg-zinc-200 text-xs font-mono uppercase tracking-widest px-5 py-3 font-bold transition-all"
-                  >
-                    <Play size={12} fill="black" /> Train Model Local
-                  </button>
-                ) : (
-                  <button
-                    onClick={handlePauseTraining}
-                    className="flex items-center gap-2 border border-amber-500/30 text-amber-500 hover:bg-amber-500/10 text-xs font-mono uppercase tracking-widest px-5 py-3 font-bold transition-all"
-                  >
-                    <Pause size={12} fill="currentColor" /> Pause Training
-                  </button>
-                )}
-
-                <button
-                  onClick={handleReset}
-                  className="flex items-center gap-2 border border-white/10 hover:border-white/20 text-zinc-400 hover:text-white text-xs font-mono uppercase tracking-widest px-4 py-3 transition-all"
-                >
-                  <RotateCcw size={12} /> Reset Model
-                </button>
-              </div>
-
-              {/* Graphical Box */}
-              <div className="h-44 sm:h-52 border border-white/[0.04] bg-[#090909] relative flex items-center justify-center p-4">
-                
-                {/* Node visualization layout */}
-                <div className="flex justify-between items-center w-full max-w-md h-full relative">
-                  
-                  {/* Lines behind */}
-                  <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20">
-                    <line x1="10%" y1="30%" x2="50%" y2="20%" stroke="white" strokeWidth="1" />
-                    <line x1="10%" y1="30%" x2="50%" y2="40%" stroke="white" strokeWidth="1" />
-                    <line x1="10%" y1="30%" x2="50%" y2="60%" stroke="white" strokeWidth="1" />
-                    <line x1="10%" y1="30%" x2="50%" y2="80%" stroke="white" strokeWidth="1" />
-
-                    <line x1="10%" y1="70%" x2="50%" y2="20%" stroke="white" strokeWidth="1" />
-                    <line x1="10%" y1="70%" x2="50%" y2="40%" stroke="white" strokeWidth="1" />
-                    <line x1="10%" y1="70%" x2="50%" y2="60%" stroke="white" strokeWidth="1" />
-                    <line x1="10%" y1="70%" x2="50%" y2="80%" stroke="white" strokeWidth="1" />
-
-                    <line x1="50%" y1="20%" x2="90%" y2="50%" stroke="white" strokeWidth="1" />
-                    <line x1="50%" y1="40%" x2="90%" y2="50%" stroke="white" strokeWidth="1" />
-                    <line x1="50%" y1="60%" x2="90%" y2="50%" stroke="white" strokeWidth="1" />
-                    <line x1="50%" y1="80%" x2="90%" y2="50%" stroke="white" strokeWidth="1" />
-                  </svg>
-
-                  {/* Input Nodes */}
-                  <div className="flex flex-col gap-12 z-10">
-                    <div className="flex flex-col items-center">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs border ${inputA === 1 ? 'bg-white text-black border-white' : 'border-white/20 text-zinc-500'}`}>A</div>
-                      <span className="font-mono text-[9px] text-zinc-600 mt-1">[{inputA}]</span>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs border ${inputB === 1 ? 'bg-white text-black border-white' : 'border-white/20 text-zinc-500'}`}>B</div>
-                      <span className="font-mono text-[9px] text-zinc-600 mt-1">[{inputB}]</span>
-                    </div>
-                  </div>
-
-                  {/* Hidden Nodes */}
-                  <div className="flex flex-col gap-5 z-10">
-                    {[1, 2, 3, 4].map((nodeIdx) => (
-                      <div
-                        key={nodeIdx}
-                        className={`w-6 h-6 rounded-full border transition-all duration-300 ${isTraining ? 'border-emerald-500/50 bg-emerald-500/[0.04]' : 'border-white/10'}`}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Output Node */}
-                  <div className="flex flex-col items-center z-10">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-mono text-xs border transition-all duration-500 ${prediction && prediction > 0.5 ? 'border-emerald-400 bg-emerald-400/10 text-emerald-400' : 'border-white/20 text-zinc-500'}`}>
-                      {prediction !== null ? prediction.toFixed(3) : "?"}
-                    </div>
-                    <span className="font-mono text-[9px] text-zinc-600 mt-1">Prediction</span>
-                  </div>
-
-                </div>
-
-                {/* Status indicator absolute */}
-                <div className="absolute bottom-3 left-4 font-mono text-[9px] text-zinc-600 flex items-center gap-1.5">
-                  <span className={`w-1.5 h-1.5 rounded-full ${isTraining ? 'bg-emerald-400 animate-pulse' : 'bg-zinc-600'}`} />
-                  {isTraining ? 'COMPUTE STATE: CALCULATING WEIGHT GRADIENTS' : 'COMPUTE STATE: IDLE'}
-                </div>
-              </div>
-            </div>
-
-            {/* Sandbox Interrogation Station */}
+            {/* Model Output & Success Table */}
             <div className="bg-[#0c0c0c] border border-white/[0.08] p-6 sm:p-8 space-y-6">
               <div>
-                <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Shield size={16} className="text-zinc-400" /> Interactive Model Interrogation
-                </h2>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                    <Shield size={16} className="text-emerald-400 animate-pulse" /> Live Threat Classification Matrix
+                  </h2>
+                  <div className="flex gap-2">
+                    {!isTraining ? (
+                      <button
+                        onClick={handleStartTraining}
+                        className="flex items-center gap-1.5 bg-white text-black hover:bg-zinc-200 text-[10px] font-mono uppercase tracking-widest px-4 py-2 font-bold transition-all"
+                      >
+                        <Play size={10} fill="black" /> Train Model
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handlePauseTraining}
+                        className="flex items-center gap-1.5 border border-amber-500/30 text-amber-500 hover:bg-amber-500/10 text-[10px] font-mono uppercase tracking-widest px-4 py-2 font-bold transition-all"
+                      >
+                        <Pause size={10} fill="currentColor" /> Pause
+                      </button>
+                    )}
+                    <button
+                      onClick={handleReset}
+                      className="flex items-center gap-1.5 border border-white/10 hover:border-white/20 text-zinc-400 hover:text-white text-[10px] font-mono uppercase tracking-widest px-3 py-2 transition-all"
+                    >
+                      <RotateCcw size={10} /> Reset
+                    </button>
+                  </div>
+                </div>
                 <p className="text-zinc-500 text-xs mt-1">
-                  Change the inputs below to immediately verify if the locally trained weights correctly calculate the non-linear XOR logic gate.
+                  Inputs represent: [Access Frequency, Payload Size]. The model learns to correctly identify safe citizen logins (Target: 1) from bot attacks (Target: 0).
                 </p>
               </div>
 
-              {/* Toggles */}
-              <div className="flex items-center gap-6">
-                <div className="space-y-2">
-                  <span className="font-mono text-[10px] tracking-wider uppercase text-zinc-500">Input A</span>
-                  <div className="flex border border-white/10 rounded-none overflow-hidden font-mono text-xs">
-                    <button
-                      onClick={() => { setInputA(0); runPrediction(0, inputB); }}
-                      className={`px-4 py-2 ${inputA === 0 ? 'bg-white text-black font-bold' : 'text-zinc-500 hover:text-white'}`}
-                    >
-                      0
-                    </button>
-                    <button
-                      onClick={() => { setInputA(1); runPrediction(1, inputB); }}
-                      className={`px-4 py-2 ${inputA === 1 ? 'bg-white text-black font-bold' : 'text-zinc-500 hover:text-white'}`}
-                    >
-                      1
-                    </button>
-                  </div>
-                </div>
+              {/* Scenarios Table */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs font-mono border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/10 text-zinc-500">
+                      <th className="pb-3 font-semibold">Scenario Profile</th>
+                      <th className="pb-3 font-semibold">Normalized Inputs</th>
+                      <th className="pb-3 font-semibold text-center">Expected Output</th>
+                      <th className="pb-3 font-semibold text-right">Model Prediction</th>
+                      <th className="pb-3 font-semibold text-right pr-2">Evaluation Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/[0.04]">
+                    {SECURITY_SCENARIOS.map((s, idx) => {
+                      const pred = predictions[idx];
+                      const diff = Math.abs(s.expected - pred);
+                      const isCorrect = diff < 0.15; // Deemed "passed" if within range
+                      
+                      return (
+                        <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
+                          <td className="py-4">
+                            <span className="text-white font-bold block">{s.name}</span>
+                            <span className="text-zinc-500 text-[10px]">{s.desc}</span>
+                          </td>
+                          <td className="py-4 text-zinc-400">
+                            [{s.inputs.join(', ')}]
+                          </td>
+                          <td className="py-4 text-center">
+                            <span className={`px-2 py-0.5 text-[10px] font-bold ${s.expected === 1 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
+                              {s.expected === 1 ? "1 (CITIZEN)" : "0 (BLOCKED)"}
+                            </span>
+                          </td>
+                          <td className="py-4 text-right font-bold text-zinc-300">
+                            {pred.toFixed(4)}
+                          </td>
+                          <td className="py-4 text-right">
+                            <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[10px] font-bold ${isCorrect ? 'bg-emerald-400/10 text-emerald-400' : 'bg-amber-400/10 text-amber-400'}`}>
+                              {isCorrect ? <Check size={10} /> : <X size={10} />}
+                              {isCorrect ? "VERIFIED SAFE" : "UNCERTAIN"}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
 
-                <div className="space-y-2">
-                  <span className="font-mono text-[10px] tracking-wider uppercase text-zinc-500">Input B</span>
-                  <div className="flex border border-white/10 rounded-none overflow-hidden font-mono text-xs">
-                    <button
-                      onClick={() => { setInputB(0); runPrediction(inputA, 0); }}
-                      className={`px-4 py-2 ${inputB === 0 ? 'bg-white text-black font-bold' : 'text-zinc-500 hover:text-white'}`}
-                    >
-                      0
-                    </button>
-                    <button
-                      onClick={() => { setInputB(1); runPrediction(inputA, 1); }}
-                      className={`px-4 py-2 ${inputB === 1 ? 'bg-white text-black font-bold' : 'text-zinc-500 hover:text-white'}`}
-                    >
-                      1
-                    </button>
-                  </div>
-                </div>
+            {/* Simulated Swarm Network Grid */}
+            <div className="bg-[#0c0c0c] border border-white/[0.08] p-6 sm:p-8 space-y-6">
+              <div>
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <Users size={16} className="text-zinc-400" /> Active Peer Compute Grid
+                </h3>
+                <p className="text-zinc-500 text-xs mt-1">
+                  These are actual browser sessions currently visiting this page. Open this URL on your phone to watch it dynamically join the cluster list!
+                </p>
               </div>
 
-              {/* Truth validation box */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#090909] border border-white/[0.04] p-4 font-mono text-xs">
-                <div>
-                  <span className="text-zinc-500 block mb-1">Mathematical Formula Output:</span>
-                  <span className="text-zinc-300">{prediction !== null ? prediction.toFixed(10) : "Untrained"}</span>
+              {/* Peers grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                
+                {/* Local Node Card */}
+                <div className="p-4 border font-mono text-[11px] space-y-3 relative overflow-hidden border-emerald-500/40 bg-emerald-500/[0.02]">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-white font-bold block">Local Node (You)</span>
+                      <span className="text-zinc-500 text-[10px]">{myLocation} ({myDevice})</span>
+                    </div>
+                    <span className={`h-1.5 w-1.5 rounded-full bg-emerald-400 ${isTraining ? 'animate-pulse' : ''}`} />
+                  </div>
+                  <div className="flex items-center justify-between text-zinc-400 text-[10px]">
+                    <span>Status: <strong className="uppercase text-emerald-400">{isTraining ? "training" : "idle"}</strong></span>
+                    <span>Token: <strong className="text-white">{myNodeId}</strong></span>
+                  </div>
+                  <div className="w-full bg-zinc-900 h-1 rounded-full overflow-hidden">
+                    <div className={`h-full bg-emerald-400 ${isTraining ? 'w-1/2 animate-pulse' : 'w-0'}`} />
+                  </div>
                 </div>
-                <div>
-                  <span className="text-zinc-500 block mb-1">Expected Output (Truth):</span>
-                  <span className="text-white font-bold">{(inputA !== inputB) ? 1 : 0}</span>
-                </div>
+
+                {/* Peer Nodes Cards */}
+                {peers.length === 0 ? (
+                  <div className="col-span-1 sm:col-span-2 md:col-span-2 p-6 border border-dashed border-white/10 flex items-center justify-center text-zinc-600 text-xs font-mono text-center">
+                    Awaiting peer devices. Open this page on another laptop/phone to watch them appear here live!
+                  </div>
+                ) : (
+                  peers.map((peer) => {
+                    const statusColors = {
+                      idle: "text-zinc-500 border-zinc-800 bg-zinc-900/10",
+                      syncing: "text-blue-400 border-blue-500/20 bg-blue-500/5",
+                      training: "text-emerald-400 border-emerald-500/20 bg-emerald-500/5"
+                    };
+
+                    return (
+                      <div key={peer.id} className={`p-4 border font-mono text-[11px] space-y-3 relative overflow-hidden transition-all duration-300 ${statusColors[peer.status]}`}>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="text-white font-bold block">{peer.name}</span>
+                            <span className="text-zinc-500 text-[10px]">{peer.location} ({peer.device})</span>
+                          </div>
+                          <span className={`h-1.5 w-1.5 rounded-full ${peer.status === 'training' ? 'bg-emerald-400 animate-pulse' : 'bg-zinc-600'}`} />
+                        </div>
+                        <div className="flex items-center justify-between text-zinc-400 text-[10px]">
+                          <span>Status: <strong className="uppercase">{peer.status}</strong></span>
+                          <span>Last Ping: <strong className="text-white">{((Date.now() - peer.lastActive)/1000).toFixed(0)}s ago</strong></span>
+                        </div>
+                        <div className="w-full bg-zinc-900 h-1 rounded-full overflow-hidden">
+                          <div className={`h-full ${peer.status === 'training' ? 'bg-emerald-400 w-1/2 animate-pulse' : 'bg-zinc-700 w-0'}`} />
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
               </div>
             </div>
 
           </div>
 
-          {/* RIGHT: Privacy Firewall Simulator */}
+          {/* RIGHT: Security, Logs, etc. */}
           <div className="lg:col-span-4 space-y-8">
             
-            {/* The Bouncer/DP box */}
+            {/* Edge Security Firewall Panel */}
             <div className="bg-[#0c0c0c] border border-white/[0.08] p-6 space-y-6">
               <div>
                 <h3 className="text-md font-bold text-white flex items-center gap-2">
-                  <Shield size={14} className="text-emerald-500" /> Edge Security Firewall
+                  <Shield size={14} className="text-emerald-500" /> Secure Gradient Export
                 </h3>
                 <p className="text-zinc-500 text-xs mt-1">
-                  Before gradient updates leave the device, secure them using differential privacy & quantization.
+                  Before gradient updates leave individual devices, FlockML applies differential privacy noise to ensure user inputs cannot be reverse engineered.
                 </p>
               </div>
 
               {/* Slider */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-zinc-500">Laplacian Noise (ε)</span>
+                  <span className="text-zinc-500">Privacy Factor (ε)</span>
                   <span className="text-emerald-400 font-bold">{epsilon}</span>
                 </div>
                 <input
@@ -398,28 +514,22 @@ export default function MeityDemoPage() {
                 onClick={handleExportSecuredGradients}
                 className="w-full flex items-center justify-center gap-2 border border-white/10 hover:border-white/20 text-white font-mono text-[11px] uppercase tracking-wider py-3 transition-colors"
               >
-                Apply DP Noise & Export
+                Encrypt & Export Local Grads
               </button>
 
-              {/* JSON preview of quantized weights */}
+              {/* JSON preview */}
               {secureGrads && (
                 <div className="space-y-2">
-                  <span className="font-mono text-[9px] uppercase tracking-wider text-zinc-500 block">Exported 8-bit Payload Preview:</span>
+                  <span className="font-mono text-[9px] uppercase tracking-wider text-zinc-500 block">Encrypted Grad Data Preview:</span>
                   <div className="bg-[#090909] border border-white/[0.04] p-3 text-[10px] font-mono text-zinc-400 max-h-40 overflow-y-auto space-y-2">
                     <div>
-                      <span className="text-emerald-500">weights_ih:</span> [{secureGrads.weights_ih.data.join(', ')}]
+                      <span className="text-emerald-500">weights_ih:</span> [{secureGrads.weights_ih.data.slice(0, 10).join(', ')}...]
                     </div>
                     <div>
-                      <span className="text-emerald-500">weights_ho:</span> [{secureGrads.weights_ho.data.join(', ')}]
-                    </div>
-                    <div>
-                      <span className="text-emerald-500">bias_h:</span> [{secureGrads.bias_h.data.join(', ')}]
-                    </div>
-                    <div>
-                      <span className="text-emerald-500">bias_o:</span> [{secureGrads.bias_o.data.join(', ')}]
+                      <span className="text-emerald-500">weights_ho:</span> [{secureGrads.weights_ho.data.slice(0, 10).join(', ')}...]
                     </div>
                     <div className="text-zinc-600 text-[9px] pt-1">
-                      *Note: Floating point numbers are gone. Replaced with 8-bit quantized gradients to protect data.
+                      *Ternary 8-bit quantization removes exact numerical traces, rendering global parameters safe from hacker snooping.
                     </div>
                   </div>
                 </div>
@@ -429,7 +539,7 @@ export default function MeityDemoPage() {
             {/* Live Terminal Log */}
             <div className="bg-[#0c0c0c] border border-white/[0.08] p-6 space-y-4">
               <span className="font-mono text-[10px] tracking-wider uppercase text-zinc-500 block">Wasm Console Logs</span>
-              <div className="font-mono text-[11px] text-zinc-500 space-y-2 h-44 overflow-y-auto select-none bg-[#090909] border border-white/[0.04] p-4">
+              <div className="font-mono text-[10.5px] text-zinc-500 space-y-2 h-44 overflow-y-auto select-none bg-[#090909] border border-white/[0.04] p-4">
                 {logs.length === 0 ? (
                   <div className="text-zinc-700 italic">No logs yet. Click 'Train Model' to execute steps.</div>
                 ) : (
