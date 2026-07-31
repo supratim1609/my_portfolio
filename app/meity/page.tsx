@@ -55,17 +55,25 @@ export default function MeityDemoPage() {
 
     // 2. Identify browser device type
     const ua = navigator.userAgent;
-    let detectedDevice = "Desktop PC";
-    if (/mobile/i.test(ua)) detectedDevice = "Smartphone";
-    else if (/ipad|tablet/i.test(ua)) detectedDevice = "Tablet";
     
-    // Better user agent parsing for specific device OS names
+    // Check for iOS Safari requesting "Desktop Version"
+    const isIOSMobile = /iphone|ipad|ipod/i.test(ua) || 
+      (/macintosh/i.test(ua) && typeof navigator !== 'undefined' && navigator.maxTouchPoints > 1);
+
     let osName = "Browser";
-    if (/macintosh|mac os x/i.test(ua)) osName = "macOS Device";
-    else if (/windows/i.test(ua)) osName = "Windows PC";
-    else if (/android/i.test(ua)) osName = "Android Device";
-    else if (/iphone|ipad/i.test(ua)) osName = "iOS Device";
-    else if (/linux/i.test(ua)) osName = "Linux Machine";
+    if (isIOSMobile) {
+      osName = /iphone/i.test(ua) ? "iPhone Node" : "iPad Node";
+      // Fallback if generic Macintosh touch
+      if (osName === "Browser" || /macintosh/i.test(ua)) osName = "iOS Device";
+    } else if (/macintosh|mac os x/i.test(ua)) {
+      osName = "macOS Device";
+    } else if (/windows/i.test(ua)) {
+      osName = "Windows PC";
+    } else if (/android/i.test(ua)) {
+      osName = "Android Device";
+    } else if (/linux/i.test(ua)) {
+      osName = "Linux Machine";
+    }
     
     setMyDevice(osName);
 
