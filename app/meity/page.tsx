@@ -23,8 +23,7 @@ interface RealPeerNode {
   lastActive: number;
 }
 
-// Random bucket ID on KVdb.io to coordinate the live demo participants
-const BUCKET_URL = "https://kvdb.io/Mug5V8XvR9pW5k6VUz6y6Z/meity_flock_nodes";
+// Component body begins
 
 export default function MeityDemoPage() {
   const [node, setNode] = useState<FlockNode | null>(null);
@@ -109,19 +108,6 @@ export default function MeityDemoPage() {
     // Periodically post our presence and fetch the list of other active peers
     const syncGrid = async () => {
       try {
-        // Fetch current active list
-        const getRes = await fetch(BUCKET_URL);
-        let activeNodes: RealPeerNode[] = [];
-        if (getRes.ok) {
-          activeNodes = await getRes.json();
-        }
-
-        // Filter out dead nodes (no ping for 15 seconds)
-        const now = Date.now();
-        activeNodes = activeNodes.filter(n => (now - n.lastActive) < 15000);
-
-        // Update or insert our node info
-        const myIndex = activeNodes.findIndex(n => n.id === myNodeId);
         const myNodeData: RealPeerNode = {
           id: myNodeId,
           name: customNodeName || `Node (${myNodeId.split('-')[1]})`,
@@ -129,34 +115,31 @@ export default function MeityDemoPage() {
           device: myDevice,
           status: isTraining ? "training" : "idle",
           progress: isTraining ? Math.floor(Math.random() * 40) + 40 : 0,
-          lastActive: now
+          lastActive: Date.now()
         };
 
-        if (myIndex > -1) {
-          activeNodes[myIndex] = myNodeData;
-        } else {
-          activeNodes.push(myNodeData);
-        }
-
-        // If another node is actively training, trigger training state local sync
-        const isAnyoneTraining = activeNodes.some(n => n.status === "training" && n.id !== myNodeId);
-        if (isAnyoneTraining && !isTraining) {
-          addLog("Incoming training coordinate sweep received from peer.");
-          // Trigger training remotely triggered
-          triggerRemoteSyncedTraining();
-        }
-
-        // Post updated nodes list back to shared bucket
-        await fetch(BUCKET_URL, {
-          method: 'PUT',
+        // Send our state to the server and receive the full active grid list back in one step
+        const res = await fetch('/api/meity/nodes', {
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(activeNodes)
+          body: JSON.stringify(myNodeData)
         });
 
-        // Set local state
-        setPeers(activeNodes.filter(n => n.id !== myNodeId));
+        if (res.ok) {
+          const activeNodes: RealPeerNode[] = await res.json();
+
+          // If another node is actively training, trigger training state local sync
+          const isAnyoneTraining = activeNodes.some(n => n.status === "training" && n.id !== myNodeId);
+          if (isAnyoneTraining && !isTraining) {
+            addLog("Incoming training coordinate sweep received from peer.");
+            triggerRemoteSyncedTraining();
+          }
+
+          // Set local state
+          setPeers(activeNodes.filter(n => n.id !== myNodeId));
+        }
       } catch (err) {
-        // Fallback silently if bucket fails/throttles
+        // Fallback silently
       }
     };
 
