@@ -215,6 +215,52 @@ export async function POST(req: Request) {
           </div>
         </motion.div>
 
+        {/* GitHub Star badge — spinning comet border */}
+        <motion.a
+          href="https://github.com/supratim1609/flockML"
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+          whileHover={{ scale: 1.03, y: -1 }}
+          whileTap={{ scale: 0.97 }}
+          className="self-start w-fit mb-6 sm:mb-8 relative rounded-full p-px overflow-hidden"
+          style={{ background: '#161616' }}
+        >
+          {/* Spinning comet gradient that sweeps around the border */}
+          <div className="absolute inset-0 rounded-full overflow-hidden">
+            <motion.div
+              className="absolute inset-[-100%]"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+              style={{
+                background: 'conic-gradient(transparent 0deg, transparent 240deg, rgba(255,255,255,0.9) 300deg, rgba(255,255,255,0.2) 330deg, transparent 360deg)',
+              }}
+            />
+          </div>
+
+          {/* Inner content */}
+          <span className="relative flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#0d0d0d]">
+            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 shrink-0 fill-zinc-300" aria-hidden="true">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12" />
+            </svg>
+            <span className="font-mono text-[11px] tracking-[0.1em] text-zinc-300 whitespace-nowrap">
+              Star on GitHub
+            </span>
+            <span className="w-px h-3 bg-white/10 shrink-0" />
+            <motion.svg
+              viewBox="0 0 24 24"
+              className="w-3 h-3 shrink-0"
+              aria-hidden="true"
+              animate={{ fill: ['rgba(251,191,36,0.4)', 'rgba(251,191,36,1)', 'rgba(251,191,36,0.4)'] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </motion.svg>
+          </span>
+        </motion.a>
+
         {/* Version label */}
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.2 }}
