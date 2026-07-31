@@ -41,6 +41,7 @@ export default function MeityDemoPage() {
   const [myNodeId, setMyNodeId] = useState<string>("");
   const [myLocation, setMyLocation] = useState<string>("Locating...");
   const [myDevice, setMyDevice] = useState<string>("Browser Window");
+  const [customNodeName, setCustomNodeName] = useState<string>("");
 
   const trainingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const syncIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -55,14 +56,24 @@ export default function MeityDemoPage() {
 
     // 2. Identify browser device type
     const ua = navigator.userAgent;
-    let detectedDevice = "Desktop Browser";
+    let detectedDevice = "Desktop PC";
     if (/mobile/i.test(ua)) detectedDevice = "Smartphone";
     else if (/ipad|tablet/i.test(ua)) detectedDevice = "Tablet";
-    setMyDevice(detectedDevice);
+    
+    // Better user agent parsing for specific device OS names
+    let osName = "Browser";
+    if (/macintosh|mac os x/i.test(ua)) osName = "macOS Device";
+    else if (/windows/i.test(ua)) osName = "Windows PC";
+    else if (/android/i.test(ua)) osName = "Android Device";
+    else if (/iphone|ipad/i.test(ua)) osName = "iOS Device";
+    else if (/linux/i.test(ua)) osName = "Linux Machine";
+    
+    setMyDevice(osName);
 
     // Generate random session ID for this tab
     const randomId = "node-" + Math.random().toString(36).substring(2, 8);
     setMyNodeId(randomId);
+    setCustomNodeName(`${osName} (${randomId.split('-')[1]})`);
 
     // 3. Fetch approximate location via free geolocation API
     fetch("https://ipapi.co/json/")
@@ -70,11 +81,11 @@ export default function MeityDemoPage() {
       .then(data => {
         const loc = data.city ? `${data.city}, ${data.country_code}` : "India";
         setMyLocation(loc);
-        addLog(`Registered local node at: ${loc} (${detectedDevice})`);
+        addLog(`Registered local node at: ${loc} (${osName})`);
       })
       .catch(() => {
         setMyLocation("NIC Portal Node");
-        addLog(`Registered local node: NIC Node (${detectedDevice})`);
+        addLog(`Registered local node: NIC Node (${osName})`);
       });
 
     addLog("Sovereign AI Client Node connected to shared local grid.");
@@ -113,7 +124,7 @@ export default function MeityDemoPage() {
         const myIndex = activeNodes.findIndex(n => n.id === myNodeId);
         const myNodeData: RealPeerNode = {
           id: myNodeId,
-          name: myNodeId === "node-master" ? "NIC Master Center" : `Peer Node (${myNodeId.split('-')[1]})`,
+          name: customNodeName || `Node (${myNodeId.split('-')[1]})`,
           location: myLocation,
           device: myDevice,
           status: isTraining ? "training" : "idle",
@@ -156,7 +167,7 @@ export default function MeityDemoPage() {
     return () => {
       if (syncIntervalRef.current) clearInterval(syncIntervalRef.current);
     };
-  }, [myNodeId, myLocation, myDevice, isTraining]);
+  }, [myNodeId, myLocation, myDevice, isTraining, customNodeName]);
 
   // Sync training locally if trigger detected from screen-sharing node
   const triggerRemoteSyncedTraining = () => {
@@ -426,11 +437,17 @@ export default function MeityDemoPage() {
                 {/* Local Node Card */}
                 <div className="p-4 border font-mono text-[11px] space-y-3 relative overflow-hidden border-emerald-500/40 bg-emerald-500/[0.02]">
                   <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-white font-bold block">Local Node (You)</span>
-                      <span className="text-zinc-500 text-[10px]">{myLocation} ({myDevice})</span>
+                    <div className="w-full mr-2">
+                      <span className="text-zinc-500 text-[9px] uppercase tracking-wider block mb-1">Set Device Name:</span>
+                      <input
+                        type="text"
+                        value={customNodeName}
+                        onChange={(e) => setCustomNodeName(e.target.value)}
+                        className="bg-white/[0.04] border border-white/10 text-white font-bold px-2 py-1 text-[11px] font-mono rounded-none focus:outline-none focus:border-emerald-500/50 w-full mb-1"
+                      />
+                      <span className="text-zinc-500 text-[10px] block">{myLocation} ({myDevice})</span>
                     </div>
-                    <span className={`h-1.5 w-1.5 rounded-full bg-emerald-400 ${isTraining ? 'animate-pulse' : ''}`} />
+                    <span className={`h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0 ${isTraining ? 'animate-pulse' : ''}`} />
                   </div>
                   <div className="flex items-center justify-between text-zinc-400 text-[10px]">
                     <span>Status: <strong className="uppercase text-emerald-400">{isTraining ? "training" : "idle"}</strong></span>
