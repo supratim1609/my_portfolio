@@ -407,16 +407,16 @@ export default function MeityDemoPage() {
                   <span className="font-mono text-[9px] uppercase tracking-wider text-zinc-500 block">Exported 8-bit Payload Preview:</span>
                   <div className="bg-[#090909] border border-white/[0.04] p-3 text-[10px] font-mono text-zinc-400 max-h-40 overflow-y-auto space-y-2">
                     <div>
-                      <span className="text-emerald-500">weights_ih:</span> [{secureGrads.weights_ih.data.map((r: any) => `[${r.join(',')}]`).join(', ')}]
+                      <span className="text-emerald-500">weights_ih:</span> [{secureGrads.weights_ih.data.join(', ')}]
                     </div>
                     <div>
-                      <span className="text-emerald-500">weights_ho:</span> [{secureGrads.weights_ho.data.map((r: any) => `[${r.join(',')}]`).join(', ')}]
+                      <span className="text-emerald-500">weights_ho:</span> [{secureGrads.weights_ho.data.join(', ')}]
                     </div>
                     <div>
-                      <span className="text-emerald-500">bias_h:</span> [{secureGrads.bias_h.data.map((r: any) => `[${r.join(',')}]`).join(', ')}]
+                      <span className="text-emerald-500">bias_h:</span> [{secureGrads.bias_h.data.join(', ')}]
                     </div>
                     <div>
-                      <span className="text-emerald-500">bias_o:</span> [{secureGrads.bias_o.data.map((r: any) => `[${r.join(',')}]`).join(', ')}]
+                      <span className="text-emerald-500">bias_o:</span> [{secureGrads.bias_o.data.join(', ')}]
                     </div>
                     <div className="text-zinc-600 text-[9px] pt-1">
                       *Note: Floating point numbers are gone. Replaced with 8-bit quantized gradients to protect data.
