@@ -289,13 +289,21 @@ export async function POST(req: Request) {
             <p className="text-zinc-400 text-sm sm:text-base lg:text-lg max-w-sm leading-relaxed">
               FlockML crowdsources model training across your users' browsers — then runs inference locally with BitNet 1.58-bit WGSL shaders. No servers. No API keys. OpenAI never gets a cent.
             </p>
-            <Link
-              href="/flock-ml/docs"
-              className="group inline-flex items-center justify-center gap-3 border border-white/20 hover:border-white transition-all px-5 sm:px-6 py-3 sm:py-3.5 text-xs sm:text-sm font-mono tracking-wider uppercase text-white shrink-0 w-full sm:w-auto"
-            >
-              Get Started
-              <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto shrink-0">
+              <Link
+                href="/flock-ml/command"
+                className="group inline-flex items-center justify-center gap-3 bg-white text-black hover:bg-zinc-200 transition-all px-5 sm:px-6 py-3 sm:py-3.5 text-xs sm:text-sm font-mono tracking-wider uppercase font-bold shrink-0 w-full sm:w-auto"
+              >
+                Launch Command Center
+                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </Link>
+              <Link
+                href="/flock-ml/docs"
+                className="group inline-flex items-center justify-center gap-3 border border-white/20 hover:border-white transition-all px-5 sm:px-6 py-3 sm:py-3.5 text-xs sm:text-sm font-mono tracking-wider uppercase text-white shrink-0 w-full sm:w-auto"
+              >
+                Get Started
+              </Link>
+            </div>
           </motion.div>
         </div>
 
