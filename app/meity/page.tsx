@@ -51,7 +51,10 @@ export default function MeityDemoPage() {
   useEffect(() => {
     // 1. Setup local network model
     const initializedNode = new FlockNode(2, 4, 1);
-    initializedNode.connect('wss://sovereign-ai.gov.in/grid');
+    const wsUrl = process.env.NEXT_PUBLIC_COORDINATOR_WS_URL || 
+      (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('wsUrl') : null) || 
+      'wss://sovereign-ai.gov.in/grid';
+    initializedNode.connect(wsUrl);
     setNode(initializedNode);
     updatePredictions(initializedNode);
 
@@ -181,11 +184,17 @@ export default function MeityDemoPage() {
       });
       const currentLoss = errorSum / SECURITY_SCENARIOS.length;
 
+      // Transmit quantized Int8 gradients to FedAvg coordinator over WebSocket
+      if (typeof (node as any).submitLocalGradientsWS === 'function') {
+        (node as any).submitLocalGradientsWS();
+      }
+
       setEpoch(prev => {
         const nextEpoch = prev + 15;
         if (currentLoss < 0.008) {
           clearInterval(trainingIntervalRef.current!);
           setIsTraining(false);
+          addLog("Training sequence complete. Global model parameters converged.");
         }
         return nextEpoch;
       });
