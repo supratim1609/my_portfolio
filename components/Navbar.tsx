@@ -24,7 +24,7 @@ export function Navbar() {
     { name: "Experience", href: "/#experience" },
     { name: "Presence", href: "/#presence" },
     { name: "Articles", href: "/blog" },
-    { name: "FlockML", href: "/flock-ml" },
+    { name: "FlockML", href: "https://flockml.qd.je" },
   ];
 
   return (
